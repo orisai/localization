@@ -1,0 +1,49 @@
+<?php declare(strict_types = 1);
+
+use Orisai\Localization\Logging\MissingResource;
+
+/** @var string $currentLocale */
+/** @var string $defaultLocale */
+/** @var string[] $localeWhitelist */
+/** @var MissingResource[] $missingResources */
+
+?>
+<h1>Translator</h1>
+
+<div class="tracy-inner">
+	<div class="tracy-inner-container">
+		<h2>Settings</h2>
+		Current locale: <b><?= $currentLocale ?></b><br>
+		Default locale: <b><?= $defaultLocale ?></b><br>
+		Whitelist: <?= implode(', ', $localeWhitelist) ?><br>
+	</div>
+	<?php if ($missingResources !== []): ?>
+		<div class="tracy-inner-container">
+			<h2>Missing resources (<?= count($missingResources) ?>)</h2>
+			<table>
+				<thead>
+				<tr>
+					<th>Message</th>
+					<th>Count</th>
+					<th>Locales</th>
+				</tr>
+				</thead>
+				<tbody>
+				<?php foreach ($missingResources as $resource): ?>
+					<tr>
+						<td>
+							<?= $resource->getMessage() ?>
+						</td>
+						<td>
+							<?= $resource->getCount() ?>
+						</td>
+						<td>
+							<?= implode(', ', $resource->getLocales()) ?>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+	<?php endif; ?>
+</div>

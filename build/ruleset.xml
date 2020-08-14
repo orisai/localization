@@ -1,0 +1,34 @@
+<ruleset
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="./../vendor/squizlabs/php_codesniffer/phpcs.xsd">
+
+	<!-- Show only relevant part of path -->
+	<arg name="basepath" value="./.."/>
+
+	<!-- Configure cache -->
+	<arg name="cache" value="./../var/tmp/codesniffer.dat"/>
+
+	<!-- Import coding-standard -->
+	<rule ref="./../vendor/orisai/coding-standard/src/ruleset-7.4.xml"/>
+
+	<!-- Configure PSR-4 rule -->
+	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
+		<properties>
+			<property name="rootNamespaces" type="array">
+				<element key="src" value="Orisai\Localization"/>
+				<element key="tests" value="Tests\Orisai\Localization"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- __() -->
+	<rule ref="Generic.NamingConventions.CamelCapsFunctionName.NotCamelCaps">
+		<exclude-pattern>src/shortcut.php</exclude-pattern>
+	</rule>
+
+	<!-- Variables are used in required file -->
+	<rule ref="SlevomatCodingStandard.Variables.UnusedVariable.UnusedVariable">
+		<exclude-pattern>src/Bridge/Tracy/TranslationPanel.php</exclude-pattern>
+	</rule>
+
+</ruleset>

@@ -1,0 +1,68 @@
+{
+	"name": "orisai/localization",
+	"description": "Internationalization (i18n) and localization (l10n)",
+	"keywords": [
+		"localization",
+		"nette",
+		"orisai",
+		"translation"
+	],
+	"type": "library",
+	"license": "MPL-2.0",
+	"homepage": "https://github.com/orisai/localization",
+	"authors": [
+		{
+			"name": "Marek Bartoš",
+			"homepage": "https://github.com/mabar"
+		}
+	],
+	"require": {
+		"php": ">=7.4.0 <8.2.0",
+		"orisai/exceptions": "^1.0.0",
+		"psr/log": "^1.1.0"
+	},
+	"require-dev": {
+		"ext-intl": "*",
+		"contributte/di": "^0.4.1",
+		"latte/latte": "^2.5.0",
+		"nette/application": "^3.0.0",
+		"nette/caching": "^3.0.0",
+		"nette/di": "^3.0.5",
+		"orisai/coding-standard": "^1.0.0",
+		"pepakriz/phpstan-exception-rules": "^0.10.0",
+		"phpstan/extension-installer": "^1.0.0",
+		"phpstan/phpstan": "^0.12.0",
+		"phpstan/phpstan-deprecation-rules": "^0.12.0",
+		"phpstan/phpstan-nette": "^0.12.0",
+		"phpstan/phpstan-phpunit": "^0.12.0",
+		"phpstan/phpstan-strict-rules": "^0.12.0",
+		"phpunit/phpunit": "^9.3.0",
+		"staabm/annotate-pull-request-from-checkstyle": "^1.1.0",
+		"symfony/polyfill-intl-messageformatter": "^1.10.0",
+		"symfony/translation-contracts": "^2.0.0",
+		"tracy/tracy": "^2.6.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"Orisai\\Localization\\": "src"
+		},
+		"files": [
+			"src/shortcut.php"
+		]
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Tests\\Orisai\\Localization\\": "tests"
+		}
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"config": {
+		"sort-packages": true
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "1.0.x-dev"
+		}
+	}
+}
