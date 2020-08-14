@@ -1,0 +1,9 @@
+extensions:
+	orisai.translation: Orisai\Localization\Bridge\Nette\DI\TranslationExtension
+
+orisai.translation:
+	locale:
+		default: en
+
+services:
+	storage: Nette\Caching\Storages\MemoryStorage

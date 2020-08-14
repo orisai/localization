@@ -1,0 +1,17 @@
+extensions:
+	orisai.translation: Orisai\Localization\Bridge\Nette\DI\TranslationExtension
+	latte: Nette\Bridges\ApplicationDI\LatteExtension(%tempDir%/cache/latte, true)
+	tracy: Tracy\Bridges\Nette\TracyExtension(true, true)
+
+orisai.translation:
+	locale:
+		default: en
+		whitelist: [cs, fr, de, sk]
+	holder:
+		enabled: false
+	debug:
+		panel: true
+
+services:
+	storage: Nette\Caching\Storages\MemoryStorage
+	logger: Psr\Log\Test\TestLogger
