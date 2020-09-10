@@ -10,7 +10,7 @@ final class ArrayCatalogue implements Catalogue
 	/** @var array<array<string>> */
 	private array $messages;
 
-	/** @var array<int> */
+	/** @var array<string, array<string, int>> */
 	private array $calls = [];
 
 	/**
@@ -31,7 +31,7 @@ final class ArrayCatalogue implements Catalogue
 	}
 
 	/**
-	 * @return array<int>
+	 * @return array<string, array<string, int>>
 	 */
 	public function getCalls(): array
 	{

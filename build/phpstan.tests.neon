@@ -2,4 +2,7 @@ includes:
 	- phpstan.base.neon
 
 parameters:
-	level: 1
+	level: 3
+
+	ignoreErrors:
+		- '#^Call to an undefined method Nette\\DI\\Container\:\:initialize\(\)\.$#'
