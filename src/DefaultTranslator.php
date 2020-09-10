@@ -74,7 +74,15 @@ final class DefaultTranslator implements ConfigurableTranslator
 		TranslationsLogger $logger
 	): self
 	{
-		return new self($defaultLocale, $localeWhiteList, $fallbackLocales, $localeResolver, $catalogue, $messageFormatter, $logger);
+		return new self(
+			$defaultLocale,
+			$localeWhiteList,
+			$fallbackLocales,
+			$localeResolver,
+			$catalogue,
+			$messageFormatter,
+			$logger,
+		);
 	}
 
 	/**
@@ -102,7 +110,15 @@ final class DefaultTranslator implements ConfigurableTranslator
 			LocaleHelper::validate($fallbackLocale);
 		}
 
-		return new self($defaultLocale, $localeWhiteList, $fallbackLocales, $localeResolver, $catalogue, $messageFormatter, $logger);
+		return new self(
+			$defaultLocale,
+			$localeWhiteList,
+			$fallbackLocales,
+			$localeResolver,
+			$catalogue,
+			$messageFormatter,
+			$logger,
+		);
 	}
 
 	/**

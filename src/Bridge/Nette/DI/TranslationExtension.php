@@ -108,7 +108,10 @@ final class TranslationExtension extends CompilerExtension
 
 		foreach ($config->configurators as $configuratorKey => $configuratorConfig) {
 			$configuratorName = $this->prefix('configurator.' . $configuratorKey);
-			$configuratorDefinition = $definitionsHelper->getDefinitionFromConfig($configuratorConfig, $configuratorKey);
+			$configuratorDefinition = $definitionsHelper->getDefinitionFromConfig(
+				$configuratorConfig,
+				$configuratorKey,
+			);
 
 			if (
 				$configuratorDefinition instanceof Definition
@@ -265,7 +268,10 @@ final class TranslationExtension extends CompilerExtension
 					new PhpLiteral(Engine::class),
 					new PhpLiteral(TranslationMacros::class),
 				])
-				->addSetup('?->addProvider(?, ?)', ['@self', 'translator', $builder->getDefinition($this->prefix('translator'))])
+				->addSetup(
+					'?->addProvider(?, ?)',
+					['@self', 'translator', $builder->getDefinition($this->prefix('translator'))],
+				)
 				->addSetup('?->addFilter(?, ?)', ['@self', 'translate', [$latteFiltersDefinition, 'translate']]);
 		}
 	}

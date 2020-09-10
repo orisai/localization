@@ -19,7 +19,15 @@ final class TranslatorHolderTest extends TestCase
 
 	public function testOk(): void
 	{
-		$translator = DefaultTranslator::fromRawLocales('en', [], [], new FakeLocaleResolver(), new ArrayCatalogue([]), new IntlMessageFormatter(), new TranslationsLogger());
+		$translator = DefaultTranslator::fromRawLocales(
+			'en',
+			[],
+			[],
+			new FakeLocaleResolver(),
+			new ArrayCatalogue([]),
+			new IntlMessageFormatter(),
+			new TranslationsLogger(),
+		);
 		TranslatorHolder::setTranslator($translator);
 
 		self::assertInstanceOf(DefaultTranslator::class, TranslatorHolder::getInstance()->getTranslator());
@@ -28,7 +36,9 @@ final class TranslatorHolderTest extends TestCase
 	public function testNotConfigured(): void
 	{
 		$this->expectException(InvalidState::class);
-		$this->expectExceptionMessage('Call Orisai\Localization\TranslatorHolder::setTranslator() to use Orisai\Localization\TranslatorHolder::getInstance()');
+		$this->expectExceptionMessage(
+			'Call Orisai\Localization\TranslatorHolder::setTranslator() to use Orisai\Localization\TranslatorHolder::getInstance()',
+		);
 
 		TranslatorHolder::getInstance()->getTranslator();
 	}
