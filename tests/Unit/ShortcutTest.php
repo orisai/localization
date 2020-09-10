@@ -21,15 +21,17 @@ final class ShortcutTest extends TestCase
 
 	public function test(): void
 	{
-		TranslatorHolder::setTranslator(DefaultTranslator::fromRawLocales('en', ['cs'], [], new FakeLocaleResolver(), new ArrayCatalogue([
-			'en' => [
-				'no-param' => 'No parameters',
-				'apples' => 'I have {apples} apples.',
-			],
-			'cs' => [
-				'apples' => 'Já mám {apples} jablka.',
-			],
-		]), new IntlMessageFormatter(), new TranslationsLogger()));
+		TranslatorHolder::setTranslator(
+			DefaultTranslator::fromRawLocales('en', ['cs'], [], new FakeLocaleResolver(), new ArrayCatalogue([
+				'en' => [
+					'no-param' => 'No parameters',
+					'apples' => 'I have {apples} apples.',
+				],
+				'cs' => [
+					'apples' => 'Já mám {apples} jablka.',
+				],
+			]), new IntlMessageFormatter(), new TranslationsLogger()),
+		);
 
 		self::assertTrue(function_exists('Orisai\Localization\__'));
 

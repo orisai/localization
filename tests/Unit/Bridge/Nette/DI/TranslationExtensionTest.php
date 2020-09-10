@@ -55,7 +55,10 @@ final class TranslationExtensionTest extends TestCase
 		self::assertInstanceOf(LazyMultiLoader::class, $container->getService('orisai.translation.loader'));
 		self::assertInstanceOf(ArrayCacheLoader::class, $container->getService('orisai.translation.loader.cache'));
 		self::assertInstanceOf(CachedCatalogue::class, $container->getService('orisai.translation.catalogue'));
-		self::assertInstanceOf(ArrayCacheCatalogue::class, $container->getService('orisai.translation.catalogue.cache'));
+		self::assertInstanceOf(
+			ArrayCacheCatalogue::class,
+			$container->getService('orisai.translation.catalogue.cache'),
+		);
 		self::assertInstanceOf(MessageFormatter::class, $container->getService('orisai.translation.formatter'));
 		self::assertInstanceOf(TranslationsLogger::class, $container->getService('orisai.translation.logger'));
 		self::assertInstanceOf(DefaultTranslator::class, $container->getService('orisai.translation.translator'));
@@ -95,7 +98,10 @@ final class TranslationExtensionTest extends TestCase
 		self::assertInstanceOf(LazyMultiLoader::class, $container->getService('orisai.translation.loader'));
 		self::assertInstanceOf(ArrayCacheLoader::class, $container->getService('orisai.translation.loader.cache'));
 		self::assertInstanceOf(CachedCatalogue::class, $container->getService('orisai.translation.catalogue'));
-		self::assertInstanceOf(ArrayCacheCatalogue::class, $container->getService('orisai.translation.catalogue.cache'));
+		self::assertInstanceOf(
+			ArrayCacheCatalogue::class,
+			$container->getService('orisai.translation.catalogue.cache'),
+		);
 		self::assertInstanceOf(MessageFormatter::class, $container->getService('orisai.translation.formatter'));
 		self::assertInstanceOf(TranslationsLogger::class, $container->getService('orisai.translation.logger'));
 		self::assertInstanceOf(DefaultTranslator::class, $container->getService('orisai.translation.translator'));

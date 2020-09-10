@@ -81,8 +81,14 @@ final class DefaultTranslatorTest extends TestCase
 
 		// Missing translation
 		self::assertSame('missing-translation', $translator->translate('missing-translation'));
-		self::assertSame('missing-translation', $translator->translate('missing-translation', ['unused parameter'], 'cs'));
-		self::assertSame('missing-translation', $translator->translate('missing-translation', ['unused parameter'], 'cs'));
+		self::assertSame(
+			'missing-translation',
+			$translator->translate('missing-translation', ['unused parameter'], 'cs'),
+		);
+		self::assertSame(
+			'missing-translation',
+			$translator->translate('missing-translation', ['unused parameter'], 'cs'),
+		);
 		self::assertSame('another-missing-translation', $translator->translate('another-missing-translation'));
 
 		// Logger
@@ -107,36 +113,68 @@ final class DefaultTranslatorTest extends TestCase
 		$this->expectExceptionMessage(InvalidState::class);
 		$this->expectExceptionMessage('Locale "fr" is not whitelisted. Whitelisted are: "cs, en"');
 
-		$translator = DefaultTranslator::fromValidLocales('en', ['cs'], [], new FakeLocaleResolver(), new ArrayCatalogue([
-			'en' => [
-				'apples' => 'I have {apples} apples.',
-			],
-		]), new IntlMessageFormatter(), new TranslationsLogger());
+		$translator = DefaultTranslator::fromValidLocales(
+			'en',
+			['cs'],
+			[],
+			new FakeLocaleResolver(),
+			new ArrayCatalogue([
+				'en' => [
+					'apples' => 'I have {apples} apples.',
+				],
+			]),
+			new IntlMessageFormatter(),
+			new TranslationsLogger(),
+		);
 
 		$translator->translate('apples', [], 'fr');
 	}
 
 	public function testResolverExplicit(): void
 	{
-		$translator = DefaultTranslator::fromValidLocales('en', ['cs'], [], new FakeLocaleResolver('cs'), new ArrayCatalogue([]), new IntlMessageFormatter(), new TranslationsLogger());
+		$translator = DefaultTranslator::fromValidLocales(
+			'en',
+			['cs'],
+			[],
+			new FakeLocaleResolver('cs'),
+			new ArrayCatalogue([]),
+			new IntlMessageFormatter(),
+			new TranslationsLogger(),
+		);
 
 		self::assertSame('cs', $translator->getCurrentLocale());
 	}
 
 	public function testResolverExplicitWithNormalization(): void
 	{
-		$translator = DefaultTranslator::fromValidLocales('en', ['cs'], [], new FakeLocaleResolver('CS'), new ArrayCatalogue([]), new IntlMessageFormatter(), new TranslationsLogger());
+		$translator = DefaultTranslator::fromValidLocales(
+			'en',
+			['cs'],
+			[],
+			new FakeLocaleResolver('CS'),
+			new ArrayCatalogue([]),
+			new IntlMessageFormatter(),
+			new TranslationsLogger(),
+		);
 
 		self::assertSame('cs', $translator->getCurrentLocale());
 	}
 
 	public function testResolverTriggeredByTranslation(): void
 	{
-		$translator = DefaultTranslator::fromValidLocales('en', ['cs'], [], new FakeLocaleResolver('cs'), new ArrayCatalogue([
-			'cs' => [
-				'apples' => 'Já mám {apples} jablka.',
-			],
-		]), new IntlMessageFormatter(), new TranslationsLogger());
+		$translator = DefaultTranslator::fromValidLocales(
+			'en',
+			['cs'],
+			[],
+			new FakeLocaleResolver('cs'),
+			new ArrayCatalogue([
+				'cs' => [
+					'apples' => 'Já mám {apples} jablka.',
+				],
+			]),
+			new IntlMessageFormatter(),
+			new TranslationsLogger(),
+		);
 
 		self::assertSame('Já mám 3 jablka.', $translator->translate('apples', ['apples' => 3]));
 		self::assertSame('cs', $translator->getCurrentLocale());
@@ -144,7 +182,15 @@ final class DefaultTranslatorTest extends TestCase
 
 	public function testResolverNotWhitelistedLocale(): void
 	{
-		$translator = DefaultTranslator::fromValidLocales('en', ['cs'], [], new FakeLocaleResolver('fr'), new ArrayCatalogue([]), new IntlMessageFormatter(), new TranslationsLogger());
+		$translator = DefaultTranslator::fromValidLocales(
+			'en',
+			['cs'],
+			[],
+			new FakeLocaleResolver('fr'),
+			new ArrayCatalogue([]),
+			new IntlMessageFormatter(),
+			new TranslationsLogger(),
+		);
 
 		self::assertSame('en', $translator->getCurrentLocale());
 	}
@@ -164,7 +210,15 @@ final class DefaultTranslatorTest extends TestCase
 		$this->expectException(MalformedLocale::class);
 		$this->expectExceptionMessage($message);
 
-		DefaultTranslator::fromRawLocales($defaultLocale, $localeWhitelist, $fallbacks, new FakeLocaleResolver(), new ArrayCatalogue([]), new IntlMessageFormatter(), new TranslationsLogger());
+		DefaultTranslator::fromRawLocales(
+			$defaultLocale,
+			$localeWhitelist,
+			$fallbacks,
+			new FakeLocaleResolver(),
+			new ArrayCatalogue([]),
+			new IntlMessageFormatter(),
+			new TranslationsLogger(),
+		);
 	}
 
 	/**
@@ -182,7 +236,15 @@ final class DefaultTranslatorTest extends TestCase
 
 	public function testSetCurrentLocale(): void
 	{
-		$translator = DefaultTranslator::fromValidLocales('en', ['cs'], [], new FakeLocaleResolver(), new ArrayCatalogue([]), new IntlMessageFormatter(), new TranslationsLogger());
+		$translator = DefaultTranslator::fromValidLocales(
+			'en',
+			['cs'],
+			[],
+			new FakeLocaleResolver(),
+			new ArrayCatalogue([]),
+			new IntlMessageFormatter(),
+			new TranslationsLogger(),
+		);
 
 		$translator->setCurrentLocale('cs');
 		self::assertSame('cs', $translator->getCurrentLocale());
@@ -191,9 +253,19 @@ final class DefaultTranslatorTest extends TestCase
 	public function testSetCurrentLocaleTwice(): void
 	{
 		$this->expectExceptionMessage(InvalidState::class);
-		$this->expectExceptionMessage('Current locale already set. Ensure you call Orisai\Localization\DefaultTranslator::setCurrentLocale() only once and before translator is first used.');
+		$this->expectExceptionMessage(
+			'Current locale already set. Ensure you call Orisai\Localization\DefaultTranslator::setCurrentLocale() only once and before translator is first used.',
+		);
 
-		$translator = DefaultTranslator::fromValidLocales('en', ['cs', 'de'], [], new FakeLocaleResolver(), new ArrayCatalogue([]), new IntlMessageFormatter(), new TranslationsLogger());
+		$translator = DefaultTranslator::fromValidLocales(
+			'en',
+			['cs', 'de'],
+			[],
+			new FakeLocaleResolver(),
+			new ArrayCatalogue([]),
+			new IntlMessageFormatter(),
+			new TranslationsLogger(),
+		);
 
 		$translator->setCurrentLocale('cs');
 		$translator->setCurrentLocale('de');
@@ -202,13 +274,23 @@ final class DefaultTranslatorTest extends TestCase
 	public function testSetCurrentLocaleAfterComputation(): void
 	{
 		$this->expectExceptionMessage(InvalidState::class);
-		$this->expectExceptionMessage('Current locale already set. Ensure you call Orisai\Localization\DefaultTranslator::setCurrentLocale() only once and before translator is first used.');
+		$this->expectExceptionMessage(
+			'Current locale already set. Ensure you call Orisai\Localization\DefaultTranslator::setCurrentLocale() only once and before translator is first used.',
+		);
 
-		$translator = DefaultTranslator::fromValidLocales('en', ['cs'], [], new FakeLocaleResolver(), new ArrayCatalogue([
-			'en' => [
-				'apples' => 'I have {apples} apples.',
-			],
-		]), new IntlMessageFormatter(), new TranslationsLogger());
+		$translator = DefaultTranslator::fromValidLocales(
+			'en',
+			['cs'],
+			[],
+			new FakeLocaleResolver(),
+			new ArrayCatalogue([
+				'en' => [
+					'apples' => 'I have {apples} apples.',
+				],
+			]),
+			new IntlMessageFormatter(),
+			new TranslationsLogger(),
+		);
 
 		self::assertSame('I have 5 apples.', $translator->translate('apples', ['apples' => 5]));
 		$translator->setCurrentLocale('cs');
@@ -219,7 +301,15 @@ final class DefaultTranslatorTest extends TestCase
 		$this->expectException(MalformedLocale::class);
 		$this->expectExceptionMessage('Invalid "+ěš" locale.');
 
-		$translator = DefaultTranslator::fromValidLocales('en', ['cs', 'de'], [], new FakeLocaleResolver(), new ArrayCatalogue([]), new IntlMessageFormatter(), new TranslationsLogger());
+		$translator = DefaultTranslator::fromValidLocales(
+			'en',
+			['cs', 'de'],
+			[],
+			new FakeLocaleResolver(),
+			new ArrayCatalogue([]),
+			new IntlMessageFormatter(),
+			new TranslationsLogger(),
+		);
 
 		$translator->setCurrentLocale('+ěš');
 	}
@@ -229,14 +319,30 @@ final class DefaultTranslatorTest extends TestCase
 		$this->expectException(LocaleNotWhitelisted::class);
 		$this->expectExceptionMessage('Locale "fr" is not whitelisted. Whitelisted are: "cs, de, en"');
 
-		$translator = DefaultTranslator::fromValidLocales('en', ['cs', 'de'], [], new FakeLocaleResolver(), new ArrayCatalogue([]), new IntlMessageFormatter(), new TranslationsLogger());
+		$translator = DefaultTranslator::fromValidLocales(
+			'en',
+			['cs', 'de'],
+			[],
+			new FakeLocaleResolver(),
+			new ArrayCatalogue([]),
+			new IntlMessageFormatter(),
+			new TranslationsLogger(),
+		);
 
 		$translator->setCurrentLocale('fr');
 	}
 
 	public function testWhitelistDefaultAddedOnlyOnce(): void
 	{
-		$translator = DefaultTranslator::fromValidLocales('en', ['en'], [], new FakeLocaleResolver(), new ArrayCatalogue([]), new IntlMessageFormatter(), new TranslationsLogger());
+		$translator = DefaultTranslator::fromValidLocales(
+			'en',
+			['en'],
+			[],
+			new FakeLocaleResolver(),
+			new ArrayCatalogue([]),
+			new IntlMessageFormatter(),
+			new TranslationsLogger(),
+		);
 
 		self::assertSame(['en'], $translator->getLocaleWhitelist());
 	}
