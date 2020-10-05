@@ -6,7 +6,7 @@
 
 <p align=center>
   <a href="https://github.com/orisai/localization/actions"><img src="https://github.com/orisai/localization/workflows/ci/badge.svg"></a>
-  <a href="https://coveralls.io/r/orisai/localization"><img src="https://badgen.net/coveralls/c/github/orisai/localization?cache=300"></a>
+  <a href="https://coveralls.io/r/orisai/localization"><img src="https://badgen.net/coveralls/c/github/orisai/localization/v1.x?cache=300"></a>
   <a href="https://packagist.org/packages/orisai/localization"><img src="https://badgen.net/packagist/dt/orisai/localization?cache=3600"></a>
   <a href="https://packagist.org/packages/orisai/localization"><img src="https://badgen.net/packagist/v/orisai/localization?cache=3600"></a>
   <a href="https://choosealicense.com/licenses/mpl-2.0/"><img src="https://badgen.net/badge/license/MPL-2.0/blue?cache=3600"></a>
