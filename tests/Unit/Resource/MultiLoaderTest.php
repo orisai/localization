@@ -4,7 +4,7 @@ namespace Tests\Orisai\Localization\Unit\Resource;
 
 use Orisai\Localization\Resource\MultiLoader;
 use PHPUnit\Framework\TestCase;
-use Tests\Orisai\Localization\Fixtures\ArrayLoader;
+use Tests\Orisai\Localization\Doubles\ArrayLoader;
 
 final class MultiLoaderTest extends TestCase
 {

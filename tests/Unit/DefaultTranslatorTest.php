@@ -9,8 +9,8 @@ use Orisai\Localization\Exception\MalformedLocale;
 use Orisai\Localization\Formatting\IntlMessageFormatter;
 use Orisai\Localization\Logging\TranslationsLogger;
 use PHPUnit\Framework\TestCase;
-use Tests\Orisai\Localization\Fixtures\ArrayCatalogue;
-use Tests\Orisai\Localization\Fixtures\FakeLocaleResolver;
+use Tests\Orisai\Localization\Doubles\ArrayCatalogue;
+use Tests\Orisai\Localization\Doubles\FakeLocaleResolver;
 use function array_shift;
 
 final class DefaultTranslatorTest extends TestCase

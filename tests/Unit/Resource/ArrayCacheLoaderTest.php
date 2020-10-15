@@ -4,7 +4,7 @@ namespace Tests\Orisai\Localization\Unit\Resource;
 
 use Orisai\Localization\Resource\ArrayCacheLoader;
 use PHPUnit\Framework\TestCase;
-use Tests\Orisai\Localization\Fixtures\ArrayLoader;
+use Tests\Orisai\Localization\Doubles\ArrayLoader;
 
 final class ArrayCacheLoaderTest extends TestCase
 {
