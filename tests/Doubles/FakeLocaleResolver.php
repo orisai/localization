@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Tests\Orisai\Localization\Fixtures;
+namespace Tests\Orisai\Localization\Doubles;
 
 use Orisai\Localization\Locale\LocaleHelper;
 use Orisai\Localization\Locale\LocaleResolver;

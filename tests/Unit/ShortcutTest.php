@@ -8,8 +8,8 @@ use Orisai\Localization\Logging\TranslationsLogger;
 use Orisai\Localization\Translator;
 use Orisai\Localization\TranslatorHolder;
 use PHPUnit\Framework\TestCase;
-use Tests\Orisai\Localization\Fixtures\ArrayCatalogue;
-use Tests\Orisai\Localization\Fixtures\FakeLocaleResolver;
+use Tests\Orisai\Localization\Doubles\ArrayCatalogue;
+use Tests\Orisai\Localization\Doubles\FakeLocaleResolver;
 use function function_exists;
 use function Orisai\Localization\__;
 

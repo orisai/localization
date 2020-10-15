@@ -4,7 +4,7 @@ namespace Tests\Orisai\Localization\Unit\Resource;
 
 use Orisai\Localization\Resource\ArrayCacheCatalogue;
 use PHPUnit\Framework\TestCase;
-use Tests\Orisai\Localization\Fixtures\ArrayCatalogue;
+use Tests\Orisai\Localization\Doubles\ArrayCatalogue;
 
 final class ArrayCacheCatalogueTest extends TestCase
 {

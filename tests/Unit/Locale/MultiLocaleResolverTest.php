@@ -4,7 +4,7 @@ namespace Tests\Orisai\Localization\Unit\Locale;
 
 use Orisai\Localization\Locale\MultiLocaleResolver;
 use PHPUnit\Framework\TestCase;
-use Tests\Orisai\Localization\Fixtures\FakeLocaleResolver;
+use Tests\Orisai\Localization\Doubles\FakeLocaleResolver;
 
 final class MultiLocaleResolverTest extends TestCase
 {
