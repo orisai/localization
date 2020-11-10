@@ -2,11 +2,9 @@
 
 namespace Orisai\Localization\Bridge\Nette\DI;
 
-use Contributte\DI\Helper\ExtensionDefinitionsHelper;
 use Latte\Engine;
 use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Nette\DI\CompilerExtension;
-use Nette\DI\Definitions\Definition;
 use Nette\DI\Definitions\FactoryDefinition;
 use Nette\DI\Definitions\Statement;
 use Nette\Localization\ITranslator;
@@ -14,6 +12,7 @@ use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\PhpLiteral;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
+use OriNette\DI\Definitions\DefinitionsLoader;
 use Orisai\Localization\Bridge\Latte\TranslationFilters;
 use Orisai\Localization\Bridge\Latte\TranslationMacros;
 use Orisai\Localization\Bridge\Nette\Caching\CachedCatalogue;
@@ -87,7 +86,7 @@ final class TranslationExtension extends CompilerExtension
 	{
 		$builder = $this->getContainerBuilder();
 		$config = $this->config;
-		$definitionsHelper = new ExtensionDefinitionsHelper($this->compiler);
+		$loader = new DefinitionsLoader($this->compiler);
 
 		// Locale validation
 
@@ -107,18 +106,10 @@ final class TranslationExtension extends CompilerExtension
 		$configuratorDefinitions = [];
 
 		foreach ($config->configurators as $configuratorKey => $configuratorConfig) {
-			$configuratorName = $this->prefix('configurator.' . $configuratorKey);
-			$configuratorDefinition = $definitionsHelper->getDefinitionFromConfig(
+			$configuratorDefinition = $loader->loadDefinitionFromConfig(
 				$configuratorConfig,
-				$configuratorKey,
+				$this->prefix('configurator.' . $configuratorKey),
 			);
-
-			if (
-				$configuratorDefinition instanceof Definition
-				&& $configuratorDefinition->getName() === $configuratorName
-			) {
-				$configuratorDefinition->setAutowired(false);
-			}
 
 			$configuratorDefinitions[] = $configuratorDefinition;
 		}
@@ -133,12 +124,10 @@ final class TranslationExtension extends CompilerExtension
 		$resolverDefinitionNames = [];
 
 		foreach ($config->resolvers as $resolverKey => $resolverConfig) {
-			$resolverName = $this->prefix('resolver.' . $resolverKey);
-			$resolverDefinition = $definitionsHelper->getDefinitionFromConfig($resolverConfig, $resolverKey);
-
-			if ($resolverDefinition instanceof Definition && $resolverDefinition->getName() === $resolverName) {
-				$resolverDefinition->setAutowired(false);
-			}
+			$resolverDefinition = $loader->loadDefinitionFromConfig(
+				$resolverConfig,
+				$this->prefix('resolver.' . $resolverKey),
+			);
 
 			$resolverDefinitionNames[] = is_string($resolverDefinition)
 				? ltrim($resolverDefinition, '@')
@@ -155,12 +144,10 @@ final class TranslationExtension extends CompilerExtension
 		$loaderDefinitionNames = [];
 
 		foreach ($config->loaders as $loaderKey => $loaderConfig) {
-			$loaderName = $this->prefix('loader.' . $loaderKey);
-			$loaderDefinition = $definitionsHelper->getDefinitionFromConfig($loaderConfig, $loaderKey);
-
-			if ($loaderDefinition instanceof Definition && $loaderDefinition->getName() === $loaderName) {
-				$loaderDefinition->setAutowired(false);
-			}
+			$loaderDefinition = $loader->loadDefinitionFromConfig(
+				$loaderConfig,
+				$this->prefix('loader.' . $loaderKey),
+			);
 
 			$loaderDefinitionNames[] = is_string($loaderDefinition)
 				? ltrim($loaderDefinition, '@')
