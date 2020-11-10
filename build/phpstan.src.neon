@@ -12,9 +12,6 @@ parameters:
 		- message: '#(.+)array\<int, string\>\|false(.+)#'
 		  path: %currentWorkingDirectory%/src/Locale/LocaleHelper.php
 		  count: 5
-		- message: '#^Unused \@throws Orisai\\Localization\\Exception\\MalformedLocale annotation$#'
-		  path: %currentWorkingDirectory%/src/Locale/LocaleHelper.php
-		  count: 1
 		- message: '#^Foreach overwrites \$messageLocale with its value variable\.$#'
 		  path: %currentWorkingDirectory%/src/DefaultTranslator.php
 		  count: 1
