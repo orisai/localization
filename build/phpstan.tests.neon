@@ -3,6 +3,7 @@ includes:
 
 parameters:
 	level: 3
+	resultCachePath: %currentWorkingDirectory%/var/build-tools/PHPStan/resultCache.tests.php
 
 	ignoreErrors:
 		- '#^Call to an undefined method Nette\\DI\\Container\:\:initialize\(\)\.$#'
