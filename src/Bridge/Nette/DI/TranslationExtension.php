@@ -6,6 +6,7 @@ use Latte\Engine;
 use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\FactoryDefinition;
+use Nette\DI\Definitions\Reference;
 use Nette\DI\Definitions\Statement;
 use Nette\Localization\ITranslator;
 use Nette\PhpGenerator\ClassType;
@@ -35,8 +36,6 @@ use Orisai\Localization\Translator;
 use Orisai\Localization\TranslatorHolder;
 use stdClass;
 use function assert;
-use function is_string;
-use function ltrim;
 
 /**
  * @property-read stdClass $config
@@ -129,8 +128,8 @@ final class TranslationExtension extends CompilerExtension
 				$this->prefix('resolver.' . $resolverKey),
 			);
 
-			$resolverDefinitionNames[] = is_string($resolverDefinition)
-				? ltrim($resolverDefinition, '@')
+			$resolverDefinitionNames[] = $resolverDefinition instanceof Reference
+				? $resolverDefinition->getValue()
 				: $resolverDefinition->getName();
 		}
 
@@ -149,8 +148,8 @@ final class TranslationExtension extends CompilerExtension
 				$this->prefix('loader.' . $loaderKey),
 			);
 
-			$loaderDefinitionNames[] = is_string($loaderDefinition)
-				? ltrim($loaderDefinition, '@')
+			$loaderDefinitionNames[] = $loaderDefinition instanceof Reference
+				? $loaderDefinition->getValue()
 				: $loaderDefinition->getName();
 		}
 
