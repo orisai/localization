@@ -5,7 +5,9 @@ namespace Orisai\Localization;
 use function assert;
 use function function_exists;
 
+// @codeCoverageIgnoreStart
 if (!function_exists('Orisai\Localization\__')) {
+	// @codeCoverageIgnoreEnd
 
 	/**
 	 * @param array<mixed> $parameters
