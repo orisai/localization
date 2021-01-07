@@ -1,6 +1,6 @@
 extensions:
 	localization: Orisai\Localization\Bridge\NetteDI\LocalizationExtension
-	latte: Nette\Bridges\ApplicationDI\LatteExtension(%tempDir%/cache/latte, true)
+	latte: Nette\Bridges\ApplicationDI\LatteExtension(%buildDir%/latte, true)
 	tracy: Tracy\Bridges\Nette\TracyExtension(true, true)
 
 localization:

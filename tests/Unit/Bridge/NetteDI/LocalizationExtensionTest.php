@@ -2,10 +2,7 @@
 
 namespace Tests\Orisai\Localization\Unit\Bridge\NetteDI;
 
-use Nette\DI\Compiler;
-use Nette\DI\Container;
-use Nette\DI\ContainerLoader;
-use Nette\DI\Extensions\ExtensionsExtension;
+use OriNette\DI\Boot\ManualConfigurator;
 use Orisai\Localization\Bridge\Latte\TranslationFilters;
 use Orisai\Localization\Bridge\NetteCaching\CachedCatalogue;
 use Orisai\Localization\Bridge\NetteDI\LazyMultiLoader;
@@ -21,7 +18,7 @@ use Orisai\Localization\Resource\ArrayCacheLoader;
 use Orisai\Localization\Translator;
 use Orisai\Localization\TranslatorHolder;
 use PHPUnit\Framework\TestCase;
-use function assert;
+use function dirname;
 use function Orisai\Localization\__;
 
 /**
@@ -30,19 +27,12 @@ use function Orisai\Localization\__;
 final class LocalizationExtensionTest extends TestCase
 {
 
-	private const TEMP_PATH = __DIR__ . '/../../../../var/tmp';
-
 	public function testMinimal(): void
 	{
-		$loader = new ContainerLoader(self::TEMP_PATH . '/cache', true);
-		$class = $loader->load(static function (Compiler $compiler): void {
-			$compiler->addExtension('extensions', new ExtensionsExtension());
-			$compiler->loadConfig(__DIR__ . '/config.minimal.neon');
-		}, __METHOD__);
+		$configurator = new ManualConfigurator(dirname(__DIR__, 4));
+		$configurator->addConfig(__DIR__ . '/config.minimal.neon');
 
-		$container = new $class();
-		assert($container instanceof Container);
-		$container->initialize();
+		$container = $configurator->createContainer();
 
 		$translator = $container->getByType(Translator::class);
 		self::assertInstanceOf(DefaultTranslator::class, $translator);
@@ -72,20 +62,10 @@ final class LocalizationExtensionTest extends TestCase
 
 	public function testFull(): void
 	{
-		$loader = new ContainerLoader(self::TEMP_PATH . '/cache', true);
-		$class = $loader->load(static function (Compiler $compiler): void {
-			$compiler->addExtension('extensions', new ExtensionsExtension());
-			$compiler->addConfig([
-				'parameters' => [
-					'tempDir' => self::TEMP_PATH,
-				],
-			]);
-			$compiler->loadConfig(__DIR__ . '/config.full.neon');
-		}, __METHOD__);
+		$configurator = new ManualConfigurator(dirname(__DIR__, 4));
+		$configurator->addConfig(__DIR__ . '/config.full.neon');
 
-		$container = new $class();
-		assert($container instanceof Container);
-		$container->initialize();
+		$container = $configurator->createContainer();
 
 		$translator = $container->getByType(Translator::class);
 		self::assertInstanceOf(DefaultTranslator::class, $translator);
