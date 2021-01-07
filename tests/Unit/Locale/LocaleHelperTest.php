@@ -11,7 +11,7 @@ final class LocaleHelperTest extends TestCase
 
 	/**
 	 * @doesNotPerformAssertions
-	 * @dataProvider providerValidate
+	 * @dataProvider provideValidate
 	 */
 	public function testValidate(string $locale): void
 	{
@@ -21,7 +21,7 @@ final class LocaleHelperTest extends TestCase
 	/**
 	 * @return array<array<string>>
 	 */
-	public function providerValidate(): array
+	public function provideValidate(): array
 	{
 		return [
 			['cs'],
@@ -32,7 +32,7 @@ final class LocaleHelperTest extends TestCase
 	}
 
 	/**
-	 * @dataProvider providerValidateFailure
+	 * @dataProvider provideValidateFailure
 	 */
 	public function testValidateUnknownFormat(string $locale, string $message): void
 	{
@@ -45,7 +45,7 @@ final class LocaleHelperTest extends TestCase
 	/**
 	 * @return array<array<string>>
 	 */
-	public function providerValidateFailure(): array
+	public function provideValidateFailure(): array
 	{
 		return [
 			['+ěšč', 'Invalid "+ěšč" locale.'],
@@ -59,7 +59,7 @@ final class LocaleHelperTest extends TestCase
 	}
 
 	/**
-	 * @dataProvider providerNormalize
+	 * @dataProvider provideNormalize
 	 */
 	public function testNormalize(string $given, string $expected): void
 	{
@@ -69,7 +69,7 @@ final class LocaleHelperTest extends TestCase
 	/**
 	 * @return array<array<string>>
 	 */
-	public function providerNormalize(): array
+	public function provideNormalize(): array
 	{
 		return [
 			['CS', 'cs'],
@@ -80,7 +80,7 @@ final class LocaleHelperTest extends TestCase
 	}
 
 	/**
-	 * @dataProvider providerShorten
+	 * @dataProvider provideShorten
 	 */
 	public function testShorten(string $given, string $expected): void
 	{
@@ -90,7 +90,7 @@ final class LocaleHelperTest extends TestCase
 	/**
 	 * @return array<array<string>>
 	 */
-	public function providerShorten(): array
+	public function provideShorten(): array
 	{
 		return [
 			['en-US', 'en'],
@@ -102,7 +102,7 @@ final class LocaleHelperTest extends TestCase
 
 	/**
 	 * @param array<string> $whitelist
-	 * @dataProvider providerIsWhitelisted
+	 * @dataProvider provideIsWhitelisted
 	 */
 	public function testIsWhitelisted(string $locale, array $whitelist): void
 	{
@@ -112,7 +112,7 @@ final class LocaleHelperTest extends TestCase
 	/**
 	 * @return array<mixed>
 	 */
-	public function providerIsWhitelisted(): array
+	public function provideIsWhitelisted(): array
 	{
 		return [
 			[
@@ -132,7 +132,7 @@ final class LocaleHelperTest extends TestCase
 
 	/**
 	 * @param array<string> $whitelist
-	 * @dataProvider providerIsNotWhitelisted
+	 * @dataProvider provideIsNotWhitelisted
 	 */
 	public function testIsNotWhitelisted(string $locale, array $whitelist): void
 	{
@@ -142,7 +142,7 @@ final class LocaleHelperTest extends TestCase
 	/**
 	 * @return array<mixed>
 	 */
-	public function providerIsNotWhitelisted(): array
+	public function provideIsNotWhitelisted(): array
 	{
 		return [
 			[

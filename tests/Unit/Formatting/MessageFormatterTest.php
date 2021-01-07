@@ -21,14 +21,14 @@ final class MessageFormatterTest extends TestCase
 
 	/**
 	 * @param array<mixed> $parameters
-	 * @dataProvider providerChoice
-	 * @dataProvider providerComplex
-	 * @dataProvider providerDuration
-	 * @dataProvider providerDate
-	 * @dataProvider providerNumber
-	 * @dataProvider providerSelect
-	 * @dataProvider providerPlural
-	 * @dataProvider providerSpellout
+	 * @dataProvider provideChoice
+	 * @dataProvider provideComplex
+	 * @dataProvider provideDuration
+	 * @dataProvider provideDate
+	 * @dataProvider provideNumber
+	 * @dataProvider provideSelect
+	 * @dataProvider providePlural
+	 * @dataProvider provideSpellout
 	 */
 	public function testIntl(string $locale, string $message, array $parameters, string $expected): void
 	{
@@ -44,10 +44,10 @@ final class MessageFormatterTest extends TestCase
 	 *  - spellout
 	 *
 	 * @param array<mixed> $parameters
-	 * @dataProvider providerComplex
-	 * @dataProvider providerNumber
-	 * @dataProvider providerSelect
-	 * @dataProvider providerPlural
+	 * @dataProvider provideComplex
+	 * @dataProvider provideNumber
+	 * @dataProvider provideSelect
+	 * @dataProvider providePlural
 	 */
 	public function testSymfony(string $locale, string $message, array $parameters, string $expected): void
 	{
@@ -58,7 +58,7 @@ final class MessageFormatterTest extends TestCase
 	/**
 	 * @return array<mixed>
 	 */
-	public function providerNumber(): array
+	public function provideNumber(): array
 	{
 		return [
 			['en-US', 'I have {0} apples.', [3], 'I have 3 apples.'],
@@ -73,7 +73,7 @@ final class MessageFormatterTest extends TestCase
 	/**
 	 * @return array<mixed>
 	 */
-	public function providerDate(): array
+	public function provideDate(): array
 	{
 		return [
 			['en_US', 'Today is {0, date, full} - {0, time}', [1_577_531_843], 'Today is Saturday, December 28, 2019 - 11:17:23 AM'],
@@ -83,7 +83,7 @@ final class MessageFormatterTest extends TestCase
 	/**
 	 * @return array<mixed>
 	 */
-	public function providerDuration(): array
+	public function provideDuration(): array
 	{
 		return [
 			['en-US', 'duration: {0, duration}', [1_577_531_843], 'duration: 438,203:17:23'],
@@ -93,7 +93,7 @@ final class MessageFormatterTest extends TestCase
 	/**
 	 * @return array<mixed>
 	 */
-	public function providerSpellout(): array
+	public function provideSpellout(): array
 	{
 		return [
 			['en-US', 'I have {0, spellout} apples', [34], 'I have thirty-four apples'],
@@ -106,7 +106,7 @@ final class MessageFormatterTest extends TestCase
 	 *
 	 * @return array<mixed>
 	 */
-	public function providerPlural(): array
+	public function providePlural(): array
 	{
 		return [
 			['en-US', 'I have {number_apples, plural, =0{no apples} =1{one apple} other{# apples}}', ['number_apples' => 0], 'I have no apples'],
@@ -118,7 +118,7 @@ final class MessageFormatterTest extends TestCase
 	/**
 	 * @return array<mixed>
 	 */
-	public function providerChoice(): array
+	public function provideChoice(): array
 	{
 		return [
 			[
@@ -139,7 +139,7 @@ final class MessageFormatterTest extends TestCase
 	/**
 	 * @return array<mixed>
 	 */
-	public function providerSelect(): array
+	public function provideSelect(): array
 	{
 		return [
 			[
@@ -154,7 +154,7 @@ final class MessageFormatterTest extends TestCase
 	/**
 	 * @return array<mixed>
 	 */
-	public function providerComplex(): array
+	public function provideComplex(): array
 	{
 		$complexPattern
 			= '{gender_of_host, select, ' .

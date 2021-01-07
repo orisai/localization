@@ -198,7 +198,7 @@ final class DefaultTranslatorTest extends TestCase
 	/**
 	 * @param array<string> $localeWhitelist
 	 * @param array<string> $fallbacks
-	 * @dataProvider providerValidation
+	 * @dataProvider provideValidation
 	 */
 	public function testValidation(
 		string $defaultLocale,
@@ -224,7 +224,7 @@ final class DefaultTranslatorTest extends TestCase
 	/**
 	 * @return array<mixed>
 	 */
-	public function providerValidation(): array
+	public function provideValidation(): array
 	{
 		return [
 			['eN', [], [], 'Invalid "eN" locale, use "en" format instead.'],
