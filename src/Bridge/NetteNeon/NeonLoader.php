@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Orisai\Localization\Bridge\Neon;
+namespace Orisai\Localization\Bridge\NetteNeon;
 
 use Orisai\Localization\Resource\Loader;
 

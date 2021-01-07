@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Orisai\Localization\Bridge\Nette\DI;
+namespace Orisai\Localization\Bridge\NetteDI;
 
 use Nette\DI\Container;
 use Orisai\Localization\Resource\Loader;

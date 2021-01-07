@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Orisai\Localization\Bridge\Nette\DI;
+namespace Orisai\Localization\Bridge\NetteDI;
 
 use Latte\Engine;
 use Nette\Bridges\ApplicationLatte\ILatteFactory;
@@ -16,8 +16,8 @@ use Nette\Schema\Schema;
 use OriNette\DI\Definitions\DefinitionsLoader;
 use Orisai\Localization\Bridge\Latte\TranslationFilters;
 use Orisai\Localization\Bridge\Latte\TranslationMacros;
-use Orisai\Localization\Bridge\Nette\Caching\CachedCatalogue;
-use Orisai\Localization\Bridge\Nette\Localization\NetteTranslator;
+use Orisai\Localization\Bridge\NetteCaching\CachedCatalogue;
+use Orisai\Localization\Bridge\NetteLocalization\NetteTranslator;
 use Orisai\Localization\Bridge\Tracy\TranslationPanel;
 use Orisai\Localization\ConfigurableTranslator;
 use Orisai\Localization\DefaultTranslator;
@@ -40,7 +40,7 @@ use function assert;
 /**
  * @property-read stdClass $config
  */
-final class TranslationExtension extends CompilerExtension
+final class LocalizationExtension extends CompilerExtension
 {
 
 	public function getConfigSchema(): Schema

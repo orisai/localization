@@ -1,9 +1,9 @@
 extensions:
-	orisai.translation: Orisai\Localization\Bridge\Nette\DI\TranslationExtension
+	localization: Orisai\Localization\Bridge\NetteDI\LocalizationExtension
 	latte: Nette\Bridges\ApplicationDI\LatteExtension(%tempDir%/cache/latte, true)
 	tracy: Tracy\Bridges\Nette\TracyExtension(true, true)
 
-orisai.translation:
+localization:
 	locale:
 		default: en
 		whitelist: [cs, fr, de, sk]

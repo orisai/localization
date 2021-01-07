@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Orisai\Localization\Bridge\Nette\Http;
+namespace Orisai\Localization\Bridge\NetteHttp;
 
 use Nette\Http\IResponse;
 use Nette\Http\Session;

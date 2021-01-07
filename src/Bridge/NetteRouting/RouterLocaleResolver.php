@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Orisai\Localization\Bridge\Nette\Router;
+namespace Orisai\Localization\Bridge\NetteRouting;
 
 use Nette\Http\IRequest;
 use Nette\Routing\Router;

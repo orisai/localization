@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Orisai\Localization\Bridge\Symfony\Contracts\Translation;
+namespace Orisai\Localization\Bridge\SymfonyTranslationContracts;
 
 use Orisai\Localization\Translator;
 use Symfony\Contracts\Translation\TranslatorInterface;

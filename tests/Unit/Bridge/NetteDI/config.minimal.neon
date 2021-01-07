@@ -1,0 +1,9 @@
+extensions:
+	localization: Orisai\Localization\Bridge\NetteDI\LocalizationExtension
+
+localization:
+	locale:
+		default: en
+
+services:
+	storage: Nette\Caching\Storages\MemoryStorage
