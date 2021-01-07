@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Orisai\Localization\Bridge\Nette\Localization;
+namespace Orisai\Localization\Bridge\NetteLocalization;
 
 use Nette\Localization\ITranslator;
 use Orisai\Exceptions\Logic\InvalidArgument;
