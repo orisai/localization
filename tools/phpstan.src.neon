@@ -6,17 +6,14 @@ parameters:
 	resultCachePath: %currentWorkingDirectory%/var/tools/PHPStan/resultCache.src.php
 
 	ignoreErrors:
-		# Intentional
-		- message: '#(.+)string\|false\.$#'
-		  path: %currentWorkingDirectory%/src/Bridge/Tracy/TranslationPanel.php
-		  count: 2
-		- message: '#(.+)array\<int, string\>\|false(.+)#'
-		  path: %currentWorkingDirectory%/src/Locale/LocaleHelper.php
-		  count: 5
-		- message: '#^Foreach overwrites \$messageLocale with its value variable\.$#'
-		  path: %currentWorkingDirectory%/src/DefaultTranslator.php
-		  count: 1
 		# MessageFormatter is null in case pattern is invalid
 		- message: '#^Strict comparison using === between MessageFormatter and null will always evaluate to false\.$#'
 		  path: %currentWorkingDirectory%/src/Formatting/IntlMessageFormatter.php
 		  count: 1
+		# Shouldn't be possible
+		- message: '#Parameter \#3 \$length of function substr expects int, int\<0, max\>\|false given\.#'
+		  path:  %currentWorkingDirectory%/src/Locale/StandardLocale.php
+		  count: 1
+		- message: '#(.+)string\|false\.$#'
+		  path: %currentWorkingDirectory%/src/Bridge/Tracy/TranslationPanel.php
+		  count: 2

@@ -4,6 +4,8 @@ namespace Tests\Orisai\Localization\Unit;
 
 use Orisai\Localization\DefaultTranslator;
 use Orisai\Localization\Formatting\IntlMessageFormatter;
+use Orisai\Localization\Locale\LocaleProcessor;
+use Orisai\Localization\Locale\LocaleSet;
 use Orisai\Localization\Logging\TranslationsLogger;
 use Orisai\Localization\Translator;
 use Orisai\Localization\TranslatorHolder;
@@ -21,16 +23,29 @@ final class ShortcutTest extends TestCase
 
 	public function test(): void
 	{
+		$processor = new LocaleProcessor();
 		TranslatorHolder::setTranslator(
-			DefaultTranslator::fromRawLocales('en', ['cs'], [], new FakeLocaleResolver(), new ArrayCatalogue([
-				'en' => [
-					'no-param' => 'No parameters',
-					'apples' => 'I have {apples} apples.',
-				],
-				'cs' => [
-					'apples' => 'Já mám {apples} jablka.',
-				],
-			]), new IntlMessageFormatter(), new TranslationsLogger()),
+			new DefaultTranslator(
+				new LocaleSet(
+					$processor,
+					'en',
+					['cs'],
+					[],
+				),
+				new FakeLocaleResolver(),
+				new ArrayCatalogue([
+					'en' => [
+						'no-param' => 'No parameters',
+						'apples' => 'I have {apples} apples.',
+					],
+					'cs' => [
+						'apples' => 'Já mám {apples} jablka.',
+					],
+				]),
+				new IntlMessageFormatter(),
+				new TranslationsLogger(),
+				$processor,
+			),
 		);
 
 		self::assertTrue(function_exists('Orisai\Localization\__'));

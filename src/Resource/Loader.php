@@ -8,6 +8,6 @@ interface Loader
 	/**
 	 * @return array<string>
 	 */
-	public function loadAllMessages(string $locale): array;
+	public function loadAllMessages(string $languageTag): array;
 
 }

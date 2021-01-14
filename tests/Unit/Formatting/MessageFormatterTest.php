@@ -32,8 +32,8 @@ final class MessageFormatterTest extends TestCase
 	 */
 	public function testIntl(string $locale, string $message, array $parameters, string $expected): void
 	{
-		self::assertSame($expected, self::$intlFormatter->formatMessage($locale, $message, $parameters));
-		self::$intlFormatter->validatePattern($locale, $message);
+		self::assertSame($expected, self::$intlFormatter->formatMessage($message, $parameters, $locale));
+		self::$intlFormatter->validatePattern($message, $locale);
 	}
 
 	/**
@@ -51,8 +51,8 @@ final class MessageFormatterTest extends TestCase
 	 */
 	public function testSymfony(string $locale, string $message, array $parameters, string $expected): void
 	{
-		self::assertSame($expected, self::$symfonyFormatter->formatMessage($locale, $message, $parameters));
-		self::$intlFormatter->validatePattern($locale, $message);
+		self::assertSame($expected, self::$symfonyFormatter->formatMessage($message, $parameters, $locale));
+		self::$intlFormatter->validatePattern($message, $locale);
 	}
 
 	/**

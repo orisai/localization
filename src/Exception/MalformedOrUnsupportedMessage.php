@@ -10,16 +10,16 @@ final class MalformedOrUnsupportedMessage extends LogicalException
 
 	private string $pattern;
 
-	private string $locale;
+	private string $languageTag;
 
-	private function __construct(string $message, string $pattern, string $locale)
+	private function __construct(string $message, string $pattern, string $languageTag)
 	{
 		parent::__construct($message);
 		$this->pattern = $pattern;
-		$this->locale = $locale;
+		$this->languageTag = $languageTag;
 	}
 
-	public static function forPattern(string $pattern, string $locale): self
+	public static function forPattern(string $pattern, string $languageTag): self
 	{
 		return new self(
 			sprintf(
@@ -27,7 +27,7 @@ final class MalformedOrUnsupportedMessage extends LogicalException
 				$pattern,
 			),
 			$pattern,
-			$locale,
+			$languageTag,
 		);
 	}
 
@@ -36,9 +36,9 @@ final class MalformedOrUnsupportedMessage extends LogicalException
 		return $this->pattern;
 	}
 
-	public function getLocale(): string
+	public function getLanguageTag(): string
 	{
-		return $this->locale;
+		return $this->languageTag;
 	}
 
 }

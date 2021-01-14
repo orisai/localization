@@ -8,15 +8,15 @@ final class MissingResource
 {
 
 	/** @var array<string> */
-	private array $locales;
+	private array $languageTags;
 
 	private string $message;
 
 	private int $count;
 
-	public function __construct(string $locale, string $message)
+	public function __construct(string $message, string $languageTag)
 	{
-		$this->locales = [$locale];
+		$this->languageTags = [$languageTag];
 		$this->message = $message;
 		$this->count = 1;
 	}
@@ -24,9 +24,9 @@ final class MissingResource
 	/**
 	 * @return array<string>
 	 */
-	public function getLocales(): array
+	public function getLanguageTags(): array
 	{
-		return $this->locales;
+		return $this->languageTags;
 	}
 
 	public function getMessage(): string
@@ -34,10 +34,10 @@ final class MissingResource
 		return $this->message;
 	}
 
-	public function incrementCount(string $locale): void
+	public function incrementCount(string $languageTag): void
 	{
-		if (!in_array($locale, $this->locales, true)) {
-			$this->locales[] = $locale;
+		if (!in_array($languageTag, $this->languageTags, true)) {
+			$this->languageTags[] = $languageTag;
 		}
 
 		++$this->count;

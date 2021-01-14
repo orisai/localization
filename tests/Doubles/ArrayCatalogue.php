@@ -21,13 +21,13 @@ final class ArrayCatalogue implements Catalogue
 		$this->messages = $messages;
 	}
 
-	public function getMessage(string $message, string $locale): ?string
+	public function getMessage(string $message, string $languageTag): ?string
 	{
-		$this->calls[$locale][$message] = isset($this->calls[$locale][$message])
-			? $this->calls[$locale][$message] + 1
+		$this->calls[$languageTag][$message] = isset($this->calls[$languageTag][$message])
+			? $this->calls[$languageTag][$message] + 1
 			: 1;
 
-		return $this->messages[$locale][$message] ?? null;
+		return $this->messages[$languageTag][$message] ?? null;
 	}
 
 	/**

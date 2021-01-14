@@ -7,16 +7,16 @@ use Orisai\Localization\Locale\LocaleConfigurator;
 final class FakeLocaleConfigurator implements LocaleConfigurator
 {
 
-	private ?string $locale = null;
+	private ?string $languageTag = null;
 
-	public function configure(string $locale): void
+	public function configure(string $languageTag): void
 	{
-		$this->locale = $locale;
+		$this->languageTag = $languageTag;
 	}
 
-	public function getLocale(): string
+	public function getLanguageTag(): string
 	{
-		return $this->locale;
+		return $this->languageTag;
 	}
 
 }

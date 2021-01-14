@@ -16,20 +16,13 @@ final class MultiLocaleResolver implements LocaleResolver
 		$this->resolvers = $resolvers;
 	}
 
-	/**
-	 * @param array<string> $localeWhitelist
-	 */
-	public function resolve(array $localeWhitelist): ?string
+	public function resolve(LocaleSet $locales, LocaleProcessor $localeProcessor): ?Locale
 	{
 		foreach ($this->resolvers as $resolver) {
-			$locale = $resolver->resolve($localeWhitelist);
+			$locale = $resolver->resolve($locales, $localeProcessor);
 
-			if ($locale !== null) {
-				$locale = LocaleHelper::normalize($locale);
-
-				if (LocaleHelper::isWhitelisted($locale, $localeWhitelist)) {
-					return $locale;
-				}
+			if ($locale !== null && $localeProcessor->isWhitelisted($locale, $locales)) {
+				return $locale;
 			}
 		}
 

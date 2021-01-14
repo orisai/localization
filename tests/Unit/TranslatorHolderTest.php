@@ -5,6 +5,8 @@ namespace Tests\Orisai\Localization\Unit;
 use Orisai\Exceptions\Logic\InvalidState;
 use Orisai\Localization\DefaultTranslator;
 use Orisai\Localization\Formatting\IntlMessageFormatter;
+use Orisai\Localization\Locale\LocaleProcessor;
+use Orisai\Localization\Locale\LocaleSet;
 use Orisai\Localization\Logging\TranslationsLogger;
 use Orisai\Localization\TranslatorHolder;
 use PHPUnit\Framework\TestCase;
@@ -19,14 +21,19 @@ final class TranslatorHolderTest extends TestCase
 
 	public function testOk(): void
 	{
-		$translator = DefaultTranslator::fromRawLocales(
-			'en',
-			[],
-			[],
+		$processor = new LocaleProcessor();
+		$translator = new DefaultTranslator(
+			new LocaleSet(
+				$processor,
+				'en',
+				[],
+				[],
+			),
 			new FakeLocaleResolver(),
 			new ArrayCatalogue([]),
 			new IntlMessageFormatter(),
 			new TranslationsLogger(),
+			$processor,
 		);
 		TranslatorHolder::setTranslator($translator);
 

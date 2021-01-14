@@ -11,7 +11,6 @@ final class MultiLocaleConfiguratorTest extends TestCase
 
 	public function test(): void
 	{
-		/** @var array<FakeLocaleConfigurator> $configurators */
 		$configurators = [
 			new FakeLocaleConfigurator(),
 			new FakeLocaleConfigurator(),
@@ -22,7 +21,7 @@ final class MultiLocaleConfiguratorTest extends TestCase
 		$mainConfigurator->configure('en');
 
 		foreach ($configurators as $configurator) {
-			self::assertSame('en', $configurator->getLocale());
+			self::assertSame('en', $configurator->getLanguageTag());
 		}
 	}
 

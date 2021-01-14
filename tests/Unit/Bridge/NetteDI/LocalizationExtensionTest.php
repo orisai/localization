@@ -12,12 +12,14 @@ use Orisai\Localization\Bridge\NetteLocalization\NetteTranslator;
 use Orisai\Localization\Bridge\Tracy\TranslationPanel;
 use Orisai\Localization\DefaultTranslator;
 use Orisai\Localization\Formatting\MessageFormatter;
+use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Logging\TranslationsLogger;
 use Orisai\Localization\Resource\ArrayCacheCatalogue;
 use Orisai\Localization\Resource\ArrayCacheLoader;
 use Orisai\Localization\Translator;
 use Orisai\Localization\TranslatorHolder;
 use PHPUnit\Framework\TestCase;
+use function assert;
 use function dirname;
 use function Orisai\Localization\__;
 
@@ -30,6 +32,7 @@ final class LocalizationExtensionTest extends TestCase
 	public function testMinimal(): void
 	{
 		$configurator = new ManualConfigurator(dirname(__DIR__, 4));
+		$configurator->setDebugMode(true);
 		$configurator->addConfig(__DIR__ . '/config.minimal.neon');
 
 		$container = $configurator->createContainer();
@@ -37,9 +40,14 @@ final class LocalizationExtensionTest extends TestCase
 		$translator = $container->getByType(Translator::class);
 		self::assertInstanceOf(DefaultTranslator::class, $translator);
 
-		self::assertSame('en', $translator->getDefaultLocale());
-		self::assertSame(['en'], $translator->getLocaleWhitelist());
-		self::assertSame('en', $translator->getCurrentLocale());
+		$processor = $container->getService('localization.locale.processor');
+		self::assertInstanceOf(LocaleProcessor::class, $processor);
+		self::assertSame($processor, $container->getByType(LocaleProcessor::class));
+		assert($processor instanceof LocaleProcessor);
+
+		self::assertSame('en', $translator->getDefaultLocale()->getTag());
+		self::assertSame(['en'], $processor->localesToTagVariants($translator->getLocaleWhitelist()));
+		self::assertSame('en', $translator->getCurrentLocale()->getTag());
 
 		self::assertInstanceOf(LazyMultiLocaleResolver::class, $container->getService('localization.resolver'));
 		self::assertInstanceOf(LazyMultiLoader::class, $container->getService('localization.loader'));
@@ -63,6 +71,7 @@ final class LocalizationExtensionTest extends TestCase
 	public function testFull(): void
 	{
 		$configurator = new ManualConfigurator(dirname(__DIR__, 4));
+		$configurator->setDebugMode(true);
 		$configurator->addConfig(__DIR__ . '/config.full.neon');
 
 		$container = $configurator->createContainer();
@@ -70,9 +79,14 @@ final class LocalizationExtensionTest extends TestCase
 		$translator = $container->getByType(Translator::class);
 		self::assertInstanceOf(DefaultTranslator::class, $translator);
 
-		self::assertSame('en', $translator->getDefaultLocale());
-		self::assertSame(['cs', 'fr', 'de', 'sk', 'en'], $translator->getLocaleWhitelist());
-		self::assertSame('en', $translator->getCurrentLocale());
+		$processor = new LocaleProcessor();
+
+		self::assertSame('en', $translator->getDefaultLocale()->getTag());
+		self::assertSame(
+			['cs', 'fr', 'de', 'sk', 'en'],
+			$processor->localesToTagVariants($translator->getLocaleWhitelist()),
+		);
+		self::assertSame('en', $translator->getCurrentLocale()->getTag());
 
 		self::assertInstanceOf(LazyMultiLocaleResolver::class, $container->getService('localization.resolver'));
 		self::assertInstanceOf(LazyMultiLoader::class, $container->getService('localization.loader'));

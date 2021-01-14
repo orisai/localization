@@ -3,14 +3,16 @@
 namespace Orisai\Localization;
 
 use Orisai\Exceptions\Logic\InvalidState;
-use Orisai\Localization\Exception\LocaleNotWhitelisted;
+use Orisai\Localization\Exception\LanguageNotWhitelisted;
 use Orisai\Localization\Formatting\MessageFormatter;
-use Orisai\Localization\Locale\LocaleHelper;
+use Orisai\Localization\Locale\Locale;
+use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Locale\LocaleResolver;
+use Orisai\Localization\Locale\LocaleSet;
 use Orisai\Localization\Logging\TranslationsLogger;
 use Orisai\Localization\Resource\Catalogue;
+use function array_merge;
 use function array_unique;
-use function in_array;
 use function sprintf;
 
 final class DefaultTranslator implements ConfigurableTranslator
@@ -20,154 +22,77 @@ final class DefaultTranslator implements ConfigurableTranslator
 	private LocaleResolver $localeResolver;
 	private MessageFormatter $messageFormatter;
 	private TranslationsLogger $logger;
+	private LocaleProcessor $localeProcessor;
 
-	private string $defaultLocale;
-	private ?string $currentLocale = null;
-
-	/** @var array<string> */
-	private array $localeWhitelist;
-
-	/** @var array<string> */
-	private array $fallbackLocales;
+	private LocaleSet $locales;
+	private ?Locale $currentLocale = null;
 
 	/** @var array<array<string>> */
-	private array $possibleLocales = [];
+	private array $possibleLanguageTags = [];
 
-	/**
-	 * @param array<string> $localeWhiteList
-	 * @param array<string> $fallbackLocales
-	 */
-	private function __construct(
-		string $defaultLocale,
-		array $localeWhiteList,
-		array $fallbackLocales,
+	public function __construct(
+		LocaleSet $locales,
 		LocaleResolver $localeResolver,
 		Catalogue $catalogue,
 		MessageFormatter $messageFormatter,
-		TranslationsLogger $logger
+		TranslationsLogger $logger,
+		LocaleProcessor $localeProcessor
 	)
 	{
-		if (!in_array($defaultLocale, $localeWhiteList, true)) {
-			$localeWhiteList[] = $defaultLocale;
-		}
-
-		$this->defaultLocale = $defaultLocale;
-		$this->localeWhitelist = $localeWhiteList;
-		$this->fallbackLocales = $fallbackLocales;
+		$this->locales = $locales;
 		$this->localeResolver = $localeResolver;
 		$this->catalogue = $catalogue;
 		$this->messageFormatter = $messageFormatter;
 		$this->logger = $logger;
-	}
-
-	/**
-	 * @param array<string> $localeWhiteList
-	 * @param array<string> $fallbackLocales
-	 */
-	public static function fromValidLocales(
-		string $defaultLocale,
-		array $localeWhiteList,
-		array $fallbackLocales,
-		LocaleResolver $localeResolver,
-		Catalogue $catalogue,
-		MessageFormatter $messageFormatter,
-		TranslationsLogger $logger
-	): self
-	{
-		return new self(
-			$defaultLocale,
-			$localeWhiteList,
-			$fallbackLocales,
-			$localeResolver,
-			$catalogue,
-			$messageFormatter,
-			$logger,
-		);
-	}
-
-	/**
-	 * @param array<string> $localeWhiteList
-	 * @param array<string> $fallbackLocales
-	 */
-	public static function fromRawLocales(
-		string $defaultLocale,
-		array $localeWhiteList,
-		array $fallbackLocales,
-		LocaleResolver $localeResolver,
-		Catalogue $catalogue,
-		MessageFormatter $messageFormatter,
-		TranslationsLogger $logger
-	): self
-	{
-		LocaleHelper::validate($defaultLocale);
-
-		foreach ($localeWhiteList as $whitelistedLocale) {
-			LocaleHelper::validate($whitelistedLocale);
-		}
-
-		foreach ($fallbackLocales as $requestedLocale => $fallbackLocale) {
-			LocaleHelper::validate($requestedLocale);
-			LocaleHelper::validate($fallbackLocale);
-		}
-
-		return new self(
-			$defaultLocale,
-			$localeWhiteList,
-			$fallbackLocales,
-			$localeResolver,
-			$catalogue,
-			$messageFormatter,
-			$logger,
-		);
+		$this->localeProcessor = $localeProcessor;
 	}
 
 	/**
 	 * @param array<mixed> $parameters
 	 */
-	public function translate(string $message, array $parameters = [], ?string $locale = null): string
+	public function translate(string $message, array $parameters = [], ?string $languageTag = null): string
 	{
-		if ($locale !== null) {
-			$this->checkValidAndWhitelisted($locale);
-		}
+		$locale = $languageTag !== null
+			? $this->checkValidAndWhitelisted($languageTag)
+			: $this->getCurrentLocale();
+		$languageTag = $locale->getTag();
 
-		$locale ??= $this->getCurrentLocale();
-		$possibleLocales = $this->getPossibleLocales($locale);
-
-		// Should not happen, foreach should always have at least one iteration
 		$translatedMessage = null;
-		$messageLocale = $locale;
+		$translatedMessageLanguageTag = $languageTag;
 
-		foreach ($possibleLocales as $messageLocale) {
-			$translatedMessage = $this->catalogue->getMessage($message, $messageLocale);
+		foreach ($this->getPossibleLanguageTags($locale) as $possibleLanguageTag) {
+			$translatedMessage = $this->catalogue->getMessage($message, $possibleLanguageTag);
 
 			if ($translatedMessage !== null) {
+				$translatedMessageLanguageTag = $possibleLanguageTag;
+
 				break;
 			}
 		}
 
 		if ($translatedMessage === null) {
-			$this->logger->addMissingResource($locale, $message);
+			$this->logger->addMissingResource($message, $languageTag);
 
 			return $message;
 		}
 
-		return $this->messageFormatter->formatMessage($messageLocale, $translatedMessage, $parameters);
+		return $this->messageFormatter->formatMessage($translatedMessage, $parameters, $translatedMessageLanguageTag);
 	}
 
-	public function getDefaultLocale(): string
+	public function getDefaultLocale(): Locale
 	{
-		return $this->defaultLocale;
+		return $this->locales->getDefault();
 	}
 
 	/**
-	 * @return array<string>
+	 * @return array<Locale>
 	 */
 	public function getLocaleWhitelist(): array
 	{
-		return $this->localeWhitelist;
+		return $this->locales->getWhitelist();
 	}
 
-	public function setCurrentLocale(string $locale): void
+	public function setCurrentLocale(string $languageTag): void
 	{
 		if ($this->currentLocale !== null) {
 			throw InvalidState::create()
@@ -177,83 +102,65 @@ final class DefaultTranslator implements ConfigurableTranslator
 				));
 		}
 
-		$this->checkValidAndWhitelisted($locale);
-		$this->currentLocale = $locale;
+		$currentLocale = $this->checkValidAndWhitelisted($languageTag);
+		$this->currentLocale = $currentLocale;
 	}
 
-	public function getCurrentLocale(): string
+	public function getCurrentLocale(): Locale
 	{
 		if ($this->currentLocale !== null) {
 			return $this->currentLocale;
 		}
 
-		$resolved = $this->localeResolver->resolve($this->localeWhitelist);
+		$resolved = $this->localeResolver->resolve($this->locales, $this->localeProcessor);
 
-		if ($resolved !== null) {
-			$resolved = LocaleHelper::normalize($resolved);
-
-			if (LocaleHelper::isWhitelisted($resolved, $this->localeWhitelist)) {
-				return $this->currentLocale = $resolved;
-			}
+		if ($resolved !== null && $this->localeProcessor->isWhitelisted($resolved, $this->locales)) {
+			return $this->currentLocale = $resolved;
 		}
 
-		return $this->currentLocale = $this->defaultLocale;
+		return $this->currentLocale = $this->locales->getDefault();
 	}
 
-	private function checkValidAndWhitelisted(string $locale): void
+	private function checkValidAndWhitelisted(string $languageTag): Locale
 	{
-		LocaleHelper::validate($locale);
+		$locale = $this->localeProcessor->parseAndEnsureNormalized($languageTag);
 
-		if (!LocaleHelper::isWhitelisted($locale, $this->localeWhitelist)) {
-			throw LocaleNotWhitelisted::forWhitelist($locale, $this->localeWhitelist);
+		if (!$this->localeProcessor->isWhitelisted($locale, $this->locales)) {
+			throw LanguageNotWhitelisted::forLocales($locale, $this->locales);
 		}
+
+		return $locale;
 	}
 
 	/**
 	 * @return array<string>
 	 */
-	private function getPossibleLocales(string $requestedLocale): array
+	private function getPossibleLanguageTags(Locale $locale): array
 	{
-		if (isset($this->possibleLocales[$requestedLocale])) {
-			return $this->possibleLocales[$requestedLocale];
+		$languageTag = $locale->getTag();
+
+		if (isset($this->possibleLanguageTags[$languageTag])) {
+			return $this->possibleLanguageTags[$languageTag];
 		}
 
-		$list = [];
+		$listByLocale = [];
+		$listByLocale[] = $locale->getTagVariants();
 
-		// Add requested locale
-		$list[] = $requestedLocale;
-		if (($shortRequestedLocale = LocaleHelper::shorten($requestedLocale)) !== $requestedLocale) {
-			$list[] = $shortRequestedLocale;
-		}
+		$fallbacks = $this->locales->getFallbacks();
+		$language = $locale->getLanguage();
 
 		// Add locale from fallback
-		if (isset($this->fallbackLocales[$requestedLocale])) {
-			$list[] = $fallback = $this->fallbackLocales[$requestedLocale];
-			if (($shortFallback = LocaleHelper::shorten($fallback)) !== $fallback) {
-				$list[] = $shortFallback;
-			}
-		}
-
-		// Add short locale from fallback
-		if ($requestedLocale !== $shortRequestedLocale && isset($this->fallbackLocales[$shortRequestedLocale])) {
-			$list[] = $fallback = $this->fallbackLocales[$shortRequestedLocale];
-			if (($shortFallback = LocaleHelper::shorten($fallback)) !== $fallback) {
-				$list[] = $shortFallback;
-			}
+		if (isset($fallbacks[$language])) {
+			$listByLocale[] = $fallbacks[$language]->getTagVariants();
 		}
 
 		// Add default locale
-		$list[] = $default = $this->defaultLocale;
-		if (($shortDefault = LocaleHelper::shorten($default)) !== $default) {
-			$list[] = $shortDefault;
+		$defaultLocale = $this->locales->getDefault();
+		if ($languageTag !== $defaultLocale->getTag()) {
+			$listByLocale[] = $defaultLocale->getTagVariants();
 		}
 
-		// Remove duplicates
-		$list = array_unique($list);
-
-		$this->possibleLocales[$requestedLocale] = $list;
-
-		return $list;
+		return $this->possibleLanguageTags[$languageTag] = array_unique(array_merge(...$listByLocale));
 	}
 
 }

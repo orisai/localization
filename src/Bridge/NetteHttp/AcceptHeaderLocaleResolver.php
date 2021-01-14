@@ -3,13 +3,14 @@
 namespace Orisai\Localization\Bridge\NetteHttp;
 
 use Nette\Http\IRequest;
-use Nette\Http\Request;
+use Orisai\Localization\Exception\MalformedLanguageTag;
+use Orisai\Localization\Locale\Locale;
+use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Locale\LocaleResolver;
-use function implode;
-use function preg_match_all;
-use function rsort;
-use function str_replace;
-use function strtolower;
+use Orisai\Localization\Locale\LocaleSet;
+use function array_merge;
+use function explode;
+use function krsort;
 
 final class AcceptHeaderLocaleResolver implements LocaleResolver
 {
@@ -21,51 +22,48 @@ final class AcceptHeaderLocaleResolver implements LocaleResolver
 		$this->request = $request;
 	}
 
-	/**
-	 * @param array<string> $localeWhitelist
-	 */
-	public function resolve(array $localeWhitelist): ?string
+	public function resolve(LocaleSet $locales, LocaleProcessor $localeProcessor): ?Locale
 	{
-		if ($this->request instanceof Request) {
-			return $this->request->detectLanguage($localeWhitelist);
-		}
+		foreach ($this->getAcceptedLanguages() as $language) {
+			try {
+				$locale = $localeProcessor->parse($language);
+			} catch (MalformedLanguageTag $exception) {
+				continue;
+			}
 
-		return $this->detectLanguage($localeWhitelist);
-	}
-
-	/**
-	 * Parse Accept-Language header and returns preferred language.
-	 *
-	 * @param array<string> $languages supported languages
-	 * @see Copy-pasted from Nette\Http\Request https://github.com/nette/http/blob/3f062bdfe8301eb9d16bb17a9c1ea501ffd20cab/src/Http/Request.php#L287-L318
-	 */
-	private function detectLanguage(array $languages): ?string
-	{
-		$header = $this->request->getHeader('Accept-Language');
-		if ($header === null) {
-			return null;
-		}
-
-		$s = strtolower($header); // case insensitive
-		$s = str_replace('_', '-', $s); // cs_CZ means cs-CZ
-		rsort($languages); // first more specific
-		preg_match_all('#(' . implode('|', $languages) . ')(?:-[^\s,;=]+)?\s*(?:;\s*q=([0-9.]+))?#', $s, $matches);
-
-		if (!$matches[0]) {
-			return null;
-		}
-
-		$max = 0;
-		$lang = null;
-		foreach ($matches[1] as $key => $value) {
-			$q = $matches[2][$key] === '' ? 1.0 : (float) $matches[2][$key];
-			if ($q > $max) {
-				$max = $q;
-				$lang = $value;
+			if ($localeProcessor->isWhitelisted($locale, $locales)) {
+				return $locale;
 			}
 		}
 
-		return $lang;
+		return null;
+	}
+
+	/**
+	 * @return array<string>
+	 */
+	private function getAcceptedLanguages(): array
+	{
+		$header = $this->request->getHeader('Accept-Language');
+
+		if ($header === null) {
+			return [];
+		}
+
+		$languagesByPriority = [];
+		foreach (explode(',', $header) as $languageAndPriority) {
+			$parsed = explode(';q=', $languageAndPriority, 2);
+			$language = $parsed[0];
+			$priority = isset($parsed[1])
+				? (string) (float) $parsed[1]
+				: '1.0';
+
+			$languagesByPriority[$priority][] = $language;
+		}
+
+		krsort($languagesByPriority);
+
+		return array_merge(...$languagesByPriority);
 	}
 
 }

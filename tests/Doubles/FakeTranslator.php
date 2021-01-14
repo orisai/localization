@@ -3,56 +3,53 @@
 namespace Tests\Orisai\Localization\Doubles;
 
 use Orisai\Localization\ConfigurableTranslator;
+use Orisai\Localization\Locale\Locale;
+use Orisai\Localization\Locale\LocaleProcessor;
+use Orisai\Localization\Locale\LocaleSet;
 
 final class FakeTranslator implements ConfigurableTranslator
 {
 
-	private string $defaultLocale;
+	private LocaleSet $locales;
+	private LocaleProcessor $localeProcessor;
 
-	private string $currentLocale;
+	private Locale $currentLocale;
 
-	/** @var array<string> */
-	private array $whitelist;
-
-	/**
-	 * @param array<string> $whitelist
-	 */
-	public function __construct(string $defaultLocale, array $whitelist = [])
+	public function __construct(LocaleSet $locales, LocaleProcessor $localeProcessor)
 	{
-		$this->defaultLocale = $defaultLocale;
-		$this->currentLocale = $defaultLocale;
-		$this->whitelist = $whitelist;
+		$this->locales = $locales;
+		$this->localeProcessor = $localeProcessor;
 	}
 
-	public function setCurrentLocale(string $currentLocale): void
+	public function setCurrentLocale(string $languageTag): void
 	{
-		$this->currentLocale = $currentLocale;
+		$this->currentLocale = $this->localeProcessor->parse($languageTag);
 	}
 
 	/**
 	 * @param array<mixed> $parameters
 	 */
-	public function translate(string $message, array $parameters = [], ?string $locale = null): string
+	public function translate(string $message, array $parameters = [], ?string $languageTag = null): string
 	{
 		return $message;
 	}
 
-	public function getCurrentLocale(): string
+	public function getCurrentLocale(): Locale
 	{
 		return $this->currentLocale;
 	}
 
-	public function getDefaultLocale(): string
+	public function getDefaultLocale(): Locale
 	{
-		return $this->defaultLocale;
+		return $this->locales->getDefault();
 	}
 
 	/**
-	 * @return array<string>
+	 * @return array<Locale>
 	 */
 	public function getLocaleWhitelist(): array
 	{
-		return $this->whitelist;
+		return $this->locales->getWhitelist();
 	}
 
 }

@@ -27,9 +27,9 @@ final class CookieLocaleConfigurator implements LocaleConfigurator
 		$this->expiration = $expiration;
 	}
 
-	public function configure(string $locale): void
+	public function configure(string $languageTag): void
 	{
-		$this->response->setCookie(CookieLocaleResolver::COOKIE_KEY, $locale, $this->expiration);
+		$this->response->setCookie(CookieLocaleResolver::COOKIE_KEY, $languageTag, $this->expiration);
 	}
 
 }

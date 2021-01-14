@@ -22,10 +22,10 @@ final class TranslationFilters
 		FilterInfo $filterInfo,
 		string $message,
 		array $parameters = [],
-		?string $locale = null
+		?string $languageTag = null
 	): string
 	{
-		return $this->translator->translate($message, $parameters, $locale);
+		return $this->translator->translate($message, $parameters, $languageTag);
 	}
 
 }

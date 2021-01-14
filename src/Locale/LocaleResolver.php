@@ -7,11 +7,8 @@ interface LocaleResolver
 
 	/**
 	 * Returns requested locale or null if none was requested
-	 * Can return non-normalized locale, without whitelist check, it is done by translator
-	 * Can optionally check locale format validity (e.g. for storage cleanup purposes)
-	 *
-	 * @param array<string> $localeWhitelist
+	 * Can return locale without whitelist check, it is done by translator
 	 */
-	public function resolve(array $localeWhitelist): ?string;
+	public function resolve(LocaleSet $locales, LocaleProcessor $localeProcessor): ?Locale;
 
 }

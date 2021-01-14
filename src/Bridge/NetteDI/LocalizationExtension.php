@@ -23,9 +23,11 @@ use Orisai\Localization\ConfigurableTranslator;
 use Orisai\Localization\DefaultTranslator;
 use Orisai\Localization\Formatting\MessageFormatter;
 use Orisai\Localization\Formatting\MessageFormatterFactory;
+use Orisai\Localization\Locale\Locale;
 use Orisai\Localization\Locale\LocaleConfigurator;
-use Orisai\Localization\Locale\LocaleHelper;
+use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Locale\LocaleResolver;
+use Orisai\Localization\Locale\LocaleSet;
 use Orisai\Localization\Locale\MultiLocaleConfigurator;
 use Orisai\Localization\Logging\TranslationsLogger;
 use Orisai\Localization\Resource\ArrayCacheCatalogue;
@@ -36,6 +38,7 @@ use Orisai\Localization\Translator;
 use Orisai\Localization\TranslatorHolder;
 use stdClass;
 use function assert;
+use function serialize;
 
 /**
  * @property-read stdClass $config
@@ -87,18 +90,20 @@ final class LocalizationExtension extends CompilerExtension
 		$config = $this->config;
 		$loader = new DefinitionsLoader($this->compiler);
 
-		// Locale validation
-
-		LocaleHelper::validate($config->locale->default);
-
-		foreach ($config->locale->whitelist as $whitelistedLocale) {
-			LocaleHelper::validate($whitelistedLocale);
-		}
-
-		foreach ($config->locale->fallback as $requestedLocale => $fallbackLocale) {
-			LocaleHelper::validate($requestedLocale);
-			LocaleHelper::validate($fallbackLocale);
-		}
+		// Locales
+		$processor = new LocaleProcessor();
+		$locales = new LocaleSet(
+			$processor,
+			$config->locale->default,
+			$config->locale->whitelist,
+			$config->locale->fallback,
+		);
+		$localesDef = $builder->addDefinition($this->prefix('locales'))
+			->setFactory('\unserialize(\'?\', [?])', [
+				new PhpLiteral(serialize($locales)),
+				Locale::class,
+			])
+			->setType(LocaleSet::class);
 
 		// Configurators
 
@@ -118,6 +123,11 @@ final class LocalizationExtension extends CompilerExtension
 				->setFactory(MultiLocaleConfigurator::class, [$configuratorDefinitions])
 				->setType(LocaleConfigurator::class);
 		}
+
+		// Locale processor
+		$processorDefinition = $builder->addDefinition($this->prefix('locale.processor'))
+			->setFactory(LocaleProcessor::class)
+			->setType(LocaleProcessor::class);
 
 		// Resolvers
 		$resolverDefinitionNames = [];
@@ -194,16 +204,14 @@ final class LocalizationExtension extends CompilerExtension
 		$translatorPrefix = $this->prefix('translator');
 		$translatorDefinition = $builder->addDefinition($translatorPrefix)
 			->setFactory(
-				'?::fromValidLocales(?, ?, ?, ?, ?, ?, ?)',
+				DefaultTranslator::class,
 				[
-					new PhpLiteral(DefaultTranslator::class),
-					$config->locale->default,
-					$config->locale->whitelist,
-					$config->locale->fallback,
+					$localesDef,
 					$rootResolverDefinition,
 					$catalogueCacheDefinition,
 					$messageFormatterDefinition,
 					$loggerDefinition,
+					$processorDefinition,
 				],
 			)
 			->setType(ConfigurableTranslator::class)

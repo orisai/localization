@@ -3,8 +3,10 @@
 namespace Orisai\Localization\Bridge\NetteDI;
 
 use Nette\DI\Container;
-use Orisai\Localization\Locale\LocaleHelper;
+use Orisai\Localization\Locale\Locale;
+use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Locale\LocaleResolver;
+use Orisai\Localization\Locale\LocaleSet;
 use function assert;
 
 final class LazyMultiLocaleResolver implements LocaleResolver
@@ -27,21 +29,14 @@ final class LazyMultiLocaleResolver implements LocaleResolver
 		$this->resolverServiceNames = $resolverServiceNames;
 	}
 
-	/**
-	 * @param array<string> $localeWhitelist
-	 */
-	public function resolve(array $localeWhitelist): ?string
+	public function resolve(LocaleSet $locales, LocaleProcessor $localeProcessor): ?Locale
 	{
 		foreach ($this->resolverServiceNames as $resolverServiceName) {
 			$resolver = $this->getResolver($resolverServiceName);
-			$locale = $resolver->resolve($localeWhitelist);
+			$locale = $resolver->resolve($locales, $localeProcessor);
 
-			if ($locale !== null) {
-				$locale = LocaleHelper::normalize($locale);
-
-				if (LocaleHelper::isWhitelisted($locale, $localeWhitelist)) {
-					return $locale;
-				}
+			if ($locale !== null && $localeProcessor->isWhitelisted($locale, $locales)) {
+				return $locale;
 			}
 		}
 

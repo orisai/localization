@@ -5,6 +5,6 @@ namespace Orisai\Localization\Resource;
 interface Catalogue
 {
 
-	public function getMessage(string $message, string $locale): ?string;
+	public function getMessage(string $message, string $languageTag): ?string;
 
 }

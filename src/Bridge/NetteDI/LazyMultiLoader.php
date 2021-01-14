@@ -30,14 +30,14 @@ final class LazyMultiLoader implements Loader
 	/**
 	 * @return array<string>
 	 */
-	public function loadAllMessages(string $locale): array
+	public function loadAllMessages(string $languageTag): array
 	{
 		$messagesByLoader = [];
 
 		foreach ($this->loaderServiceNames as $loaderServiceName) {
 			$loader = $this->getLoader($loaderServiceName);
 
-			$messagesByLoader[] = $loader->loadAllMessages($locale);
+			$messagesByLoader[] = $loader->loadAllMessages($languageTag);
 		}
 
 		return $messagesByLoader === [] ? [] : array_merge(...$messagesByLoader);

@@ -3,8 +3,8 @@
 namespace Orisai\Localization\Logging;
 
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use function md5;
-use function sprintf;
 
 /**
  * @internal
@@ -12,34 +12,30 @@ use function sprintf;
 final class TranslationsLogger
 {
 
-	private ?LoggerInterface $logger = null;
+	private LoggerInterface $logger;
 
 	/** @var array<MissingResource> */
 	private array $missingResources = [];
 
 	public function __construct(?LoggerInterface $logger = null)
 	{
-		$this->logger = $logger;
+		$this->logger = $logger ?? new NullLogger();
 	}
 
-	public function addMissingResource(string $locale, string $message): void
+	public function addMissingResource(string $message, string $languageTag): void
 	{
 		$hash = md5($message);
 
 		if (isset($this->missingResources[$hash])) {
-			$this->missingResources[$hash]->incrementCount($locale);
+			$this->missingResources[$hash]->incrementCount($languageTag);
 		} else {
-			$this->missingResources[$hash] = new MissingResource($locale, $message);
-		}
-
-		if ($this->logger === null) {
-			return;
+			$this->missingResources[$hash] = new MissingResource($message, $languageTag);
 		}
 
 		$this->logger->error(
-			sprintf('Missing translation of "%s" for locale "%s"', $message, $locale),
+			"Missing translation of {$message} for locale {$languageTag}",
 			[
-				'locale' => $locale,
+				'locale' => $languageTag,
 				'message' => $message,
 			],
 		);

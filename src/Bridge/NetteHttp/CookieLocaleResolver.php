@@ -4,9 +4,11 @@ namespace Orisai\Localization\Bridge\NetteHttp;
 
 use Nette\Http\IRequest;
 use Nette\Http\IResponse;
-use Orisai\Localization\Exception\MalformedLocale;
-use Orisai\Localization\Locale\LocaleHelper;
+use Orisai\Localization\Exception\MalformedLanguageTag;
+use Orisai\Localization\Locale\Locale;
+use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Locale\LocaleResolver;
+use Orisai\Localization\Locale\LocaleSet;
 use function is_string;
 
 final class CookieLocaleResolver implements LocaleResolver
@@ -15,41 +17,40 @@ final class CookieLocaleResolver implements LocaleResolver
 	public const COOKIE_KEY = 'locale';
 
 	private IRequest $request;
-
 	private IResponse $response;
 
-	public function __construct(IRequest $request, IResponse $response)
+	private LocaleProcessor $processor;
+
+	public function __construct(IRequest $request, IResponse $response, LocaleProcessor $processor)
 	{
 		$this->request = $request;
 		$this->response = $response;
+		$this->processor = $processor;
 	}
 
-	/**
-	 * @param array<string> $localeWhitelist
-	 */
-	public function resolve(array $localeWhitelist): ?string
+	public function resolve(LocaleSet $locales, LocaleProcessor $localeProcessor): ?Locale
 	{
-		$locale = $this->request->getCookie(self::COOKIE_KEY);
+		$languageTag = $this->request->getCookie(self::COOKIE_KEY);
 
-		if ($locale === null) {
+		if ($languageTag === null) {
 			return null;
 		}
 
-		if (!is_string($locale)) {
+		if (!is_string($languageTag)) {
 			$this->response->deleteCookie(self::COOKIE_KEY);
 
 			return null;
 		}
 
 		try {
-			LocaleHelper::validate($locale);
-		} catch (MalformedLocale $error) {
+			$this->processor->parse($languageTag);
+		} catch (MalformedLanguageTag $error) {
 			$this->response->deleteCookie(self::COOKIE_KEY);
 
 			return null;
 		}
 
-		return $locale;
+		return $localeProcessor->parse($languageTag);
 	}
 
 }

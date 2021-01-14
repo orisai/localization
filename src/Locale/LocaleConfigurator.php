@@ -13,6 +13,6 @@ interface LocaleConfigurator
 	 * @see TranslatorLocaleConfigurator sets Translator curent locale
 	 * @see MultiLocaleConfigurator calls multiple configurators
 	 */
-	public function configure(string $locale): void;
+	public function configure(string $languageTag): void;
 
 }

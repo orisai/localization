@@ -21,12 +21,12 @@ final class MultiLoader implements Loader
 	/**
 	 * @return array<string>
 	 */
-	public function loadAllMessages(string $locale): array
+	public function loadAllMessages(string $languageTag): array
 	{
 		$messagesByLoader = [];
 
 		foreach ($this->loaders as $loader) {
-			$messagesByLoader[] = $loader->loadAllMessages($locale);
+			$messagesByLoader[] = $loader->loadAllMessages($languageTag);
 		}
 
 		return $messagesByLoader === [] ? [] : array_merge(...$messagesByLoader);
