@@ -21,13 +21,13 @@ final class ArrayCacheLoader implements Loader
 	/**
 	 * @return array<string>
 	 */
-	public function loadAllMessages(string $locale): array
+	public function loadAllMessages(string $languageTag): array
 	{
-		if (isset($this->cache[$locale])) {
-			return $this->cache[$locale];
+		if (isset($this->cache[$languageTag])) {
+			return $this->cache[$languageTag];
 		}
 
-		return $this->cache[$locale] = $this->loader->loadAllMessages($locale);
+		return $this->cache[$languageTag] = $this->loader->loadAllMessages($languageTag);
 	}
 
 }

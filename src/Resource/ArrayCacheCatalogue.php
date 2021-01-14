@@ -20,13 +20,13 @@ final class ArrayCacheCatalogue implements Catalogue
 		$this->catalogue = $catalogue;
 	}
 
-	public function getMessage(string $message, string $locale): ?string
+	public function getMessage(string $message, string $languageTag): ?string
 	{
-		if (isset($this->cache[$message]) && array_key_exists($locale, $this->cache[$message])) {
-			return $this->cache[$message][$locale];
+		if (isset($this->cache[$message]) && array_key_exists($languageTag, $this->cache[$message])) {
+			return $this->cache[$message][$languageTag];
 		}
 
-		return $this->cache[$message][$locale] = $this->catalogue->getMessage($message, $locale);
+		return $this->cache[$message][$languageTag] = $this->catalogue->getMessage($message, $languageTag);
 	}
 
 }

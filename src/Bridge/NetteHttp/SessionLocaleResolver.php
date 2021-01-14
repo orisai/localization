@@ -4,7 +4,10 @@ namespace Orisai\Localization\Bridge\NetteHttp;
 
 use Nette\Http\IResponse;
 use Nette\Http\Session;
+use Orisai\Localization\Locale\Locale;
+use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Locale\LocaleResolver;
+use Orisai\Localization\Locale\LocaleSet;
 use function sprintf;
 use function trigger_error;
 use const E_USER_WARNING;
@@ -16,7 +19,6 @@ final class SessionLocaleResolver implements LocaleResolver
 	public const PARAMETER = 'locale';
 
 	private IResponse $response;
-
 	private Session $session;
 
 	public function __construct(Session $session, IResponse $response)
@@ -25,10 +27,7 @@ final class SessionLocaleResolver implements LocaleResolver
 		$this->session = $session;
 	}
 
-	/**
-	 * @param array<string> $localeWhitelist
-	 */
-	public function resolve(array $localeWhitelist): ?string
+	public function resolve(LocaleSet $locales, LocaleProcessor $localeProcessor): ?Locale
 	{
 		if (!$this->session->isStarted() && $this->response->isSent()) {
 			trigger_error(
@@ -43,8 +42,8 @@ final class SessionLocaleResolver implements LocaleResolver
 		}
 
 		$hasSection = $this->session->hasSection(self::SECTION);
-		if ($hasSection && ($section = $this->session->getSection(self::SECTION))->offsetExists(self::PARAMETER)) {
-			return $section->offsetGet(self::PARAMETER);
+		if ($hasSection && isset(($section = $this->session->getSection(self::SECTION))[self::PARAMETER])) {
+			return $localeProcessor->parse($section[self::PARAMETER]);
 		}
 
 		return null;

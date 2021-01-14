@@ -13,12 +13,12 @@ final class SymfonyMessageFormatter implements MessageFormatter
 	 * @param array<mixed> $parameters
 	 * @throws MalformedOrUnsupportedMessage
 	 */
-	public function formatMessage(string $locale, string $pattern, array $parameters): string
+	public function formatMessage(string $pattern, array $parameters, string $languageTag): string
 	{
-		$message = OriginalSymfonyMessageFormatter::formatMessage($locale, $pattern, $parameters);
+		$message = OriginalSymfonyMessageFormatter::formatMessage($languageTag, $pattern, $parameters);
 
 		if (!is_string($message)) {
-			throw MalformedOrUnsupportedMessage::forPattern($pattern, $locale);
+			throw MalformedOrUnsupportedMessage::forPattern($pattern, $languageTag);
 		}
 
 		return $message;
@@ -27,12 +27,12 @@ final class SymfonyMessageFormatter implements MessageFormatter
 	/**
 	 * @throws MalformedOrUnsupportedMessage
 	 */
-	public function validatePattern(string $locale, string $pattern): void
+	public function validatePattern(string $pattern, string $languageTag): void
 	{
-		$formatter = OriginalSymfonyMessageFormatter::create($locale, $pattern);
+		$formatter = OriginalSymfonyMessageFormatter::create($languageTag, $pattern);
 
 		if ($formatter === null) {
-			throw MalformedOrUnsupportedMessage::forPattern($pattern, $locale);
+			throw MalformedOrUnsupportedMessage::forPattern($pattern, $languageTag);
 		}
 	}
 

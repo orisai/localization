@@ -11,11 +11,11 @@ interface MessageFormatter
 	 * @param array<mixed> $parameters
 	 * @throws MalformedOrUnsupportedMessage
 	 */
-	public function formatMessage(string $locale, string $pattern, array $parameters): string;
+	public function formatMessage(string $pattern, array $parameters, string $languageTag): string;
 
 	/**
 	 * @throws MalformedOrUnsupportedMessage
 	 */
-	public function validatePattern(string $locale, string $pattern): void;
+	public function validatePattern(string $pattern, string $languageTag): void;
 
 }

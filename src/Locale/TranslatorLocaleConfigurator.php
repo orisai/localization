@@ -21,10 +21,10 @@ final class TranslatorLocaleConfigurator implements LocaleConfigurator
 		$this->wrappedConfigurator = $wrappedConfigurator;
 	}
 
-	public function configure(string $locale): void
+	public function configure(string $languageTag): void
 	{
-		$this->wrappedConfigurator->configure($locale);
-		$this->translator->setCurrentLocale($locale);
+		$this->wrappedConfigurator->configure($languageTag);
+		$this->translator->setCurrentLocale($languageTag);
 	}
 
 }

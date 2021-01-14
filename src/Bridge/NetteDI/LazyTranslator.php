@@ -3,6 +3,7 @@
 namespace Orisai\Localization\Bridge\NetteDI;
 
 use Nette\DI\Container;
+use Orisai\Localization\Locale\Locale;
 use Orisai\Localization\Translator;
 use Orisai\Localization\TranslatorHolder;
 use function assert;
@@ -29,23 +30,23 @@ final class LazyTranslator implements Translator
 	/**
 	 * @param array<mixed> $parameters
 	 */
-	public function translate(string $message, array $parameters = [], ?string $locale = null): string
+	public function translate(string $message, array $parameters = [], ?string $languageTag = null): string
 	{
-		return $this->getTranslator()->translate($message, $parameters, $locale);
+		return $this->getTranslator()->translate($message, $parameters, $languageTag);
 	}
 
-	public function getCurrentLocale(): string
+	public function getCurrentLocale(): Locale
 	{
 		return $this->getTranslator()->getCurrentLocale();
 	}
 
-	public function getDefaultLocale(): string
+	public function getDefaultLocale(): Locale
 	{
 		return $this->getTranslator()->getDefaultLocale();
 	}
 
 	/**
-	 * @return array<string>
+	 * @return array<Locale>
 	 */
 	public function getLocaleWhitelist(): array
 	{

@@ -1,11 +1,12 @@
 <?php declare(strict_types = 1);
 
+use Orisai\Localization\Locale\Locale;
 use Orisai\Localization\Logging\MissingResource;
 
-/** @var string $currentLocale */
-/** @var string $defaultLocale */
-/** @var string[] $localeWhitelist */
-/** @var MissingResource[] $missingResources */
+/** @var Locale $currentLocale */
+/** @var Locale $defaultLocale */
+/** @var array<string> $localeWhitelist */
+/** @var array<MissingResource> $missingResources */
 
 ?>
 <h1>Translator</h1>
@@ -13,8 +14,8 @@ use Orisai\Localization\Logging\MissingResource;
 <div class="tracy-inner">
 	<div class="tracy-inner-container">
 		<h2>Settings</h2>
-		Current locale: <b><?= $currentLocale ?></b><br>
-		Default locale: <b><?= $defaultLocale ?></b><br>
+		Current locale: <b><?= $currentLocale->getTag() ?></b><br>
+		Default locale: <b><?= $defaultLocale->getTag() ?></b><br>
 		Whitelist: <?= implode(', ', $localeWhitelist) ?><br>
 	</div>
 	<?php if ($missingResources !== []): ?>
@@ -38,7 +39,7 @@ use Orisai\Localization\Logging\MissingResource;
 							<?= $resource->getCount() ?>
 						</td>
 						<td>
-							<?= implode(', ', $resource->getLocales()) ?>
+							<?= implode(', ', $resource->getLanguageTags()) ?>
 						</td>
 					</tr>
 				<?php endforeach; ?>

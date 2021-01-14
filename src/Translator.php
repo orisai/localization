@@ -2,20 +2,22 @@
 
 namespace Orisai\Localization;
 
+use Orisai\Localization\Locale\Locale;
+
 interface Translator
 {
 
 	/**
 	 * @param array<mixed> $parameters
 	 */
-	public function translate(string $message, array $parameters = [], ?string $locale = null): string;
+	public function translate(string $message, array $parameters = [], ?string $languageTag = null): string;
 
-	public function getCurrentLocale(): string;
+	public function getCurrentLocale(): Locale;
 
-	public function getDefaultLocale(): string;
+	public function getDefaultLocale(): Locale;
 
 	/**
-	 * @return array<string>
+	 * @return array<Locale>
 	 */
 	public function getLocaleWhitelist(): array;
 

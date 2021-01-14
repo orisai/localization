@@ -25,9 +25,9 @@ final class CachedCatalogue implements Catalogue
 		$this->cache = new Cache($storage, self::CACHE_KEY);
 	}
 
-	public function getMessage(string $message, string $locale): ?string
+	public function getMessage(string $message, string $languageTag): ?string
 	{
-		$cache = $this->cache->derive('.' . $locale);
+		$cache = $this->cache->derive('.' . $languageTag);
 
 		// Try get translation from cache
 		$translated = $this->cache->load($message);
@@ -38,12 +38,12 @@ final class CachedCatalogue implements Catalogue
 		}
 
 		// Loader don't contain translation for given message with requested language, skip lookup
-		if ($this->missingTranslationLocaleMap[$message][$locale] ?? false) {
+		if ($this->missingTranslationLocaleMap[$message][$languageTag] ?? false) {
 			return null;
 		}
 
 		// Load all translations for given locale
-		foreach ($this->loader->loadAllMessages($locale) as $key => $translation) {
+		foreach ($this->loader->loadAllMessages($languageTag) as $key => $translation) {
 			// Try to load message and save only if not cached yet
 			$cache->load($key, static fn (): string => $translation);
 
@@ -59,7 +59,7 @@ final class CachedCatalogue implements Catalogue
 		}
 
 		// Loader don't contain translation for given message with requested language, skip at next run
-		$this->missingTranslationLocaleMap[$message][$locale] = true;
+		$this->missingTranslationLocaleMap[$message][$languageTag] = true;
 
 		return null;
 	}

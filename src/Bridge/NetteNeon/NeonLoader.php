@@ -10,7 +10,7 @@ class NeonLoader implements Loader
 	/**
 	 * @return array<string>
 	 */
-	public function loadAllMessages(string $locale): array
+	public function loadAllMessages(string $languageTag): array
 	{
 		// todo - načíst překlady
 		//		- klíče musí být string

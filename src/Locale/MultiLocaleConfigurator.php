@@ -16,10 +16,10 @@ final class MultiLocaleConfigurator implements LocaleConfigurator
 		$this->configurators = $configurators;
 	}
 
-	public function configure(string $locale): void
+	public function configure(string $languageTag): void
 	{
 		foreach ($this->configurators as $configurator) {
-			$configurator->configure($locale);
+			$configurator->configure($languageTag);
 		}
 	}
 

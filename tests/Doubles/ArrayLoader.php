@@ -24,13 +24,13 @@ final class ArrayLoader implements Loader
 	/**
 	 * @return array<string>
 	 */
-	public function loadAllMessages(string $locale): array
+	public function loadAllMessages(string $languageTag): array
 	{
-		$this->calls[$locale] = isset($this->calls[$locale])
-			? $this->calls[$locale] + 1
+		$this->calls[$languageTag] = isset($this->calls[$languageTag])
+			? $this->calls[$languageTag] + 1
 			: 1;
 
-		return $this->messages[$locale] ?? [];
+		return $this->messages[$languageTag] ?? [];
 	}
 
 	/**

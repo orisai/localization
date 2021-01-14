@@ -12,7 +12,7 @@ if (!function_exists('Orisai\Localization\__')) {
 	/**
 	 * @param array<mixed> $parameters
 	 */
-	function __(string $message, array $parameters = [], ?string $locale = null): string
+	function __(string $message, array $parameters = [], ?string $languageTag = null): string
 	{
 		if (!isset($GLOBALS[Translator::class])) {
 			$GLOBALS[Translator::class] = TranslatorHolder::getInstance()->getTranslator();
@@ -21,7 +21,7 @@ if (!function_exists('Orisai\Localization\__')) {
 		$translator = $GLOBALS[Translator::class];
 		assert($translator instanceof Translator);
 
-		return $translator->translate($message, $parameters, $locale);
+		return $translator->translate($message, $parameters, $languageTag);
 	}
 
 }
