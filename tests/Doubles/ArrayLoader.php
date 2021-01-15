@@ -7,14 +7,14 @@ use Orisai\Localization\Resource\Loader;
 final class ArrayLoader implements Loader
 {
 
-	/** @var array<array<string>> */
+	/** @var array<string, array<string, string>> */
 	private array $messages;
 
 	/** @var array<int> */
 	private array $calls = [];
 
 	/**
-	 * @param array<array<string>> $messages
+	 * @param array<string, array<string, string>> $messages
 	 */
 	public function __construct(array $messages)
 	{
@@ -22,7 +22,7 @@ final class ArrayLoader implements Loader
 	}
 
 	/**
-	 * @return array<string>
+	 * @return array<string, string>
 	 */
 	public function loadAllMessages(string $languageTag): array
 	{
