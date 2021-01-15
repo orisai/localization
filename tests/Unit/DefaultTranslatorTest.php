@@ -2,6 +2,7 @@
 
 namespace Tests\Orisai\Localization\Unit;
 
+use Generator;
 use Orisai\Exceptions\Logic\InvalidState;
 use Orisai\Localization\DefaultTranslator;
 use Orisai\Localization\Exception\LanguageNotWhitelisted;
@@ -259,16 +260,14 @@ final class DefaultTranslatorTest extends TestCase
 	}
 
 	/**
-	 * @return array<mixed>
+	 * @return Generator<array<mixed>>
 	 */
-	public function provideValidation(): array
+	public function provideValidation(): Generator
 	{
-		return [
-			['eN', [], [], "Invalid language tag 'eN', use 'en' format instead."],
-			['en', ['EN_US'], [], "Invalid language tag 'EN_US', use 'en-US' format instead."],
-			['en', [], ['CS' => 'sk'], "Invalid language tag 'CS', use 'cs' format instead."],
-			['en', [], ['SK' => 'cs'], "Invalid language tag 'SK', use 'sk' format instead."],
-		];
+		yield ['eN', [], [], "Invalid language tag 'eN', use 'en' format instead."];
+		yield ['en', ['EN_US'], [], "Invalid language tag 'EN_US', use 'en-US' format instead."];
+		yield ['en', [], ['CS' => 'sk'], "Invalid language tag 'CS', use 'cs' format instead."];
+		yield ['en', [], ['SK' => 'cs'], "Invalid language tag 'SK', use 'sk' format instead."];
 	}
 
 	public function testSetCurrentLocale(): void
