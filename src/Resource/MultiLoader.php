@@ -19,7 +19,7 @@ final class MultiLoader implements Loader
 	}
 
 	/**
-	 * @return array<string>
+	 * @return array<string, string>
 	 */
 	public function loadAllMessages(string $languageTag): array
 	{
