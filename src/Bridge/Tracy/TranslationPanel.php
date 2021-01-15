@@ -5,9 +5,8 @@ namespace Orisai\Localization\Bridge\Tracy;
 use Orisai\Localization\Logging\MissingResource;
 use Orisai\Localization\Logging\TranslationsLogger;
 use Orisai\Localization\Translator;
+use Tracy\Helpers;
 use Tracy\IBarPanel;
-use function ob_get_clean;
-use function ob_start;
 
 final class TranslationPanel implements IBarPanel
 {
@@ -25,23 +24,21 @@ final class TranslationPanel implements IBarPanel
 
 	public function getTab(): string
 	{
-		ob_start();
-		require __DIR__ . '/templates/tab.phtml';
-
-		return ob_get_clean();
+		return Helpers::capture(static function (): void {
+			require __DIR__ . '/templates/tab.phtml';
+		});
 	}
 
 	public function getPanel(): string
 	{
-		$currentLocale = $this->translator->getCurrentLocale();
-		$defaultLocale = $this->translator->getDefaultLocale();
-		$localeWhitelist = $this->translator->getLocaleWhitelist();
-		$missingResources = $this->missingResources;
+		return Helpers::capture(function (): void {
+			$currentLocale = $this->translator->getCurrentLocale();
+			$defaultLocale = $this->translator->getDefaultLocale();
+			$localeWhitelist = $this->translator->getLocaleWhitelist();
+			$missingResources = $this->missingResources;
 
-		ob_start();
-		require __DIR__ . '/templates/panel.phtml';
-
-		return ob_get_clean();
+			require __DIR__ . '/templates/panel.phtml';
+		});
 	}
 
 }
