@@ -2,6 +2,10 @@
 	"name": "orisai/localization",
 	"description": "Internationalization (i18n) and localization (l10n)",
 	"keywords": [
+		"bcp-47",
+		"i18n",
+		"internationalization",
+		"l10n",
 		"localization",
 		"nette",
 		"orisai",
@@ -42,7 +46,7 @@
 		"staabm/annotate-pull-request-from-checkstyle": "^1.1.0",
 		"symfony/polyfill-intl-messageformatter": "^1.10.0",
 		"symfony/translation-contracts": "^2.0.0",
-		"tracy/tracy": "^2.6.0"
+		"tracy/tracy": "^2.7.2"
 	},
 	"autoload": {
 		"psr-4": {
