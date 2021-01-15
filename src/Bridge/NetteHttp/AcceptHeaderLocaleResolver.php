@@ -31,7 +31,7 @@ final class AcceptHeaderLocaleResolver implements LocaleResolver
 				continue;
 			}
 
-			if ($localeProcessor->isWhitelisted($locale, $locales)) {
+			if ($localeProcessor->isAllowed($locale, $locales)) {
 				return $locale;
 			}
 		}

@@ -2,11 +2,13 @@
 
 namespace Orisai\Localization\Bridge\Tracy;
 
+use Orisai\Localization\Locale\Locale;
 use Orisai\Localization\Logging\MissingResource;
 use Orisai\Localization\Logging\TranslationsLogger;
 use Orisai\Localization\Translator;
 use Tracy\Helpers;
 use Tracy\IBarPanel;
+use function array_map;
 
 final class TranslationPanel implements IBarPanel
 {
@@ -34,7 +36,10 @@ final class TranslationPanel implements IBarPanel
 		return Helpers::capture(function (): void {
 			$currentLocale = $this->translator->getCurrentLocale();
 			$defaultLocale = $this->translator->getDefaultLocale();
-			$localeWhitelist = $this->translator->getLocaleWhitelist();
+			$allowedLocales = array_map(
+				static fn (Locale $locale): string => $locale->getLanguage(),
+				$this->translator->getAllowedLocales(),
+			);
 			$missingResources = $this->missingResources;
 
 			require __DIR__ . '/templates/panel.phtml';

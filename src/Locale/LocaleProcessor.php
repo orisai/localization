@@ -114,12 +114,12 @@ REGEX;
 		return array_unique(array_merge(...$tagsByLocale));
 	}
 
-	public function isWhitelisted(Locale $locale, LocaleSet $locales): bool
+	public function isAllowed(Locale $locale, LocaleSet $locales): bool
 	{
 		$language = $locale->getLanguage();
 
-		foreach ($locales->getWhitelist() as $whitelisted) {
-			if ($whitelisted->getLanguage() === $language) {
+		foreach ($locales->getAllowed() as $allowedLocale) {
+			if ($allowedLocale->getLanguage() === $language) {
 				return true;
 			}
 		}

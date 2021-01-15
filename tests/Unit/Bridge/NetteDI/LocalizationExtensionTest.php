@@ -46,7 +46,7 @@ final class LocalizationExtensionTest extends TestCase
 		assert($processor instanceof LocaleProcessor);
 
 		self::assertSame('en', $translator->getDefaultLocale()->getTag());
-		self::assertSame(['en'], $processor->localesToTagVariants($translator->getLocaleWhitelist()));
+		self::assertSame(['en'], $processor->localesToTagVariants($translator->getAllowedLocales()));
 		self::assertSame('en', $translator->getCurrentLocale()->getTag());
 
 		self::assertInstanceOf(LazyMultiLocaleResolver::class, $container->getService('localization.resolver'));
@@ -84,7 +84,7 @@ final class LocalizationExtensionTest extends TestCase
 		self::assertSame('en', $translator->getDefaultLocale()->getTag());
 		self::assertSame(
 			['cs', 'fr', 'de', 'sk', 'en'],
-			$processor->localesToTagVariants($translator->getLocaleWhitelist()),
+			$processor->localesToTagVariants($translator->getAllowedLocales()),
 		);
 		self::assertSame('en', $translator->getCurrentLocale()->getTag());
 

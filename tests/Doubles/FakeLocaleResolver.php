@@ -29,7 +29,7 @@ final class FakeLocaleResolver implements LocaleResolver
 
 		$locale = $localeProcessor->parse($this->languageTag);
 
-		if (!$localeProcessor->isWhitelisted($locale, $locales)) {
+		if (!$localeProcessor->isAllowed($locale, $locales)) {
 			return null;
 		}
 

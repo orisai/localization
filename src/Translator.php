@@ -19,6 +19,6 @@ interface Translator
 	/**
 	 * @return array<Locale>
 	 */
-	public function getLocaleWhitelist(): array;
+	public function getAllowedLocales(): array;
 
 }

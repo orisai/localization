@@ -3,7 +3,7 @@
 namespace Orisai\Localization;
 
 use Orisai\Exceptions\Logic\InvalidState;
-use Orisai\Localization\Exception\LanguageNotWhitelisted;
+use Orisai\Localization\Exception\LanguageNotAllowed;
 use Orisai\Localization\Formatting\MessageFormatter;
 use Orisai\Localization\Locale\Locale;
 use Orisai\Localization\Locale\LocaleProcessor;
@@ -53,7 +53,7 @@ final class DefaultTranslator implements ConfigurableTranslator
 	public function translate(string $message, array $parameters = [], ?string $languageTag = null): string
 	{
 		$locale = $languageTag !== null
-			? $this->checkValidAndWhitelisted($languageTag)
+			? $this->checkValidAndAllowed($languageTag)
 			: $this->getCurrentLocale();
 		$languageTag = $locale->getTag();
 
@@ -87,9 +87,9 @@ final class DefaultTranslator implements ConfigurableTranslator
 	/**
 	 * @return array<Locale>
 	 */
-	public function getLocaleWhitelist(): array
+	public function getAllowedLocales(): array
 	{
-		return $this->locales->getWhitelist();
+		return $this->locales->getAllowed();
 	}
 
 	public function setCurrentLocale(string $languageTag): void
@@ -102,7 +102,7 @@ final class DefaultTranslator implements ConfigurableTranslator
 				));
 		}
 
-		$currentLocale = $this->checkValidAndWhitelisted($languageTag);
+		$currentLocale = $this->checkValidAndAllowed($languageTag);
 		$this->currentLocale = $currentLocale;
 	}
 
@@ -114,19 +114,19 @@ final class DefaultTranslator implements ConfigurableTranslator
 
 		$resolved = $this->localeResolver->resolve($this->locales, $this->localeProcessor);
 
-		if ($resolved !== null && $this->localeProcessor->isWhitelisted($resolved, $this->locales)) {
+		if ($resolved !== null && $this->localeProcessor->isAllowed($resolved, $this->locales)) {
 			return $this->currentLocale = $resolved;
 		}
 
 		return $this->currentLocale = $this->locales->getDefault();
 	}
 
-	private function checkValidAndWhitelisted(string $languageTag): Locale
+	private function checkValidAndAllowed(string $languageTag): Locale
 	{
 		$locale = $this->localeProcessor->parseAndEnsureNormalized($languageTag);
 
-		if (!$this->localeProcessor->isWhitelisted($locale, $this->locales)) {
-			throw LanguageNotWhitelisted::forLocales($locale, $this->locales);
+		if (!$this->localeProcessor->isAllowed($locale, $this->locales)) {
+			throw LanguageNotAllowed::forLocales($locale, $this->locales);
 		}
 
 		return $locale;
