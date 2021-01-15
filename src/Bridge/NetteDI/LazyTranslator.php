@@ -48,9 +48,9 @@ final class LazyTranslator implements Translator
 	/**
 	 * @return array<Locale>
 	 */
-	public function getLocaleWhitelist(): array
+	public function getAllowedLocales(): array
 	{
-		return $this->getTranslator()->getLocaleWhitelist();
+		return $this->getTranslator()->getAllowedLocales();
 	}
 
 	private function getTranslator(): Translator

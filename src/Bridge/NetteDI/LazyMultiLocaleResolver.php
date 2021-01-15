@@ -35,7 +35,7 @@ final class LazyMultiLocaleResolver implements LocaleResolver
 			$resolver = $this->getResolver($resolverServiceName);
 			$locale = $resolver->resolve($locales, $localeProcessor);
 
-			if ($locale !== null && $localeProcessor->isWhitelisted($locale, $locales)) {
+			if ($locale !== null && $localeProcessor->isAllowed($locale, $locales)) {
 				return $locale;
 			}
 		}

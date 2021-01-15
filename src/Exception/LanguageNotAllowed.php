@@ -7,37 +7,37 @@ use Orisai\Localization\Locale\Locale;
 use Orisai\Localization\Locale\LocaleSet;
 use function implode;
 
-final class LanguageNotWhitelisted extends LogicalException
+final class LanguageNotAllowed extends LogicalException
 {
 
 	private Locale $locale;
 
 	/** @var array<string> */
-	private array $whitelist;
+	private array $allowed;
 
 	/**
-	 * @param array<string> $whitelist
+	 * @param array<string> $allowed
 	 */
-	private function __construct(string $message, Locale $locale, array $whitelist)
+	private function __construct(string $message, Locale $locale, array $allowed)
 	{
 		parent::__construct($message);
 		$this->locale = $locale;
-		$this->whitelist = $whitelist;
+		$this->allowed = $allowed;
 	}
 
 	public static function forLocales(Locale $locale, LocaleSet $locales): self
 	{
-		$whitelist = [];
-		foreach ($locales->getWhitelist() as $whitelisted) {
-			$whitelist[] = $whitelisted->getLanguage();
+		$allowed = [];
+		foreach ($locales->getAllowed() as $allowedLocale) {
+			$allowed[] = $allowedLocale->getLanguage();
 		}
 
-		$inlineWhitelist = implode(', ', $whitelist);
+		$allowedInline = implode(', ', $allowed);
 
 		return new self(
-			"Language '{$locale->getLanguage()}' is not whitelisted. Whitelisted are: '{$inlineWhitelist}'",
+			"Language '{$locale->getLanguage()}' is not allowed. Allowed are: '{$allowedInline}'",
 			$locale,
-			$whitelist,
+			$allowed,
 		);
 	}
 
@@ -49,9 +49,9 @@ final class LanguageNotWhitelisted extends LogicalException
 	/**
 	 * @return array<string>
 	 */
-	public function getWhitelist(): array
+	public function getAllowed(): array
 	{
-		return $this->whitelist;
+		return $this->allowed;
 	}
 
 }

@@ -11,35 +11,35 @@ final class LocaleSet
 	private Locale $default;
 
 	/** @var array<Locale> */
-	private array $whitelist;
+	private array $allowed;
 
 	/** @var array<string, Locale> */
 	private array $fallbacks;
 
 	/**
-	 * @param array<string>         $whitelist
+	 * @param array<string>         $allowed
 	 * @param array<string, string> $fallbacks
 	 */
-	public function __construct(LocaleProcessor $localeProcessor, string $default, array $whitelist, array $fallbacks)
+	public function __construct(LocaleProcessor $localeProcessor, string $default, array $allowed, array $fallbacks)
 	{
 		$this->default = $localeProcessor->parseAndEnsureNormalized($default);
 
 		$defaultLanguage = $this->default->getLanguage();
-		if (!in_array($defaultLanguage, $whitelist, true)) {
-			$whitelist[] = $defaultLanguage;
+		if (!in_array($defaultLanguage, $allowed, true)) {
+			$allowed[] = $defaultLanguage;
 		}
 
-		$this->setWhitelist($whitelist, $localeProcessor);
+		$this->setAllowed($allowed, $localeProcessor);
 		$this->setFallbacks($fallbacks, $localeProcessor);
 	}
 
 	/**
-	 * @param array<string> $whitelist
+	 * @param array<string> $allowed
 	 */
-	protected function setWhitelist(array $whitelist, LocaleProcessor $localeProcessor): void
+	protected function setAllowed(array $allowed, LocaleProcessor $localeProcessor): void
 	{
 		$processed = [];
-		foreach ($whitelist as $languageTag) {
+		foreach ($allowed as $languageTag) {
 			$locale = $localeProcessor->parseAndEnsureNormalized($languageTag);
 
 			$language = $locale->getLanguage();
@@ -48,14 +48,14 @@ final class LocaleSet
 			if ($language !== $tag) {
 				throw InvalidArgument::create()
 					->withMessage(
-						"Only language can be whitelisted, use {$language} instead of {$tag}",
+						"Only language can be allowed, use {$language} instead of {$tag}",
 					);
 			}
 
 			$processed[$language] = $locale;
 		}
 
-		$this->whitelist = $processed;
+		$this->allowed = $processed;
 	}
 
 	/**
@@ -99,9 +99,9 @@ final class LocaleSet
 	/**
 	 * @return array<Locale>
 	 */
-	public function getWhitelist(): array
+	public function getAllowed(): array
 	{
-		return $this->whitelist;
+		return $this->allowed;
 	}
 
 	/**
@@ -119,7 +119,7 @@ final class LocaleSet
 	{
 		return [
 			'default' => $this->default,
-			'whitelist' => $this->whitelist,
+			'allowed' => $this->allowed,
 			'fallbacks' => $this->fallbacks,
 		];
 	}
@@ -130,7 +130,7 @@ final class LocaleSet
 	public function __unserialize(array $data): void
 	{
 		$this->default = $data['default'];
-		$this->whitelist = $data['whitelist'];
+		$this->allowed = $data['allowed'];
 		$this->fallbacks = $data['fallbacks'];
 	}
 

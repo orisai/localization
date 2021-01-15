@@ -57,7 +57,7 @@ final class LocalizationExtension extends CompilerExtension
 			]),
 			'locale' => Expect::structure([
 				'default' => Expect::string()->required(),
-				'whitelist' => Expect::listOf('string'),
+				'allowed' => Expect::listOf('string'),
 				'fallback' => Expect::arrayOf('string'),
 			]),
 			'loaders' => Expect::arrayOf(
@@ -95,7 +95,7 @@ final class LocalizationExtension extends CompilerExtension
 		$locales = new LocaleSet(
 			$processor,
 			$config->locale->default,
-			$config->locale->whitelist,
+			$config->locale->allowed,
 			$config->locale->fallback,
 		);
 		$localesDef = $builder->addDefinition($this->prefix('locales'))

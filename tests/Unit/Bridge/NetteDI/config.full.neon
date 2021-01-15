@@ -6,7 +6,7 @@ extensions:
 localization:
 	locale:
 		default: en
-		whitelist: [cs, fr, de, sk]
+		allowed: [cs, fr, de, sk]
 	holder:
 		enabled: false
 	debug:

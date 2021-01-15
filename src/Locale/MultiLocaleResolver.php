@@ -21,7 +21,7 @@ final class MultiLocaleResolver implements LocaleResolver
 		foreach ($this->resolvers as $resolver) {
 			$locale = $resolver->resolve($locales, $localeProcessor);
 
-			if ($locale !== null && $localeProcessor->isWhitelisted($locale, $locales)) {
+			if ($locale !== null && $localeProcessor->isAllowed($locale, $locales)) {
 				return $locale;
 			}
 		}

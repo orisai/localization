@@ -5,7 +5,7 @@ namespace Tests\Orisai\Localization\Unit;
 use Generator;
 use Orisai\Exceptions\Logic\InvalidState;
 use Orisai\Localization\DefaultTranslator;
-use Orisai\Localization\Exception\LanguageNotWhitelisted;
+use Orisai\Localization\Exception\LanguageNotAllowed;
 use Orisai\Localization\Exception\MalformedLanguageTag;
 use Orisai\Localization\Formatting\IntlMessageFormatter;
 use Orisai\Localization\Locale\LocaleProcessor;
@@ -50,10 +50,10 @@ final class DefaultTranslatorTest extends TestCase
 			$processor,
 		);
 
-		//TODO - fallback není třeba whitelistovat? jak k tomu přistupovat v multi resolverech? v chybových zprávách?
+		//TODO - fallback není třeba povolovat? jak k tomu přistupovat v multi resolverech? v chybových zprávách?
 		self::assertSame('en', $translator->getCurrentLocale()->getTag());
 		self::assertSame('en', $translator->getDefaultLocale()->getTag());
-		self::assertSame(['cs', 'de', 'is', 'en'], $processor->localesToTagVariants($translator->getLocaleWhitelist()));
+		self::assertSame(['cs', 'de', 'is', 'en'], $processor->localesToTagVariants($translator->getAllowedLocales()));
 
 		// Default locale
 		self::assertSame('I have 5 apples.', $translator->translate('apples', ['apples' => 5]));
@@ -64,17 +64,17 @@ final class DefaultTranslatorTest extends TestCase
 		// Default locale - using en (computed)
 		self::assertSame('I have 5 apples.', $translator->translate('apples', ['apples' => 5], 'en-US'));
 
-		// Whitelisted locale - using cs
+		// Allowed locale - using cs
 		self::assertSame('Já mám 3 jablka.', $translator->translate('apples', ['apples' => 3], 'cs'));
 
-		// Mutation of whitelisted locale (cs) - using cs (computed)
+		// Mutation of allowed locale (cs) - using cs (computed)
 		self::assertSame('Já mám 3 jablka.', $translator->translate('apples', ['apples' => 3], 'cs-CZ'));
 
-		// Whitelisted locale - using en (default) - translation in requested locale is missing
+		// Allowed locale - using en (default) - translation in requested locale is missing
 		//TODO - ověřit v loggeru? mám překlad jen pro defaultní jazyk
 		self::assertSame('I have 3 apples.', $translator->translate('apples', ['apples' => 3], 'is'));
 
-		// Mutation of whitelisted locale (de) - using de-AT
+		// Mutation of allowed locale (de) - using de-AT
 		self::assertSame('Ich habe 3 Äpfel. (at)', $translator->translate('apples', ['apples' => 3], 'de-AT'));
 
 		// todo - automatický fallback na jinou jazykovou mutaci? (de-AT)
@@ -116,10 +116,10 @@ final class DefaultTranslatorTest extends TestCase
 		);
 	}
 
-	public function testTranslateNotWhitelistedLocale(): void
+	public function testTranslateNotAllowedLocale(): void
 	{
-		$this->expectExceptionMessage(InvalidState::class);
-		$this->expectExceptionMessage("Language 'fr' is not whitelisted. Whitelisted are: 'cs, en'");
+		$this->expectException(LanguageNotAllowed::class);
+		$this->expectExceptionMessage("Language 'fr' is not allowed. Allowed are: 'cs, en'");
 
 		$processor = new LocaleProcessor();
 		$translator = new DefaultTranslator(
@@ -208,7 +208,7 @@ final class DefaultTranslatorTest extends TestCase
 		self::assertSame('cs', $translator->getCurrentLocale()->getTag());
 	}
 
-	public function testResolverNotWhitelistedLocale(): void
+	public function testResolverNotAllowedLocale(): void
 	{
 		$processor = new LocaleProcessor();
 		$translator = new DefaultTranslator(
@@ -229,13 +229,13 @@ final class DefaultTranslatorTest extends TestCase
 	}
 
 	/**
-	 * @param array<string> $localeWhitelist
+	 * @param array<string> $allowedLocales
 	 * @param array<string> $fallbacks
 	 * @dataProvider provideValidation
 	 */
 	public function testValidation(
 		string $defaultLocale,
-		array $localeWhitelist,
+		array $allowedLocales,
 		array $fallbacks,
 		string $message
 	): void
@@ -248,7 +248,7 @@ final class DefaultTranslatorTest extends TestCase
 			new LocaleSet(
 				$processor,
 				$defaultLocale,
-				$localeWhitelist,
+				$allowedLocales,
 				$fallbacks,
 			),
 			new FakeLocaleResolver(),
@@ -370,10 +370,10 @@ final class DefaultTranslatorTest extends TestCase
 		$translator->setCurrentLocale('+ěš');
 	}
 
-	public function testSetCurrentLocaleNotWhitelisted(): void
+	public function testSetCurrentLocaleNotAllowed(): void
 	{
-		$this->expectException(LanguageNotWhitelisted::class);
-		$this->expectExceptionMessage("Language 'fr' is not whitelisted. Whitelisted are: 'cs, de, en'");
+		$this->expectException(LanguageNotAllowed::class);
+		$this->expectExceptionMessage("Language 'fr' is not allowed. Allowed are: 'cs, de, en'");
 
 		$processor = new LocaleProcessor();
 		$translator = new DefaultTranslator(
@@ -393,7 +393,7 @@ final class DefaultTranslatorTest extends TestCase
 		$translator->setCurrentLocale('fr');
 	}
 
-	public function testWhitelistDefaultAddedOnlyOnce(): void
+	public function testAllowedDefaultAddedOnlyOnce(): void
 	{
 		$processor = new LocaleProcessor();
 		$translator = new DefaultTranslator(
@@ -410,7 +410,7 @@ final class DefaultTranslatorTest extends TestCase
 			$processor,
 		);
 
-		self::assertSame(['en'], $processor->localesToTagVariants($translator->getLocaleWhitelist()));
+		self::assertSame(['en'], $processor->localesToTagVariants($translator->getAllowedLocales()));
 	}
 
 }
