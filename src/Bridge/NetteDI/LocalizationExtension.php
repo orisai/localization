@@ -119,7 +119,7 @@ final class LocalizationExtension extends CompilerExtension
 		}
 
 		if ($configuratorDefinitions !== []) {
-			$builder->addDefinition($this->prefix('configurator'))
+			$builder->addDefinition($this->prefix('configurators'))
 				->setFactory(MultiLocaleConfigurator::class, [$configuratorDefinitions])
 				->setType(LocaleConfigurator::class);
 		}
@@ -143,7 +143,7 @@ final class LocalizationExtension extends CompilerExtension
 				: $resolverDefinition->getName();
 		}
 
-		$rootResolverDefinition = $builder->addDefinition($this->prefix('resolver'))
+		$rootResolverDefinition = $builder->addDefinition($this->prefix('resolvers'))
 			->setFactory(LazyMultiLocaleResolver::class, [$resolverDefinitionNames])
 			->setType(LocaleResolver::class)
 			->setAutowired(false);
@@ -163,12 +163,12 @@ final class LocalizationExtension extends CompilerExtension
 				: $loaderDefinition->getName();
 		}
 
-		$lazyLoaderDefinition = $builder->addDefinition($this->prefix('loader'))
+		$lazyLoaderDefinition = $builder->addDefinition($this->prefix('loaders'))
 			->setFactory(LazyMultiLoader::class, [$loaderDefinitionNames])
 			->setType(Loader::class)
 			->setAutowired(false);
 
-		$loaderCacheDefinition = $builder->addDefinition($this->prefix('loader.cache'))
+		$loaderCacheDefinition = $builder->addDefinition($this->prefix('loaders.cache'))
 			->setFactory(ArrayCacheLoader::class, [$lazyLoaderDefinition])
 			->setType(Loader::class)
 			->setAutowired(false);
