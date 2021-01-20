@@ -3,7 +3,6 @@
 namespace Orisai\Localization\Bridge\Tracy;
 
 use Orisai\Localization\Locale\Locale;
-use Orisai\Localization\Logging\MissingResource;
 use Orisai\Localization\Logging\TranslationsLogger;
 use Orisai\Localization\Translator;
 use Tracy\Helpers;
@@ -14,14 +13,12 @@ final class TranslationPanel implements IBarPanel
 {
 
 	private Translator $translator;
-
-	/** @var array<MissingResource> */
-	private array $missingResources;
+	private TranslationsLogger $logger;
 
 	public function __construct(Translator $translator, TranslationsLogger $logger)
 	{
 		$this->translator = $translator;
-		$this->missingResources = $logger->getMissingResources();
+		$this->logger = $logger;
 	}
 
 	public function getTab(): string
@@ -40,7 +37,7 @@ final class TranslationPanel implements IBarPanel
 				static fn (Locale $locale): string => $locale->getLanguage(),
 				$this->translator->getAllowedLocales(),
 			);
-			$missingResources = $this->missingResources;
+			$missingResources = $this->logger->getMissingResources();
 
 			require __DIR__ . '/templates/panel.phtml';
 		});
