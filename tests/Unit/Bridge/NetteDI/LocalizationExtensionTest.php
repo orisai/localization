@@ -49,9 +49,9 @@ final class LocalizationExtensionTest extends TestCase
 		self::assertSame(['en'], $processor->localesToTagVariants($translator->getAllowedLocales()));
 		self::assertSame('en', $translator->getCurrentLocale()->getTag());
 
-		self::assertInstanceOf(LazyMultiLocaleResolver::class, $container->getService('localization.resolver'));
-		self::assertInstanceOf(LazyMultiLoader::class, $container->getService('localization.loader'));
-		self::assertInstanceOf(ArrayCacheLoader::class, $container->getService('localization.loader.cache'));
+		self::assertInstanceOf(LazyMultiLocaleResolver::class, $container->getService('localization.resolvers'));
+		self::assertInstanceOf(LazyMultiLoader::class, $container->getService('localization.loaders'));
+		self::assertInstanceOf(ArrayCacheLoader::class, $container->getService('localization.loaders.cache'));
 		self::assertInstanceOf(CachedCatalogue::class, $container->getService('localization.catalogue'));
 		self::assertInstanceOf(
 			ArrayCacheCatalogue::class,
@@ -88,9 +88,9 @@ final class LocalizationExtensionTest extends TestCase
 		);
 		self::assertSame('en', $translator->getCurrentLocale()->getTag());
 
-		self::assertInstanceOf(LazyMultiLocaleResolver::class, $container->getService('localization.resolver'));
-		self::assertInstanceOf(LazyMultiLoader::class, $container->getService('localization.loader'));
-		self::assertInstanceOf(ArrayCacheLoader::class, $container->getService('localization.loader.cache'));
+		self::assertInstanceOf(LazyMultiLocaleResolver::class, $container->getService('localization.resolvers'));
+		self::assertInstanceOf(LazyMultiLoader::class, $container->getService('localization.loaders'));
+		self::assertInstanceOf(ArrayCacheLoader::class, $container->getService('localization.loaders.cache'));
 		self::assertInstanceOf(CachedCatalogue::class, $container->getService('localization.catalogue'));
 		self::assertInstanceOf(
 			ArrayCacheCatalogue::class,
