@@ -40,6 +40,7 @@ final class DefaultTranslator implements ConfigurableTranslator
 	)
 	{
 		$this->locales = $locales;
+
 		$this->localeResolver = $localeResolver;
 		$this->catalogue = $catalogue;
 		$this->messageFormatter = $messageFormatter;
@@ -161,6 +162,15 @@ final class DefaultTranslator implements ConfigurableTranslator
 		}
 
 		return $this->possibleLanguageTags[$languageTag] = array_unique(array_merge(...$listByLocale));
+	}
+
+	public function toFunction(): callable
+	{
+		return fn (string $message, array $parameters = [], ?string $languageTag = null): string => $this->translate(
+			$message,
+			$parameters,
+			$languageTag,
+		);
 	}
 
 }
