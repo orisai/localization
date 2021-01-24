@@ -5,6 +5,7 @@ namespace Orisai\Localization\Bridge\NetteDI;
 use Latte\Engine;
 use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Nette\DI\CompilerExtension;
+use Nette\DI\Definitions\AccessorDefinition;
 use Nette\DI\Definitions\FactoryDefinition;
 use Nette\DI\Definitions\Reference;
 use Nette\DI\Definitions\Statement;
@@ -35,6 +36,7 @@ use Orisai\Localization\Resource\ArrayCacheLoader;
 use Orisai\Localization\Resource\Catalogue;
 use Orisai\Localization\Resource\Loader;
 use Orisai\Localization\Translator;
+use Orisai\Localization\TranslatorGetter;
 use stdClass;
 use function assert;
 use function serialize;
@@ -216,6 +218,13 @@ final class LocalizationExtension extends CompilerExtension
 		$builder->addDefinition($this->prefix('translator.nette'))
 			->setFactory(NetteTranslator::class, [$translatorDefinition])
 			->setType(ITranslator::class);
+
+		// Translator accessor
+
+		$translatorGetterDefinition = new AccessorDefinition();
+		$translatorGetterDefinition->setImplement(TranslatorGetter::class)
+			->setReference(new Reference($translatorPrefix));
+		$builder->addDefinition($this->prefix('translator.getter'), $translatorGetterDefinition);
 
 		// Debug
 
