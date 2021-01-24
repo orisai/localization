@@ -7,7 +7,6 @@ use Orisai\Localization\Bridge\Latte\TranslationFilters;
 use Orisai\Localization\Bridge\NetteCaching\CachedCatalogue;
 use Orisai\Localization\Bridge\NetteDI\LazyMultiLoader;
 use Orisai\Localization\Bridge\NetteDI\LazyMultiLocaleResolver;
-use Orisai\Localization\Bridge\NetteDI\LazyTranslator;
 use Orisai\Localization\Bridge\NetteLocalization\NetteTranslator;
 use Orisai\Localization\Bridge\Tracy\TranslationPanel;
 use Orisai\Localization\DefaultTranslator;
@@ -17,11 +16,9 @@ use Orisai\Localization\Logging\TranslationsLogger;
 use Orisai\Localization\Resource\ArrayCacheCatalogue;
 use Orisai\Localization\Resource\ArrayCacheLoader;
 use Orisai\Localization\Translator;
-use Orisai\Localization\TranslatorHolder;
 use PHPUnit\Framework\TestCase;
 use function assert;
 use function dirname;
-use function Orisai\Localization\__;
 
 /**
  * @runTestsInSeparateProcesses
@@ -39,6 +36,7 @@ final class LocalizationExtensionTest extends TestCase
 
 		$translator = $container->getByType(Translator::class);
 		self::assertInstanceOf(DefaultTranslator::class, $translator);
+		self::assertSame('test', $translator->translate('test'));
 
 		$processor = $container->getService('localization.locale.processor');
 		self::assertInstanceOf(LocaleProcessor::class, $processor);
@@ -61,11 +59,8 @@ final class LocalizationExtensionTest extends TestCase
 		self::assertInstanceOf(TranslationsLogger::class, $container->getService('localization.logger'));
 		self::assertInstanceOf(DefaultTranslator::class, $container->getService('localization.translator'));
 		self::assertInstanceOf(NetteTranslator::class, $container->getService('localization.translator.nette'));
-		self::assertInstanceOf(LazyTranslator::class, $container->getService('localization.translator.lazy'));
 		self::assertFalse($container->hasService('localization.tracy.panel'));
 		self::assertFalse($container->hasService('localization.latte.filters'));
-		self::assertInstanceOf(LazyTranslator::class, TranslatorHolder::getInstance()->getTranslator());
-		self::assertSame('test', __('test'));
 	}
 
 	public function testFull(): void

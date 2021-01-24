@@ -35,7 +35,6 @@ use Orisai\Localization\Resource\ArrayCacheLoader;
 use Orisai\Localization\Resource\Catalogue;
 use Orisai\Localization\Resource\Loader;
 use Orisai\Localization\Translator;
-use Orisai\Localization\TranslatorHolder;
 use stdClass;
 use function assert;
 use function serialize;
@@ -51,9 +50,6 @@ final class LocalizationExtension extends CompilerExtension
 		return Expect::structure([
 			'debug' => Expect::structure([
 				'panel' => Expect::bool(false),
-			]),
-			'holder' => Expect::structure([
-				'enabled' => Expect::bool(true),
 			]),
 			'locale' => Expect::structure([
 				'default' => Expect::string()->required(),
@@ -221,15 +217,6 @@ final class LocalizationExtension extends CompilerExtension
 			->setFactory(NetteTranslator::class, [$translatorDefinition])
 			->setType(ITranslator::class);
 
-		// Shortcut
-
-		if ($config->holder->enabled) {
-			$builder->addDefinition($this->prefix('translator.lazy'))
-				->setFactory(LazyTranslator::class, ['@container', $translatorPrefix])
-				->setType(Translator::class)
-				->setAutowired(false);
-		}
-
 		// Debug
 
 		if ($config->debug->panel) {
@@ -281,15 +268,6 @@ final class LocalizationExtension extends CompilerExtension
 			$initialize->addBody('$this->getService(?)->addPanel($this->getService(?));', [
 				'tracy.bar',
 				$this->prefix('tracy.panel'),
-			]);
-		}
-
-		// Shortcut
-
-		if ($config->holder->enabled) {
-			$initialize->addBody('?::setTranslator($this->getService(?));', [
-				new PhpLiteral(TranslatorHolder::class),
-				$this->prefix('translator.lazy'),
 			]);
 		}
 	}
