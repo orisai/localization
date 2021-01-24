@@ -16,6 +16,7 @@ use Orisai\Localization\Logging\TranslationsLogger;
 use Orisai\Localization\Resource\ArrayCacheCatalogue;
 use Orisai\Localization\Resource\ArrayCacheLoader;
 use Orisai\Localization\Translator;
+use Orisai\Localization\TranslatorGetter;
 use PHPUnit\Framework\TestCase;
 use function assert;
 use function dirname;
@@ -37,6 +38,10 @@ final class LocalizationExtensionTest extends TestCase
 		$translator = $container->getByType(Translator::class);
 		self::assertInstanceOf(DefaultTranslator::class, $translator);
 		self::assertSame('test', $translator->translate('test'));
+
+		$getter = $container->getByType(TranslatorGetter::class);
+		self::assertInstanceOf(TranslatorGetter::class, $getter);
+		self::assertSame($translator, $getter->get());
 
 		$processor = $container->getService('localization.locale.processor');
 		self::assertInstanceOf(LocaleProcessor::class, $processor);
