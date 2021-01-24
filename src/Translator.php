@@ -21,4 +21,9 @@ interface Translator
 	 */
 	public function getAllowedLocales(): array;
 
+	/**
+	 * @return callable(string $message, array $parameters = [], ?string $languageTag = null): string
+	 */
+	public function toFunction(): callable;
+
 }

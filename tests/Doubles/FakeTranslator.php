@@ -18,6 +18,7 @@ final class FakeTranslator implements ConfigurableTranslator
 	public function __construct(LocaleSet $locales, LocaleProcessor $localeProcessor)
 	{
 		$this->locales = $locales;
+
 		$this->localeProcessor = $localeProcessor;
 	}
 
@@ -50,6 +51,15 @@ final class FakeTranslator implements ConfigurableTranslator
 	public function getAllowedLocales(): array
 	{
 		return $this->locales->getAllowed();
+	}
+
+	public function toFunction(): callable
+	{
+		return fn (string $message, array $parameters = [], ?string $languageTag = null): string => $this->translate(
+			$message,
+			$parameters,
+			$languageTag,
+		);
 	}
 
 }

@@ -87,6 +87,10 @@ final class DefaultTranslatorTest extends TestCase
 		// Translation with no parameters
 		self::assertSame('No parameters', $translator->translate('no-param'));
 
+		// Via function
+		$translate = $translator->toFunction();
+		self::assertSame('I have 5 apples.', $translate('apples', ['apples' => 5], 'en'));
+
 		// Missing translation
 		self::assertSame('missing-translation', $translator->translate('missing-translation'));
 		self::assertSame(
