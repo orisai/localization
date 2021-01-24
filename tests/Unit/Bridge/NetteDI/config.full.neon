@@ -7,8 +7,6 @@ localization:
 	locale:
 		default: en
 		allowed: [cs, fr, de, sk]
-	holder:
-		enabled: false
 	debug:
 		panel: true
 
