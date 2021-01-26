@@ -65,23 +65,19 @@ final class LocaleProcessorTest extends TestCase
 		yield 'variant 5 chars' => ['pl-ela-elb-elc-latn-rg-chars'];
 		yield 'variant 8 chars' => ['pl-ela-elb-elc-latn-rg-12chars3'];
 		yield 'variant 1 digit 3 chars' => ['pl-ela-elb-elc-latn-rg-1chr'];
-
-		//TODO - repeating is not working
-		//yield 'variant repeat' => ['pl-ela-elb-elc-latn-rg-chars-12chars3-1chr'];
+		yield 'variant repeat' => ['pl-ela-elb-elc-latn-rg-chars-12chars3-1chr'];
 
 		// Extensions
 		yield 'extension 2 chars' => ['pl-ela-elb-elc-latn-rg-chars-e-tw'];
 		yield 'extension 8 chars' => ['pl-ela-elb-elc-latn-rg-chars-1-12345678'];
-
-		//TODO - repeating is not working
-		//yield 'extension repeat' => ['pl-ela-elb-elc-latn-rg-chars-e-tw-1-12345678'];
+		yield 'extension repeat' => ['pl-ela-elb-elc-latn-rg-chars-e-tw-1-12345678'];
 
 		// Private
 		yield 'private 1 char' => ['pl-ela-elb-elc-latn-rg-chars-e-tw-x-1'];
 		yield 'private 8 char' => ['pl-ela-elb-elc-latn-rg-chars-e-tw-x-eight123'];
 
-		//TODO - repeating is not working
-		//yield 'all combined' => ['pl-ela-elb-elc-latn-rg-chars-12chars3-1chr-e-tw-1-12345678-x-eight123'];
+		// All combined
+		yield 'all combined' => ['pl-ela-elb-elc-latn-rg-chars-12chars3-1chr-e-tw-1-12345678-x-eight123'];
 	}
 
 	/**
