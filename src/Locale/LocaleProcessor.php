@@ -27,8 +27,8 @@ final class LocaleProcessor
 		)|[A-Za-z]{4}|[A-Za-z]{5,8})
 		(?:-(?<script>[A-Za-z]{4}))?
 		(?:-(?<region>[A-Za-z]{2}|[0-9]{3}))?
-		(?:-(?<variants>[A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*
-		(?:-(?<extensions>[0-9A-WY-Za-wy-z](?:-[A-Za-z0-9]{2,8})+))*
+		(?<variants>(?:-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3})+)*)
+		(?<extensions>(?:-[0-9A-WY-Za-wy-z](?:-[A-Za-z0-9]{2,8})+)*)
 		(?:-(?<privateSubtag>x(?:-[A-Za-z0-9]{1,8})+))?
 	) |
 	(?<privateLanguage>x(?:-[A-Za-z0-9]{1,8})+)
@@ -64,8 +64,14 @@ REGEX;
 				$extendedLanguage,
 				$matches['script'] ?? null,
 				$matches['region'] ?? null,
-				$matches['variants'] ?? null,
-				$matches['extensions'] ?? null,
+				(isset($matches['variants']) && $matches['variants'] !== '' ?
+					substr($matches['variants'], 1)
+					: null
+				),
+				(isset($matches['extensions']) && $matches['extensions'] !== '' ?
+					substr($matches['extensions'], 1)
+					: null
+				),
 				$matches['privateSubtag'] ?? null,
 			);
 		}
