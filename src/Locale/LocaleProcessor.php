@@ -120,7 +120,7 @@ REGEX;
 		return array_unique(array_merge(...$tagsByLocale));
 	}
 
-	public function isAllowed(Locale $locale, LocaleSet $locales): bool
+	public function isAllowed(Locale $locale, Locales $locales): bool
 	{
 		$language = $locale->getLanguage();
 

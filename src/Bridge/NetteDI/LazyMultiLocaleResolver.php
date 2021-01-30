@@ -6,7 +6,7 @@ use Nette\DI\Container;
 use Orisai\Localization\Locale\Locale;
 use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Locale\LocaleResolver;
-use Orisai\Localization\Locale\LocaleSet;
+use Orisai\Localization\Locale\Locales;
 use function assert;
 
 final class LazyMultiLocaleResolver implements LocaleResolver
@@ -29,7 +29,7 @@ final class LazyMultiLocaleResolver implements LocaleResolver
 		$this->resolverServiceNames = $resolverServiceNames;
 	}
 
-	public function resolve(LocaleSet $locales, LocaleProcessor $localeProcessor): ?Locale
+	public function resolve(Locales $locales, LocaleProcessor $localeProcessor): ?Locale
 	{
 		foreach ($this->resolverServiceNames as $resolverServiceName) {
 			$resolver = $this->getResolver($resolverServiceName);

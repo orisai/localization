@@ -5,7 +5,7 @@ namespace Orisai\Localization\Locale;
 use Orisai\Exceptions\Logic\InvalidArgument;
 use function in_array;
 
-final class LocaleSet
+final class Locales
 {
 
 	private Locale $default;

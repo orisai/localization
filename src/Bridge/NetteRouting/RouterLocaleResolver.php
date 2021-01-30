@@ -7,7 +7,7 @@ use Nette\Routing\Router;
 use Orisai\Localization\Locale\Locale;
 use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Locale\LocaleResolver;
-use Orisai\Localization\Locale\LocaleSet;
+use Orisai\Localization\Locale\Locales;
 use function array_key_exists;
 
 final class RouterLocaleResolver implements LocaleResolver
@@ -29,7 +29,7 @@ final class RouterLocaleResolver implements LocaleResolver
 		$this->parameterName = $parameterName;
 	}
 
-	public function resolve(LocaleSet $locales, LocaleProcessor $localeProcessor): ?Locale
+	public function resolve(Locales $locales, LocaleProcessor $localeProcessor): ?Locale
 	{
 		$match = $this->router->match($this->request);
 

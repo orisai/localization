@@ -4,7 +4,7 @@ namespace Orisai\Localization\Exception;
 
 use Orisai\Exceptions\LogicalException;
 use Orisai\Localization\Locale\Locale;
-use Orisai\Localization\Locale\LocaleSet;
+use Orisai\Localization\Locale\Locales;
 use function implode;
 
 final class LanguageNotAllowed extends LogicalException
@@ -25,7 +25,7 @@ final class LanguageNotAllowed extends LogicalException
 		$this->allowed = $allowed;
 	}
 
-	public static function forLocales(Locale $locale, LocaleSet $locales): self
+	public static function forLocales(Locale $locale, Locales $locales): self
 	{
 		$allowed = [];
 		foreach ($locales->getAllowed() as $allowedLocale) {

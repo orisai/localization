@@ -28,7 +28,7 @@ use Orisai\Localization\Locale\Locale;
 use Orisai\Localization\Locale\LocaleConfigurator;
 use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Locale\LocaleResolver;
-use Orisai\Localization\Locale\LocaleSet;
+use Orisai\Localization\Locale\Locales;
 use Orisai\Localization\Locale\MultiLocaleConfigurator;
 use Orisai\Localization\Logging\TranslationsLogger;
 use Orisai\Localization\Resource\ArrayCacheCatalogue;
@@ -90,7 +90,7 @@ final class LocalizationExtension extends CompilerExtension
 
 		// Locales
 		$processor = new LocaleProcessor();
-		$locales = new LocaleSet(
+		$locales = new Locales(
 			$processor,
 			$config->locale->default,
 			$config->locale->allowed,
@@ -101,7 +101,7 @@ final class LocalizationExtension extends CompilerExtension
 				new PhpLiteral(serialize($locales)),
 				Locale::class,
 			])
-			->setType(LocaleSet::class);
+			->setType(Locales::class);
 
 		// Configurators
 
