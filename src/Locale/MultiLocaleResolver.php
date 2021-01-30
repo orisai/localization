@@ -16,7 +16,7 @@ final class MultiLocaleResolver implements LocaleResolver
 		$this->resolvers = $resolvers;
 	}
 
-	public function resolve(LocaleSet $locales, LocaleProcessor $localeProcessor): ?Locale
+	public function resolve(Locales $locales, LocaleProcessor $localeProcessor): ?Locale
 	{
 		foreach ($this->resolvers as $resolver) {
 			$locale = $resolver->resolve($locales, $localeProcessor);

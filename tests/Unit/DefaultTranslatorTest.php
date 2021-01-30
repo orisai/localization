@@ -9,7 +9,7 @@ use Orisai\Localization\Exception\LanguageNotAllowed;
 use Orisai\Localization\Exception\MalformedLanguageTag;
 use Orisai\Localization\Formatting\IntlMessageFormatter;
 use Orisai\Localization\Locale\LocaleProcessor;
-use Orisai\Localization\Locale\LocaleSet;
+use Orisai\Localization\Locale\Locales;
 use Orisai\Localization\Logging\TranslationsLogger;
 use PHPUnit\Framework\TestCase;
 use Tests\Orisai\Localization\Doubles\ArrayCatalogue;
@@ -24,7 +24,7 @@ final class DefaultTranslatorTest extends TestCase
 		$logger = new TranslationsLogger();
 		$processor = new LocaleProcessor();
 		$translator = new DefaultTranslator(
-			new LocaleSet(
+			new Locales(
 				$processor,
 				'en',
 				['cs', 'de', 'is'],
@@ -127,7 +127,7 @@ final class DefaultTranslatorTest extends TestCase
 
 		$processor = new LocaleProcessor();
 		$translator = new DefaultTranslator(
-			new LocaleSet(
+			new Locales(
 				$processor,
 				'en',
 				['cs'],
@@ -151,7 +151,7 @@ final class DefaultTranslatorTest extends TestCase
 	{
 		$processor = new LocaleProcessor();
 		$translator = new DefaultTranslator(
-			new LocaleSet(
+			new Locales(
 				$processor,
 				'en',
 				['cs'],
@@ -171,7 +171,7 @@ final class DefaultTranslatorTest extends TestCase
 	{
 		$processor = new LocaleProcessor();
 		$translator = new DefaultTranslator(
-			new LocaleSet(
+			new Locales(
 				$processor,
 				'en',
 				['cs'],
@@ -191,7 +191,7 @@ final class DefaultTranslatorTest extends TestCase
 	{
 		$processor = new LocaleProcessor();
 		$translator = new DefaultTranslator(
-			new LocaleSet(
+			new Locales(
 				$processor,
 				'en',
 				['cs'],
@@ -216,7 +216,7 @@ final class DefaultTranslatorTest extends TestCase
 	{
 		$processor = new LocaleProcessor();
 		$translator = new DefaultTranslator(
-			new LocaleSet(
+			new Locales(
 				$processor,
 				'en',
 				['cs'],
@@ -249,7 +249,7 @@ final class DefaultTranslatorTest extends TestCase
 
 		$processor = new LocaleProcessor();
 		new DefaultTranslator(
-			new LocaleSet(
+			new Locales(
 				$processor,
 				$defaultLocale,
 				$allowedLocales,
@@ -278,7 +278,7 @@ final class DefaultTranslatorTest extends TestCase
 	{
 		$processor = new LocaleProcessor();
 		$translator = new DefaultTranslator(
-			new LocaleSet(
+			new Locales(
 				$processor,
 				'en',
 				['cs'],
@@ -304,7 +304,7 @@ final class DefaultTranslatorTest extends TestCase
 
 		$processor = new LocaleProcessor();
 		$translator = new DefaultTranslator(
-			new LocaleSet(
+			new Locales(
 				$processor,
 				'en',
 				['cs', 'de'],
@@ -330,7 +330,7 @@ final class DefaultTranslatorTest extends TestCase
 
 		$processor = new LocaleProcessor();
 		$translator = new DefaultTranslator(
-			new LocaleSet(
+			new Locales(
 				$processor,
 				'en',
 				['cs'],
@@ -358,7 +358,7 @@ final class DefaultTranslatorTest extends TestCase
 
 		$processor = new LocaleProcessor();
 		$translator = new DefaultTranslator(
-			new LocaleSet(
+			new Locales(
 				$processor,
 				'en',
 				['cs', 'de'],
@@ -381,7 +381,7 @@ final class DefaultTranslatorTest extends TestCase
 
 		$processor = new LocaleProcessor();
 		$translator = new DefaultTranslator(
-			new LocaleSet(
+			new Locales(
 				$processor,
 				'en',
 				['cs', 'de'],
@@ -401,7 +401,7 @@ final class DefaultTranslatorTest extends TestCase
 	{
 		$processor = new LocaleProcessor();
 		$translator = new DefaultTranslator(
-			new LocaleSet(
+			new Locales(
 				$processor,
 				'en',
 				['en'],

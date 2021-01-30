@@ -7,7 +7,7 @@ use Orisai\Localization\Exception\MalformedLanguageTag;
 use Orisai\Localization\Locale\Locale;
 use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Locale\LocaleResolver;
-use Orisai\Localization\Locale\LocaleSet;
+use Orisai\Localization\Locale\Locales;
 use function array_merge;
 use function explode;
 use function krsort;
@@ -22,7 +22,7 @@ final class AcceptHeaderLocaleResolver implements LocaleResolver
 		$this->request = $request;
 	}
 
-	public function resolve(LocaleSet $locales, LocaleProcessor $localeProcessor): ?Locale
+	public function resolve(Locales $locales, LocaleProcessor $localeProcessor): ?Locale
 	{
 		foreach ($this->getAcceptedLanguages() as $language) {
 			try {

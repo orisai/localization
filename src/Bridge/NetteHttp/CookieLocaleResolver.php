@@ -8,7 +8,7 @@ use Orisai\Localization\Exception\MalformedLanguageTag;
 use Orisai\Localization\Locale\Locale;
 use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Locale\LocaleResolver;
-use Orisai\Localization\Locale\LocaleSet;
+use Orisai\Localization\Locale\Locales;
 use function is_string;
 
 final class CookieLocaleResolver implements LocaleResolver
@@ -28,7 +28,7 @@ final class CookieLocaleResolver implements LocaleResolver
 		$this->processor = $processor;
 	}
 
-	public function resolve(LocaleSet $locales, LocaleProcessor $localeProcessor): ?Locale
+	public function resolve(Locales $locales, LocaleProcessor $localeProcessor): ?Locale
 	{
 		$languageTag = $this->request->getCookie(self::COOKIE_KEY);
 

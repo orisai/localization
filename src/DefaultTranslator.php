@@ -8,7 +8,7 @@ use Orisai\Localization\Formatting\MessageFormatter;
 use Orisai\Localization\Locale\Locale;
 use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Locale\LocaleResolver;
-use Orisai\Localization\Locale\LocaleSet;
+use Orisai\Localization\Locale\Locales;
 use Orisai\Localization\Logging\TranslationsLogger;
 use Orisai\Localization\Resource\Catalogue;
 use function array_merge;
@@ -24,14 +24,14 @@ final class DefaultTranslator implements ConfigurableTranslator
 	private TranslationsLogger $logger;
 	private LocaleProcessor $localeProcessor;
 
-	private LocaleSet $locales;
+	private Locales $locales;
 	private ?Locale $currentLocale = null;
 
 	/** @var array<array<string>> */
 	private array $possibleLanguageTags = [];
 
 	public function __construct(
-		LocaleSet $locales,
+		Locales $locales,
 		LocaleResolver $localeResolver,
 		Catalogue $catalogue,
 		MessageFormatter $messageFormatter,

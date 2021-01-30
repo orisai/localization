@@ -3,7 +3,7 @@
 namespace Tests\Orisai\Localization\Unit\Locale;
 
 use Orisai\Localization\Locale\LocaleProcessor;
-use Orisai\Localization\Locale\LocaleSet;
+use Orisai\Localization\Locale\Locales;
 use Orisai\Localization\Locale\MultiLocaleResolver;
 use PHPUnit\Framework\TestCase;
 use Tests\Orisai\Localization\Doubles\FakeLocaleResolver;
@@ -16,7 +16,7 @@ final class MultiLocaleResolverTest extends TestCase
 		$resolver = new MultiLocaleResolver([]);
 		$processor = new LocaleProcessor();
 
-		$locales = new LocaleSet($processor, 'en', [], []);
+		$locales = new Locales($processor, 'en', [], []);
 		self::assertNull($resolver->resolve($locales, $processor));
 	}
 
@@ -27,7 +27,7 @@ final class MultiLocaleResolverTest extends TestCase
 		$resolver = new MultiLocaleResolver([$r1, $r2]);
 		$processor = new LocaleProcessor();
 
-		$locales = new LocaleSet($processor, 'de', ['en'], []);
+		$locales = new Locales($processor, 'de', ['en'], []);
 		$locale = $resolver->resolve($locales, $processor);
 		self::assertNotNull($locale);
 		self::assertSame('en', $locale->getTag());
@@ -42,7 +42,7 @@ final class MultiLocaleResolverTest extends TestCase
 		$resolver = new MultiLocaleResolver([$r1, $r2]);
 		$processor = new LocaleProcessor();
 
-		$locales = new LocaleSet($processor, 'de', ['en'], []);
+		$locales = new Locales($processor, 'de', ['en'], []);
 		$locale = $resolver->resolve($locales, $processor);
 		self::assertNotNull($locale);
 		self::assertSame('en', $locale->getTag());
@@ -57,7 +57,7 @@ final class MultiLocaleResolverTest extends TestCase
 		$resolver = new MultiLocaleResolver([$r1, $r2]);
 		$processor = new LocaleProcessor();
 
-		$locales = new LocaleSet($processor, 'de', ['de', 'cs', 'jp'], []);
+		$locales = new Locales($processor, 'de', ['de', 'cs', 'jp'], []);
 		self::assertNull($resolver->resolve($locales, $processor));
 		self::assertTrue($r1->wasCalled());
 		self::assertTrue($r2->wasCalled());
