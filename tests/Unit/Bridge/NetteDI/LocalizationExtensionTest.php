@@ -13,8 +13,6 @@ use Orisai\Localization\DefaultTranslator;
 use Orisai\Localization\Formatting\MessageFormatter;
 use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Logging\TranslationsLogger;
-use Orisai\Localization\Resource\ArrayCacheCatalogue;
-use Orisai\Localization\Resource\ArrayCacheLoader;
 use Orisai\Localization\Translator;
 use Orisai\Localization\TranslatorGetter;
 use PHPUnit\Framework\TestCase;
@@ -54,12 +52,7 @@ final class LocalizationExtensionTest extends TestCase
 
 		self::assertInstanceOf(LazyMultiLocaleResolver::class, $container->getService('localization.resolvers'));
 		self::assertInstanceOf(LazyMultiLoader::class, $container->getService('localization.loaders'));
-		self::assertInstanceOf(ArrayCacheLoader::class, $container->getService('localization.loaders.cache'));
 		self::assertInstanceOf(CachedCatalogue::class, $container->getService('localization.catalogue'));
-		self::assertInstanceOf(
-			ArrayCacheCatalogue::class,
-			$container->getService('localization.catalogue.cache'),
-		);
 		self::assertInstanceOf(MessageFormatter::class, $container->getService('localization.formatter'));
 		self::assertInstanceOf(TranslationsLogger::class, $container->getService('localization.logger'));
 		self::assertInstanceOf(DefaultTranslator::class, $container->getService('localization.translator'));
@@ -90,12 +83,7 @@ final class LocalizationExtensionTest extends TestCase
 
 		self::assertInstanceOf(LazyMultiLocaleResolver::class, $container->getService('localization.resolvers'));
 		self::assertInstanceOf(LazyMultiLoader::class, $container->getService('localization.loaders'));
-		self::assertInstanceOf(ArrayCacheLoader::class, $container->getService('localization.loaders.cache'));
 		self::assertInstanceOf(CachedCatalogue::class, $container->getService('localization.catalogue'));
-		self::assertInstanceOf(
-			ArrayCacheCatalogue::class,
-			$container->getService('localization.catalogue.cache'),
-		);
 		self::assertInstanceOf(MessageFormatter::class, $container->getService('localization.formatter'));
 		self::assertInstanceOf(TranslationsLogger::class, $container->getService('localization.logger'));
 		self::assertInstanceOf(DefaultTranslator::class, $container->getService('localization.translator'));

@@ -31,8 +31,6 @@ use Orisai\Localization\Locale\LocaleResolver;
 use Orisai\Localization\Locale\Locales;
 use Orisai\Localization\Locale\MultiLocaleConfigurator;
 use Orisai\Localization\Logging\TranslationsLogger;
-use Orisai\Localization\Resource\ArrayCacheCatalogue;
-use Orisai\Localization\Resource\ArrayCacheLoader;
 use Orisai\Localization\Resource\Catalogue;
 use Orisai\Localization\Resource\Loader;
 use Orisai\Localization\Translator;
@@ -51,6 +49,7 @@ final class LocalizationExtension extends CompilerExtension
 	{
 		return Expect::structure([
 			'debug' => Expect::structure([
+				'newMessages' => Expect::bool()->required(),
 				'panel' => Expect::bool(false),
 			]),
 			'locale' => Expect::structure([
@@ -166,20 +165,13 @@ final class LocalizationExtension extends CompilerExtension
 			->setType(Loader::class)
 			->setAutowired(false);
 
-		$loaderCacheDefinition = $builder->addDefinition($this->prefix('loaders.cache'))
-			->setFactory(ArrayCacheLoader::class, [$lazyLoaderDefinition])
-			->setType(Loader::class)
-			->setAutowired(false);
-
 		// Catalogue
 
 		$catalogueDefinition = $builder->addDefinition($this->prefix('catalogue'))
-			->setFactory(CachedCatalogue::class, [$loaderCacheDefinition])
-			->setType(Catalogue::class)
-			->setAutowired(false);
-
-		$catalogueCacheDefinition = $builder->addDefinition($this->prefix('catalogue.cache'))
-			->setFactory(ArrayCacheCatalogue::class, [$catalogueDefinition])
+			->setFactory(CachedCatalogue::class, [
+				'loader' => $lazyLoaderDefinition,
+				'debugMode' => $config->debug->newMessages,
+			])
 			->setType(Catalogue::class)
 			->setAutowired(false);
 
@@ -206,7 +198,7 @@ final class LocalizationExtension extends CompilerExtension
 				[
 					$localesDef,
 					$rootResolverDefinition,
-					$catalogueCacheDefinition,
+					$catalogueDefinition,
 					$messageFormatterDefinition,
 					$loggerDefinition,
 					$processorDefinition,

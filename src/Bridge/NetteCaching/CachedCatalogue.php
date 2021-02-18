@@ -6,6 +6,9 @@ use Nette\Caching\Cache;
 use Nette\Caching\IStorage;
 use Orisai\Localization\Resource\Catalogue;
 use Orisai\Localization\Resource\Loader;
+use function array_key_exists;
+use function assert;
+use function is_array;
 
 final class CachedCatalogue implements Catalogue
 {
@@ -16,52 +19,52 @@ final class CachedCatalogue implements Catalogue
 
 	private Cache $cache;
 
-	/** @var array<array<bool>> Map of message => locale which were not found in any loader */
-	private array $missingTranslationLocaleMap = [];
+	private bool $debugMode;
 
-	public function __construct(Loader $loader, IStorage $storage)
+	/** @var array<string, array<string>> */
+	private array $arrayCache = [];
+
+	/** @var array<string, null> */
+	private array $loadedFromLoader = [];
+
+	public function __construct(Loader $loader, IStorage $storage, bool $debugMode)
 	{
 		$this->loader = $loader;
 		$this->cache = new Cache($storage, self::CACHE_KEY);
+		$this->debugMode = $debugMode;
 	}
 
 	public function getMessage(string $message, string $languageTag): ?string
 	{
-		$cache = $this->cache->derive('.' . $languageTag);
+		$messages = $this->arrayCache[$languageTag] ?? null;
 
-		// Try get translation from cache
-		$translated = $this->cache->load($message);
+		if ($messages === null) {
+			$messages = $this->cache->load(
+				$languageTag,
+				function () use ($languageTag): array {
+					$this->loadedFromLoader[$languageTag] = null;
 
-		// Translation is already cached
-		if ($translated !== null) {
-			return $translated;
+					return $this->loader->loadAllMessages($languageTag);
+				},
+			);
+			assert(is_array($messages));
+
+			$this->arrayCache[$languageTag] = $messages;
 		}
 
-		// Loader don't contain translation for given message with requested language, skip lookup
-		if ($this->missingTranslationLocaleMap[$message][$languageTag] ?? false) {
-			return null;
+		$translation = $messages[$message] ?? null;
+
+		if ($translation === null && $this->debugMode && !array_key_exists($languageTag, $this->loadedFromLoader)) {
+			$this->loadedFromLoader[$languageTag] = null;
+
+			$messages = $this->loader->loadAllMessages($languageTag);
+			$this->arrayCache[$languageTag] = $messages;
+			$this->cache->save($languageTag, $messages);
+
+			$translation = $messages[$message] ?? null;
 		}
 
-		// Load all translations for given locale
-		foreach ($this->loader->loadAllMessages($languageTag) as $key => $translation) {
-			// Try to load message and save only if not cached yet
-			$cache->load($key, static fn (): string => $translation);
-
-			// Loaded key is same as requested message, use it
-			if ($key === $message) {
-				$translated = $translation;
-			}
-		}
-
-		// Translation found, return it
-		if ($translated !== null) {
-			return $translated;
-		}
-
-		// Loader don't contain translation for given message with requested language, skip at next run
-		$this->missingTranslationLocaleMap[$message][$languageTag] = true;
-
-		return null;
+		return $translation;
 	}
 
 }
