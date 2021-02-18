@@ -8,6 +8,7 @@ localization:
 		default: en
 		allowed: [cs, fr, de, sk]
 	debug:
+		newMessages: false
 		panel: true
 
 services:

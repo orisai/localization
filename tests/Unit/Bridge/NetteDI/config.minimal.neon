@@ -4,6 +4,8 @@ extensions:
 localization:
 	locale:
 		default: en
+	debug:
+		newMessages: false
 
 services:
 	storage: Nette\Caching\Storages\MemoryStorage
