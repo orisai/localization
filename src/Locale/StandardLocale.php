@@ -13,14 +13,21 @@ final class StandardLocale implements Locale
 {
 
 	private string $primaryLanguage;
+
 	private ?string $extendedLanguage;
+
 	private ?string $script;
+
 	private ?string $region;
+
 	private ?string $variants;
+
 	private ?string $extensions;
+
 	private ?string $private;
 
 	private ?string $language = null;
+
 	private ?string $tag = null;
 
 	/** @var array<string> */

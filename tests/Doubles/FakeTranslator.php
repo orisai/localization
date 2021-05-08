@@ -11,6 +11,7 @@ final class FakeTranslator implements ConfigurableTranslator
 {
 
 	private Locales $locales;
+
 	private LocaleProcessor $localeProcessor;
 
 	private Locale $currentLocale;

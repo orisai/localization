@@ -16,9 +16,11 @@ final class SessionLocaleResolver implements LocaleResolver
 {
 
 	public const SECTION = 'orisai.localization';
+
 	public const PARAMETER = 'locale';
 
 	private IResponse $response;
+
 	private Session $session;
 
 	public function __construct(Session $session, IResponse $response)

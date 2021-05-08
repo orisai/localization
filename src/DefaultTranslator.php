@@ -19,12 +19,17 @@ final class DefaultTranslator implements ConfigurableTranslator
 {
 
 	private Catalogue $catalogue;
+
 	private LocaleResolver $localeResolver;
+
 	private MessageFormatter $messageFormatter;
+
 	private TranslationsLogger $logger;
+
 	private LocaleProcessor $localeProcessor;
 
 	private Locales $locales;
+
 	private ?Locale $currentLocale = null;
 
 	/** @var array<array<string>> */
