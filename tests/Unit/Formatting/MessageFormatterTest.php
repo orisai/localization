@@ -134,7 +134,8 @@ MSG;
 
 		// plural by language rules - zero, one, two, few, many, other
 		// Note: this method understands rules of language and ignore cases which are not used by given language
-		$message4 = 'I have {apples, plural, zero{no apples} one{one apple} two{two apples} few{# apples (few)} many{# apples (many)} other{# apples (other)}}';
+		$message4 = 'I have {apples, plural, zero{no apples} one{one apple} two{two apples} ' .
+			'few{# apples (few)} many{# apples (many)} other{# apples (other)}}';
 
 		yield ['en-US', $message4, ['apples' => 0], 'I have 0 apples (other)'];
 		yield ['en-US', $message4, ['apples' => 1], 'I have one apple'];
@@ -145,7 +146,8 @@ MSG;
 		// TODO - symfony and ext-intl have different result
 		//yield ['en-US', $message4, ['apples' => 9999], 'I have 9,999 apples (other)'];
 
-		$message5 = 'Já mám {apples, plural, zero{žádná jablka} one{jedno jablko} two{dvě jablka} few{# jablka (few)} many{# jablek (many)} other{# jablek (other)}}';
+		$message5 = 'Já mám {apples, plural, zero{žádná jablka} one{jedno jablko} two{dvě jablka} ' .
+			'few{# jablka (few)} many{# jablek (many)} other{# jablek (other)}}';
 
 		yield ['cs-CZ', $message5, ['apples' => 0], 'Já mám 0 jablek (other)'];
 		yield ['cs-CZ', $message5, ['apples' => 1], 'Já mám jedno jablko'];

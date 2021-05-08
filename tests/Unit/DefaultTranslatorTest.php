@@ -299,7 +299,8 @@ final class DefaultTranslatorTest extends TestCase
 	{
 		$this->expectExceptionMessage(InvalidState::class);
 		$this->expectExceptionMessage(
-			'Current locale already set. Ensure you call Orisai\Localization\DefaultTranslator::setCurrentLocale() only once and before translator is first used.',
+			'Current locale already set. Ensure you call Orisai\Localization\DefaultTranslator::setCurrentLocale() ' .
+			'only once and before translator is first used.',
 		);
 
 		$processor = new LocaleProcessor();
@@ -325,7 +326,8 @@ final class DefaultTranslatorTest extends TestCase
 	{
 		$this->expectExceptionMessage(InvalidState::class);
 		$this->expectExceptionMessage(
-			'Current locale already set. Ensure you call Orisai\Localization\DefaultTranslator::setCurrentLocale() only once and before translator is first used.',
+			'Current locale already set. Ensure you call Orisai\Localization\DefaultTranslator::setCurrentLocale() ' .
+			'only once and before translator is first used.',
 		);
 
 		$processor = new LocaleProcessor();

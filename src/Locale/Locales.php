@@ -81,7 +81,8 @@ final class Locales
 			if ($expectedLanguage === $fallbackProcessed->getLanguage()) {
 				throw InvalidArgument::create()
 					->withMessage(
-						"Language tag {$fallbackProcessed->getTag()} cannot be used as a {$expectedLanguage} language fallback, it's the same language.",
+						"Language tag {$fallbackProcessed->getTag()} cannot be used as a " .
+						"{$expectedLanguage} language fallback, it's the same language.",
 					);
 			}
 
