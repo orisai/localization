@@ -17,6 +17,7 @@ final class CookieLocaleResolver implements LocaleResolver
 	public const COOKIE_KEY = 'locale';
 
 	private IRequest $request;
+
 	private IResponse $response;
 
 	private LocaleProcessor $processor;

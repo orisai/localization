@@ -14,6 +14,7 @@ final class RouterLocaleResolver implements LocaleResolver
 {
 
 	private IRequest $request;
+
 	private Router $router;
 
 	private string $parameterName = 'locale';

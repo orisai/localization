@@ -13,6 +13,7 @@ final class TranslationPanel implements IBarPanel
 {
 
 	private Translator $translator;
+
 	private TranslationsLogger $logger;
 
 	public function __construct(Translator $translator, TranslationsLogger $logger)
