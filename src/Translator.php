@@ -2,6 +2,7 @@
 
 namespace Orisai\Localization;
 
+use Closure;
 use Orisai\Localization\Locale\Locale;
 
 interface Translator
@@ -22,8 +23,8 @@ interface Translator
 	public function getAllowedLocales(): array;
 
 	/**
-	 * @return callable(string $message, array $parameters = [], ?string $languageTag = null): string
+	 * @return Closure(string, array<mixed>=, ?string=): string
 	 */
-	public function toFunction(): callable;
+	public function toFunction(): Closure;
 
 }
