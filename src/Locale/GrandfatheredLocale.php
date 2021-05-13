@@ -59,6 +59,7 @@ final class GrandfatheredLocale implements Locale
 
 	/**
 	 * @todo - return standard locale
+	 * @phpstan-ignore-next-line
 	 */
 	public function getStandardLocale(): ?StandardLocale
 	{
