@@ -2,6 +2,7 @@
 
 namespace Tests\Orisai\Localization\Doubles;
 
+use Closure;
 use Orisai\Localization\ConfigurableTranslator;
 use Orisai\Localization\Locale\Locale;
 use Orisai\Localization\Locale\LocaleProcessor;
@@ -54,7 +55,7 @@ final class FakeTranslator implements ConfigurableTranslator
 		return $this->locales->getAllowed();
 	}
 
-	public function toFunction(): callable
+	public function toFunction(): Closure
 	{
 		return fn (string $message, array $parameters = [], ?string $languageTag = null): string => $this->translate(
 			$message,
