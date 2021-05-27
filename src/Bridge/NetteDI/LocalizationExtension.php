@@ -261,12 +261,11 @@ final class LocalizationExtension extends CompilerExtension
 	public function afterCompile(ClassType $class): void
 	{
 		$config = $this->config;
-		$initialize = $class->getMethod('initialize');
 
 		// Debug
 
 		if ($config->debug->panel) {
-			$initialize->addBody('$this->getService(?)->addPanel($this->getService(?));', [
+			$this->initialization->addBody('$this->getService(?)->addPanel($this->getService(?));', [
 				'tracy.bar',
 				$this->prefix('tracy.panel'),
 			]);
