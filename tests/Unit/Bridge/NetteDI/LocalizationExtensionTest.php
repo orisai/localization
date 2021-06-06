@@ -5,14 +5,16 @@ namespace Tests\Orisai\Localization\Unit\Bridge\NetteDI;
 use OriNette\DI\Boot\ManualConfigurator;
 use Orisai\Localization\Bridge\Latte\TranslationFilters;
 use Orisai\Localization\Bridge\NetteCaching\CachedCatalogue;
-use Orisai\Localization\Bridge\NetteDI\LazyMultiLoader;
-use Orisai\Localization\Bridge\NetteDI\LazyMultiLocaleResolver;
+use Orisai\Localization\Bridge\NetteDI\LazyLoaderManager;
+use Orisai\Localization\Bridge\NetteDI\LazyLocaleResolverManager;
 use Orisai\Localization\Bridge\NetteLocalization\NetteTranslator;
 use Orisai\Localization\Bridge\Tracy\TranslationPanel;
 use Orisai\Localization\DefaultTranslator;
 use Orisai\Localization\Formatting\MessageFormatter;
 use Orisai\Localization\Locale\LocaleProcessor;
+use Orisai\Localization\Locale\MultiLocaleResolver;
 use Orisai\Localization\Logging\TranslationsLogger;
+use Orisai\Localization\Resource\MultiLoader;
 use Orisai\Localization\Translator;
 use Orisai\Localization\TranslatorGetter;
 use PHPUnit\Framework\TestCase;
@@ -50,8 +52,16 @@ final class LocalizationExtensionTest extends TestCase
 		self::assertSame(['en'], $processor->localesToTagVariants($translator->getAllowedLocales()));
 		self::assertSame('en', $translator->getCurrentLocale()->getTag());
 
-		self::assertInstanceOf(LazyMultiLocaleResolver::class, $container->getService('localization.resolvers'));
-		self::assertInstanceOf(LazyMultiLoader::class, $container->getService('localization.loaders'));
+		self::assertInstanceOf(
+			LazyLocaleResolverManager::class,
+			$container->getService('localization.resolvers.manager'),
+		);
+		self::assertInstanceOf(MultiLocaleResolver::class, $container->getService('localization.resolvers'));
+		self::assertInstanceOf(
+			LazyLoaderManager::class,
+			$container->getService('localization.loaders.manager'),
+		);
+		self::assertInstanceOf(MultiLoader::class, $container->getService('localization.loaders'));
 		self::assertInstanceOf(CachedCatalogue::class, $container->getService('localization.catalogue'));
 		self::assertInstanceOf(MessageFormatter::class, $container->getService('localization.formatter'));
 		self::assertInstanceOf(TranslationsLogger::class, $container->getService('localization.logger'));
@@ -81,8 +91,11 @@ final class LocalizationExtensionTest extends TestCase
 		);
 		self::assertSame('en', $translator->getCurrentLocale()->getTag());
 
-		self::assertInstanceOf(LazyMultiLocaleResolver::class, $container->getService('localization.resolvers'));
-		self::assertInstanceOf(LazyMultiLoader::class, $container->getService('localization.loaders'));
+		self::assertInstanceOf(
+			LazyLocaleResolverManager::class,
+			$container->getService('localization.resolvers.manager'),
+		);
+		self::assertInstanceOf(MultiLocaleResolver::class, $container->getService('localization.resolvers'));
 		self::assertInstanceOf(CachedCatalogue::class, $container->getService('localization.catalogue'));
 		self::assertInstanceOf(MessageFormatter::class, $container->getService('localization.formatter'));
 		self::assertInstanceOf(TranslationsLogger::class, $container->getService('localization.logger'));

@@ -5,20 +5,17 @@ namespace Orisai\Localization\Locale;
 final class MultiLocaleResolver implements LocaleResolver
 {
 
-	/** @var array<LocaleResolver> */
-	private array $resolvers;
+	private LocaleResolverManager $resolverManager;
 
-	/**
-	 * @param array<LocaleResolver> $resolvers
-	 */
-	public function __construct(array $resolvers)
+	public function __construct(LocaleResolverManager $resolverManager)
 	{
-		$this->resolvers = $resolvers;
+		$this->resolverManager = $resolverManager;
 	}
 
 	public function resolve(Locales $locales, LocaleProcessor $localeProcessor): ?Locale
 	{
-		foreach ($this->resolvers as $resolver) {
+		foreach ($this->resolverManager->getKeys() as $resolverKey) {
+			$resolver = $this->resolverManager->get($resolverKey);
 			$locale = $resolver->resolve($locales, $localeProcessor);
 
 			if ($locale !== null && $localeProcessor->isAllowed($locale, $locales)) {

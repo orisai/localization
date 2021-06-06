@@ -2,6 +2,7 @@
 
 namespace Tests\Orisai\Localization\Unit\Resource;
 
+use Orisai\Localization\Resource\DefaultLoaderManager;
 use Orisai\Localization\Resource\MultiLoader;
 use PHPUnit\Framework\TestCase;
 use Tests\Orisai\Localization\Doubles\ArrayLoader;
@@ -11,7 +12,7 @@ final class MultiLoaderTest extends TestCase
 
 	public function testMerging(): void
 	{
-		$loader = new MultiLoader([
+		$loader = new MultiLoader(new DefaultLoaderManager([
 			new ArrayLoader([
 				'en-US' => [
 					'key1' => 'first',
@@ -35,7 +36,7 @@ final class MultiLoaderTest extends TestCase
 					'key1' => 'third',
 				],
 			]),
-		]);
+		]));
 
 		self::assertSame(
 			[
@@ -63,7 +64,7 @@ final class MultiLoaderTest extends TestCase
 
 	public function testNoLoaders(): void
 	{
-		$loader = new MultiLoader([]);
+		$loader = new MultiLoader(new DefaultLoaderManager([]));
 
 		self::assertSame(
 			[],
