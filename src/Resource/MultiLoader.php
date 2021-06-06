@@ -7,15 +7,11 @@ use function array_merge;
 final class MultiLoader implements Loader
 {
 
-	/** @var array<Loader> */
-	private array $loaders;
+	private LoaderManager $loaderManager;
 
-	/**
-	 * @param array<Loader> $loaders
-	 */
-	public function __construct(array $loaders)
+	public function __construct(LoaderManager $loaderManager)
 	{
-		$this->loaders = $loaders;
+		$this->loaderManager = $loaderManager;
 	}
 
 	/**
@@ -25,7 +21,7 @@ final class MultiLoader implements Loader
 	{
 		$messagesByLoader = [];
 
-		foreach ($this->loaders as $loader) {
+		foreach ($this->loaderManager->getAll() as $loader) {
 			$messagesByLoader[] = $loader->loadAllMessages($languageTag);
 		}
 

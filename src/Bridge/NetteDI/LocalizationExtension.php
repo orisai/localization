@@ -28,11 +28,15 @@ use Orisai\Localization\Locale\Locale;
 use Orisai\Localization\Locale\LocaleConfigurator;
 use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Locale\LocaleResolver;
+use Orisai\Localization\Locale\LocaleResolverManager;
 use Orisai\Localization\Locale\Locales;
 use Orisai\Localization\Locale\MultiLocaleConfigurator;
+use Orisai\Localization\Locale\MultiLocaleResolver;
 use Orisai\Localization\Logging\TranslationsLogger;
 use Orisai\Localization\Resource\Catalogue;
 use Orisai\Localization\Resource\Loader;
+use Orisai\Localization\Resource\LoaderManager;
+use Orisai\Localization\Resource\MultiLoader;
 use Orisai\Localization\Translator;
 use Orisai\Localization\TranslatorGetter;
 use stdClass;
@@ -140,8 +144,13 @@ final class LocalizationExtension extends CompilerExtension
 				: $resolverDefinition->getName();
 		}
 
+		$resolverManagerDefinition = $builder->addDefinition($this->prefix('resolvers.manager'))
+			->setFactory(LazyLocaleResolverManager::class, [$resolverDefinitionNames])
+			->setType(LocaleResolverManager::class)
+			->setAutowired(false);
+
 		$rootResolverDefinition = $builder->addDefinition($this->prefix('resolvers'))
-			->setFactory(LazyMultiLocaleResolver::class, [$resolverDefinitionNames])
+			->setFactory(MultiLocaleResolver::class, [$resolverManagerDefinition])
 			->setType(LocaleResolver::class)
 			->setAutowired(false);
 
@@ -160,8 +169,13 @@ final class LocalizationExtension extends CompilerExtension
 				: $loaderDefinition->getName();
 		}
 
+		$loaderManagerDefinition = $builder->addDefinition($this->prefix('loaders.manager'))
+			->setFactory(LazyLoaderManager::class, [$loaderDefinitionNames])
+			->setType(LoaderManager::class)
+			->setAutowired(false);
+
 		$lazyLoaderDefinition = $builder->addDefinition($this->prefix('loaders'))
-			->setFactory(LazyMultiLoader::class, [$loaderDefinitionNames])
+			->setFactory(MultiLoader::class, [$loaderManagerDefinition])
 			->setType(Loader::class)
 			->setAutowired(false);
 
