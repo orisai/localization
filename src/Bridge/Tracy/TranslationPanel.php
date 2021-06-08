@@ -25,7 +25,7 @@ final class TranslationPanel implements IBarPanel
 	public function getTab(): string
 	{
 		return Helpers::capture(static function (): void {
-			require __DIR__ . '/templates/tab.phtml';
+			require __DIR__ . '/Translation.tab.phtml';
 		});
 	}
 
@@ -40,7 +40,7 @@ final class TranslationPanel implements IBarPanel
 			);
 			$missingResources = $this->logger->getMissingResources();
 
-			require __DIR__ . '/templates/panel.phtml';
+			require __DIR__ . '/Translation.panel.phtml';
 		});
 	}
 
