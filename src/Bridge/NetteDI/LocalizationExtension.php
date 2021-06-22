@@ -34,6 +34,7 @@ use Orisai\Localization\Locale\MultiLocaleConfigurator;
 use Orisai\Localization\Locale\MultiLocaleResolver;
 use Orisai\Localization\Logging\TranslationsLogger;
 use Orisai\Localization\Resource\Catalogue;
+use Orisai\Localization\Resource\FileLoader;
 use Orisai\Localization\Resource\Loader;
 use Orisai\Localization\Resource\LoaderManager;
 use Orisai\Localization\Resource\MultiLoader;
@@ -68,6 +69,9 @@ final class LocalizationExtension extends CompilerExtension
 					Expect::type(Statement::class),
 				),
 			),
+			'directories' => Expect::arrayOf(
+				Expect::string(),
+			),
 			'resolvers' => Expect::arrayOf(
 				Expect::anyOf(
 					Expect::string(),
@@ -99,7 +103,7 @@ final class LocalizationExtension extends CompilerExtension
 			$config->locale->allowed,
 			$config->locale->fallback,
 		);
-		$localesDef = $builder->addDefinition($this->prefix('locales'))
+		$localesDefinition = $builder->addDefinition($this->prefix('locales'))
 			->setFactory('\unserialize(\'?\', [?])', [
 				new PhpLiteral(serialize($locales)),
 				Locale::class,
@@ -158,6 +162,17 @@ final class LocalizationExtension extends CompilerExtension
 
 		$loaderDefinitionNames = [];
 
+		if ($config->directories !== []) {
+			$directoriesLoaderDefinition = $builder->addDefinition($this->prefix('loader._directories'))
+				->setFactory(FileLoader::class, [
+					'directories' => $config->directories,
+				])
+				->setType(Loader::class)
+				->setAutowired(false);
+
+			$loaderDefinitionNames[] = $directoriesLoaderDefinition->getName();
+		}
+
 		foreach ($config->loaders as $loaderKey => $loaderConfig) {
 			$loaderDefinition = $loader->loadDefinitionFromConfig(
 				$loaderConfig,
@@ -210,7 +225,7 @@ final class LocalizationExtension extends CompilerExtension
 			->setFactory(
 				DefaultTranslator::class,
 				[
-					$localesDef,
+					$localesDefinition,
 					$rootResolverDefinition,
 					$catalogueDefinition,
 					$messageFormatterDefinition,
