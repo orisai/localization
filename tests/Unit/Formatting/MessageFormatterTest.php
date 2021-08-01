@@ -22,6 +22,7 @@ final class MessageFormatterTest extends TestCase
 
 	/**
 	 * @param array<mixed> $parameters
+	 *
 	 * @dataProvider provideChoice
 	 * @dataProvider provideComplex
 	 * @dataProvider provideDuration
@@ -45,6 +46,7 @@ final class MessageFormatterTest extends TestCase
 	 *  - spellout
 	 *
 	 * @param array<mixed> $parameters
+	 *
 	 * @dataProvider provideComplex
 	 * @dataProvider provideNumber
 	 * @dataProvider provideSelect

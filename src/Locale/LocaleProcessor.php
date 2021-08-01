@@ -38,10 +38,11 @@ REGEX;
 	/**
 	 * BCP-47 compliant language tag parser
 	 *
+	 * @throws MalformedLanguageTag
+	 *
 	 * @see https://en.wikipedia.org/wiki/IETF_language_tag
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/lang
 	 * @see https://www.ietf.org/rfc/bcp/bcp47.txt
-	 * @throws MalformedLanguageTag
 	 */
 	public function parse(string $languageTag): Locale
 	{
@@ -89,6 +90,7 @@ REGEX;
 
 	/**
 	 * @throws MalformedLanguageTag
+	 *
 	 * @see parse()
 	 */
 	public function parseAndEnsureNormalized(string $languageTag): Locale

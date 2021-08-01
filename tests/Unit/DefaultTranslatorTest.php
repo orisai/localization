@@ -235,6 +235,7 @@ final class DefaultTranslatorTest extends TestCase
 	/**
 	 * @param array<string> $allowedLocales
 	 * @param array<string> $fallbacks
+	 *
 	 * @dataProvider provideValidation
 	 */
 	public function testValidation(
