@@ -7,6 +7,8 @@ use Orisai\Exceptions\Logic\InvalidArgument;
 use Webmozart\Glob\Glob;
 use Webmozart\PathUtil\Path;
 use function array_merge;
+use function get_debug_type;
+use function is_array;
 use function is_file;
 
 final class FileLoader implements Loader
@@ -52,7 +54,15 @@ final class FileLoader implements Loader
 			}
 
 			if (Path::getFilenameWithoutExtension($path) === $languageTag) {
-				$translationsByPath[] = $this->dataSource->fromFile($path);
+				$data = $this->dataSource->fromFile($path);
+				if (!is_array($data)) {
+					$given = get_debug_type($data);
+
+					throw InvalidArgument::create()
+						->withMessage("$path is expected to return array, $given given.");
+				}
+
+				$translationsByPath[] = $data;
 			}
 		}
 
