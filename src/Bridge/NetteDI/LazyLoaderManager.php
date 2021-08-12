@@ -2,42 +2,31 @@
 
 namespace Orisai\Localization\Bridge\NetteDI;
 
-use OriNette\DI\Services\CachedServiceManager;
+use OriNette\DI\Services\ServiceManager;
 use Orisai\Localization\Resource\Loader;
 use Orisai\Localization\Resource\LoaderManager;
 
-final class LazyLoaderManager extends CachedServiceManager implements LoaderManager
+final class LazyLoaderManager extends ServiceManager implements LoaderManager
 {
 
-	/**
-	 * @param int|string $key
-	 */
-	private function get($key): Loader
-	{
-		$service = $this->getService($key);
-
-		if ($service === null) {
-			$this->throwMissingService($key, Loader::class);
-		}
-
-		if (!$service instanceof Loader) {
-			$this->throwInvalidServiceType($key, Loader::class, $service);
-		}
-
-		return $service;
-	}
+	/** @var array<Loader>|null */
+	private ?array $loaders = null;
 
 	/**
 	 * @return array<Loader>
 	 */
 	public function getAll(): array
 	{
-		$loaders = [];
-		foreach ($this->getKeys() as $key) {
-			$loaders[$key] = $this->get($key);
+		if ($this->loaders !== null) {
+			return $this->loaders;
 		}
 
-		return $loaders;
+		$loaders = [];
+		foreach ($this->getKeys() as $key) {
+			$loaders[$key] = $this->getTypedServiceOrThrow($key, Loader::class);
+		}
+
+		return $this->loaders = $loaders;
 	}
 
 }

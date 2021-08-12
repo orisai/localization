@@ -14,17 +14,7 @@ final class LazyLocaleResolverManager extends ServiceManager implements LocaleRe
 	 */
 	public function get($key): LocaleResolver
 	{
-		$service = $this->getService($key);
-
-		if ($service === null) {
-			$this->throwMissingService($key, LocaleResolver::class);
-		}
-
-		if (!$service instanceof LocaleResolver) {
-			$this->throwInvalidServiceType($key, LocaleResolver::class, $service);
-		}
-
-		return $service;
+		return $this->getTypedServiceOrThrow($key, LocaleResolver::class);
 	}
 
 	/**
