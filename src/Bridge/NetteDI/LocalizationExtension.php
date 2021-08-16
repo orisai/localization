@@ -8,7 +8,6 @@ use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\AccessorDefinition;
 use Nette\DI\Definitions\FactoryDefinition;
 use Nette\DI\Definitions\Reference;
-use Nette\DI\Definitions\Statement;
 use Nette\Localization\ITranslator;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\PhpLiteral;
@@ -63,28 +62,16 @@ final class LocalizationExtension extends CompilerExtension
 				'fallback' => Expect::arrayOf('string'),
 			]),
 			'loaders' => Expect::arrayOf(
-				Expect::anyOf(
-					Expect::string(),
-					Expect::array(),
-					Expect::type(Statement::class),
-				),
+				DefinitionsLoader::schema(),
 			),
 			'directories' => Expect::arrayOf(
 				Expect::string(),
 			),
 			'resolvers' => Expect::arrayOf(
-				Expect::anyOf(
-					Expect::string(),
-					Expect::array(),
-					Expect::type(Statement::class),
-				),
+				DefinitionsLoader::schema(),
 			),
 			'configurators' => Expect::arrayOf(
-				Expect::anyOf(
-					Expect::string(),
-					Expect::array(),
-					Expect::type(Statement::class),
-				),
+				DefinitionsLoader::schema(),
 			),
 		]);
 	}
