@@ -18,7 +18,7 @@ final class LazyLocaleResolverManager extends ServiceManager implements LocaleRe
 	}
 
 	/**
-	 * @return array<int|string>
+	 * @return array<int, int|string>
 	 */
 	public function getKeys(): array
 	{
