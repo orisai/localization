@@ -31,7 +31,7 @@
 	"require-dev": {
 		"ext-intl": "*",
 		"brianium/paratest": "^6.3.0",
-		"infection/infection": "^0.24.0",
+		"infection/infection": "^0.25.0",
 		"latte/latte": "^2.5.0",
 		"nette/application": "^3.0.0",
 		"nette/caching": "^3.0.0",
