@@ -18,6 +18,7 @@ use Orisai\Localization\Resource\MultiLoader;
 use Orisai\Localization\Translator;
 use Orisai\Localization\TranslatorGetter;
 use PHPUnit\Framework\TestCase;
+use Tracy\Bar;
 use function assert;
 use function dirname;
 
@@ -67,7 +68,6 @@ final class LocalizationExtensionTest extends TestCase
 		self::assertInstanceOf(TranslationsLogger::class, $container->getService('localization.logger'));
 		self::assertInstanceOf(DefaultTranslator::class, $container->getService('localization.translator'));
 		self::assertInstanceOf(NetteTranslator::class, $container->getService('localization.translator.nette'));
-		self::assertFalse($container->hasService('localization.tracy.panel'));
 		self::assertFalse($container->hasService('localization.latte.filters'));
 	}
 
@@ -101,9 +101,10 @@ final class LocalizationExtensionTest extends TestCase
 		self::assertInstanceOf(TranslationsLogger::class, $container->getService('localization.logger'));
 		self::assertInstanceOf(DefaultTranslator::class, $container->getService('localization.translator'));
 		self::assertInstanceOf(NetteTranslator::class, $container->getService('localization.translator.nette'));
-		self::assertFalse($container->hasService('localization.translator.lazy'));
-		self::assertInstanceOf(TranslationPanel::class, $container->getService('localization.tracy.panel'));
 		self::assertInstanceOf(TranslationFilters::class, $container->getService('localization.latte.filters'));
+
+		$bar = $container->getByType(Bar::class);
+		self::assertInstanceOf(TranslationPanel::class, $bar->getPanel('localization.panel'));
 
 		//TODO - fallbacks, loaders, resolvers, configurators
 		// 	   - logger

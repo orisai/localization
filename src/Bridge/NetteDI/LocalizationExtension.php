@@ -8,8 +8,8 @@ use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\AccessorDefinition;
 use Nette\DI\Definitions\FactoryDefinition;
 use Nette\DI\Definitions\Reference;
+use Nette\DI\Definitions\ServiceDefinition;
 use Nette\Localization\ITranslator;
-use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\PhpLiteral;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
@@ -40,6 +40,7 @@ use Orisai\Localization\Resource\MultiLoader;
 use Orisai\Localization\Translator;
 use Orisai\Localization\TranslatorGetter;
 use stdClass;
+use Tracy\Bar;
 use function assert;
 use function serialize;
 
@@ -48,6 +49,10 @@ use function serialize;
  */
 final class LocalizationExtension extends CompilerExtension
 {
+
+	private ServiceDefinition $translatorDefinition;
+
+	private ServiceDefinition $loggerDefinition;
 
 	public function getConfigSchema(): Schema
 	{
@@ -200,7 +205,7 @@ final class LocalizationExtension extends CompilerExtension
 
 		// Logger
 
-		$loggerDefinition = $builder->addDefinition($this->prefix('logger'))
+		$this->loggerDefinition = $loggerDefinition = $builder->addDefinition($this->prefix('logger'))
 			->setFactory(TranslationsLogger::class)
 			->setType(TranslationsLogger::class)
 			->setAutowired(false);
@@ -208,7 +213,7 @@ final class LocalizationExtension extends CompilerExtension
 		// Translator
 
 		$translatorPrefix = $this->prefix('translator');
-		$translatorDefinition = $builder->addDefinition($translatorPrefix)
+		$this->translatorDefinition = $translatorDefinition = $builder->addDefinition($translatorPrefix)
 			->setFactory(
 				DefaultTranslator::class,
 				[
@@ -233,20 +238,12 @@ final class LocalizationExtension extends CompilerExtension
 		$translatorGetterDefinition->setImplement(TranslatorGetter::class)
 			->setReference(new Reference($translatorPrefix));
 		$builder->addDefinition($this->prefix('translator.getter'), $translatorGetterDefinition);
-
-		// Debug
-
-		if ($config->debug->panel) {
-			$builder->addDefinition($this->prefix('tracy.panel'))
-				->setFactory(TranslationPanel::class, [$translatorDefinition, $loggerDefinition])
-				->setType(TranslationPanel::class)
-				->setAutowired(false);
-		}
 	}
 
 	public function beforeCompile(): void
 	{
 		$builder = $this->getContainerBuilder();
+		$config = $this->config;
 
 		// Latte
 
@@ -268,24 +265,37 @@ final class LocalizationExtension extends CompilerExtension
 				])
 				->addSetup(
 					'?->addProvider(?, ?)',
-					['@self', 'translator', $builder->getDefinition($this->prefix('translator'))],
+					['@self', 'translator', $this->translatorDefinition],
 				)
 				->addSetup('?->addFilter(?, ?)', ['@self', 'translate', [$latteFiltersDefinition, 'translate']]);
 		}
-	}
-
-	public function afterCompile(ClassType $class): void
-	{
-		$config = $this->config;
 
 		// Debug
 
 		if ($config->debug->panel) {
-			$this->initialization->addBody('$this->getService(?)->addPanel($this->getService(?));', [
-				'tracy.bar',
-				$this->prefix('tracy.panel'),
-			]);
+			$this->translatorDefinition->addSetup(
+				[self::class, 'setupPanel'],
+				[
+					"$this->name.panel",
+					$builder->getDefinitionByType(Bar::class),
+					$this->translatorDefinition,
+					$this->loggerDefinition,
+				],
+			);
 		}
+	}
+
+	public static function setupPanel(
+		string $name,
+		Bar $bar,
+		Translator $translator,
+		TranslationsLogger $translationsLogger
+	): void
+	{
+		$bar->addPanel(
+			new TranslationPanel($translator, $translationsLogger),
+			$name,
+		);
 	}
 
 }
