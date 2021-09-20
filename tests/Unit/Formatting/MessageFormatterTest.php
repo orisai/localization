@@ -6,6 +6,7 @@ use Generator;
 use Orisai\Localization\Formatting\IntlMessageFormatter;
 use Orisai\Localization\Formatting\SymfonyMessageFormatter;
 use PHPUnit\Framework\TestCase;
+use function date_default_timezone_set;
 
 final class MessageFormatterTest extends TestCase
 {
@@ -16,6 +17,7 @@ final class MessageFormatterTest extends TestCase
 
 	public static function setUpBeforeClass(): void
 	{
+		date_default_timezone_set('UTC');
 		self::$intlFormatter = new IntlMessageFormatter();
 		self::$symfonyFormatter = new SymfonyMessageFormatter();
 	}
