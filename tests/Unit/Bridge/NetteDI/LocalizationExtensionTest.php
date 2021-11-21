@@ -21,6 +21,8 @@ use PHPUnit\Framework\TestCase;
 use Tracy\Bar;
 use function assert;
 use function dirname;
+use function mkdir;
+use const PHP_VERSION_ID;
 
 /**
  * @runTestsInSeparateProcesses
@@ -28,10 +30,22 @@ use function dirname;
 final class LocalizationExtensionTest extends TestCase
 {
 
+	private string $rootDir;
+
+	protected function setUp(): void
+	{
+		parent::setUp();
+
+		$this->rootDir = dirname(__DIR__, 4);
+		if (PHP_VERSION_ID < 81_000) {
+			@mkdir("$this->rootDir/var/build");
+		}
+	}
+
 	public function testMinimal(): void
 	{
-		$configurator = new ManualConfigurator(dirname(__DIR__, 4));
-		$configurator->setDebugMode(true);
+		$configurator = new ManualConfigurator($this->rootDir);
+		$configurator->setForceReloadContainer();
 		$configurator->addConfig(__DIR__ . '/config.minimal.neon');
 
 		$container = $configurator->createContainer();
@@ -73,8 +87,8 @@ final class LocalizationExtensionTest extends TestCase
 
 	public function testFull(): void
 	{
-		$configurator = new ManualConfigurator(dirname(__DIR__, 4));
-		$configurator->setDebugMode(true);
+		$configurator = new ManualConfigurator($this->rootDir);
+		$configurator->setForceReloadContainer();
 		$configurator->addConfig(__DIR__ . '/config.full.neon');
 
 		$container = $configurator->createContainer();
