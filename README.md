@@ -1,4 +1,8 @@
-<h1 align="center">Orisai Localization</h1>
+<h1 align="center">
+	<img src="https://github.com/orisai/.github/blob/main/images/repo_title.png" alt="Orisai"/>
+	<br/>
+	Localization
+</h1>
 
 <p align="center">
     Internationalization (i18n) and localization (l10n)
