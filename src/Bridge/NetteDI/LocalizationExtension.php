@@ -10,7 +10,7 @@ use Nette\DI\Definitions\FactoryDefinition;
 use Nette\DI\Definitions\Reference;
 use Nette\DI\Definitions\ServiceDefinition;
 use Nette\Localization\ITranslator;
-use Nette\PhpGenerator\PhpLiteral;
+use Nette\PhpGenerator\Literal;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
 use OriNette\DI\Definitions\DefinitionsLoader;
@@ -97,7 +97,7 @@ final class LocalizationExtension extends CompilerExtension
 		);
 		$localesDefinition = $builder->addDefinition($this->prefix('locales'))
 			->setFactory('\unserialize(\'?\', [?])', [
-				new PhpLiteral(serialize($locales)),
+				new Literal(serialize($locales)),
 				Locale::class,
 			])
 			->setType(Locales::class);
@@ -199,7 +199,7 @@ final class LocalizationExtension extends CompilerExtension
 		// Message formatter
 
 		$messageFormatterDefinition = $builder->addDefinition($this->prefix('formatter'))
-			->setFactory('?::create()', [new PhpLiteral(MessageFormatterFactory::class)])
+			->setFactory('?::create()', [new Literal(MessageFormatterFactory::class)])
 			->setType(MessageFormatter::class)
 			->setAutowired(false);
 
@@ -260,8 +260,8 @@ final class LocalizationExtension extends CompilerExtension
 			$latteFactoryDefinition->getResultDefinition()
 				->addSetup('?->onCompile[] = static function(? $engine) { ?::install($engine->getCompiler()); }', [
 					'@self',
-					new PhpLiteral(Engine::class),
-					new PhpLiteral(TranslationMacros::class),
+					new Literal(Engine::class),
+					new Literal(TranslationMacros::class),
 				])
 				->addSetup(
 					'?->addProvider(?, ?)',
