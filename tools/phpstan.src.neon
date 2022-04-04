@@ -17,3 +17,6 @@ parameters:
 		- message: '#Parameter \#3 \$length of function substr expects int, int\<0, max\>\|false given\.#'
 		  path:  %currentWorkingDirectory%/src/Locale/StandardLocale.php
 		  count: 1
+		- message: '#^Parameter \#(5|6) (.+) of class (.+)StandardLocale constructor expects string\|null, string\|false\|null given\.$#'
+		  path:  %currentWorkingDirectory%/src/Locale/LocaleProcessor.php
+		  count: 2
