@@ -4,8 +4,8 @@ namespace Orisai\Localization\Resource;
 
 use Orisai\DataSources\DataSource;
 use Orisai\Exceptions\Logic\InvalidArgument;
+use Symfony\Component\Filesystem\Path;
 use Webmozart\Glob\Glob;
-use Webmozart\PathUtil\Path;
 use function array_merge;
 use function get_debug_type;
 use function is_array;
