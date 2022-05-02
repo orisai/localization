@@ -17,9 +17,6 @@ final class PrivateLocale implements Locale
 		return $this->getLanguage();
 	}
 
-	/**
-	 * @return array<string>
-	 */
 	public function getTagVariants(): array
 	{
 		return [$this->getTag()];
@@ -30,9 +27,6 @@ final class PrivateLocale implements Locale
 		return $this->language;
 	}
 
-	/**
-	 * @return array<mixed>
-	 */
 	public function __serialize(): array
 	{
 		return [
@@ -40,9 +34,6 @@ final class PrivateLocale implements Locale
 		];
 	}
 
-	/**
-	 * @param array<mixed> $data
-	 */
 	public function __unserialize(array $data): void
 	{
 		$this->language = $data['language'];

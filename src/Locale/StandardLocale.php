@@ -64,9 +64,6 @@ final class StandardLocale implements Locale
 			);
 	}
 
-	/**
-	 * @return array<string>
-	 */
 	public function getTagVariants(): array
 	{
 		if ($this->tagVariants !== []) {
@@ -92,9 +89,6 @@ final class StandardLocale implements Locale
 			);
 	}
 
-	/**
-	 * @return array<mixed>
-	 */
 	public function __serialize(): array
 	{
 		return [
@@ -112,9 +106,6 @@ final class StandardLocale implements Locale
 		];
 	}
 
-	/**
-	 * @param array<mixed> $data
-	 */
 	public function __unserialize(array $data): void
 	{
 		$this->primaryLanguage = $data['primaryLanguage'];

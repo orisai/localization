@@ -8,7 +8,7 @@ interface Locale
 	public function getTag(): string;
 
 	/**
-	 * @return array<string>
+	 * @return array<int, string>
 	 */
 	public function getTagVariants(): array;
 
@@ -18,12 +18,12 @@ interface Locale
 	public function getLanguage(): string;
 
 	/**
-	 * @return array<mixed>
+	 * @return array<int|string, mixed>
 	 */
 	public function __serialize(): array;
 
 	/**
-	 * @param array<mixed> $data
+	 * @param array<int|string, mixed> $data
 	 */
 	public function __unserialize(array $data): void;
 

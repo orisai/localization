@@ -34,9 +34,6 @@ final class GrandfatheredLocale implements Locale
 		return $this->tag;
 	}
 
-	/**
-	 * @return array<string>
-	 */
 	public function getTagVariants(): array
 	{
 		if ($this->tagVariants !== []) {
@@ -67,9 +64,6 @@ final class GrandfatheredLocale implements Locale
 		return null;
 	}
 
-	/**
-	 * @return array<mixed>
-	 */
 	public function __serialize(): array
 	{
 		return [
@@ -78,9 +72,6 @@ final class GrandfatheredLocale implements Locale
 		];
 	}
 
-	/**
-	 * @param array<mixed> $data
-	 */
 	public function __unserialize(array $data): void
 	{
 		$this->tag = $data['tag'];
