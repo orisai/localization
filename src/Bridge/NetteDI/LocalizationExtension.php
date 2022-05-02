@@ -3,13 +3,13 @@
 namespace Orisai\Localization\Bridge\NetteDI;
 
 use Latte\Engine;
-use Nette\Bridges\ApplicationLatte\ILatteFactory;
+use Nette\Bridges\ApplicationLatte\LatteFactory;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\AccessorDefinition;
 use Nette\DI\Definitions\FactoryDefinition;
 use Nette\DI\Definitions\Reference;
 use Nette\DI\Definitions\ServiceDefinition;
-use Nette\Localization\ITranslator;
+use Nette\Localization\Translator as NetteTranslatorInterface;
 use Nette\PhpGenerator\Literal;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
@@ -230,7 +230,7 @@ final class LocalizationExtension extends CompilerExtension
 
 		$builder->addDefinition($this->prefix('translator.nette'))
 			->setFactory(NetteTranslator::class, [$translatorDefinition])
-			->setType(ITranslator::class);
+			->setType(NetteTranslatorInterface::class);
 
 		// Translator accessor
 
@@ -247,7 +247,7 @@ final class LocalizationExtension extends CompilerExtension
 
 		// Latte
 
-		$latteFactoryName = $builder->getByType(ILatteFactory::class);
+		$latteFactoryName = $builder->getByType(LatteFactory::class);
 		if ($latteFactoryName !== null) {
 			$latteFactoryDefinition = $builder->getDefinition($latteFactoryName);
 			assert($latteFactoryDefinition instanceof FactoryDefinition);

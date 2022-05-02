@@ -2,7 +2,7 @@
 
 namespace Orisai\Localization\Bridge\NetteLocalization;
 
-use Nette\Localization\ITranslator;
+use Nette\Localization\Translator as NetteTranslatorInterface;
 use Orisai\Exceptions\Logic\InvalidArgument;
 use Orisai\Localization\Translator;
 use function is_array;
@@ -10,7 +10,7 @@ use function is_float;
 use function is_int;
 use function is_string;
 
-final class NetteTranslator implements ITranslator
+final class NetteTranslator implements NetteTranslatorInterface
 {
 
 	private Translator $translator;

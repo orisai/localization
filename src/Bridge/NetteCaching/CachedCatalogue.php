@@ -3,7 +3,7 @@
 namespace Orisai\Localization\Bridge\NetteCaching;
 
 use Nette\Caching\Cache;
-use Nette\Caching\IStorage;
+use Nette\Caching\Storage;
 use Orisai\Localization\Resource\Catalogue;
 use Orisai\Localization\Resource\Loader;
 use function array_key_exists;
@@ -27,7 +27,7 @@ final class CachedCatalogue implements Catalogue
 	/** @var array<string, null> */
 	private array $loadedFromLoader = [];
 
-	public function __construct(Loader $loader, IStorage $storage, bool $debugMode)
+	public function __construct(Loader $loader, Storage $storage, bool $debugMode)
 	{
 		$this->loader = $loader;
 		$this->cache = new Cache($storage, self::CACHE_KEY);
