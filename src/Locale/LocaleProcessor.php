@@ -14,7 +14,7 @@ use const PREG_UNMATCHED_AS_NULL;
 final class LocaleProcessor
 {
 
-	private const REGEX = /** @lang PhpRegExp */
+	private const Regex = /** @lang PhpRegExp */
 		<<<'REGEX'
 #^(?:
 	(?<grandfathered>
@@ -50,7 +50,7 @@ REGEX;
 		// _ is not accepted by BCP-47 as separator, but it's helpful to support in non-strict tag version
 		$languageTag = str_replace('_', '-', $languageTag);
 
-		preg_match(self::REGEX, $languageTag, $matches, PREG_UNMATCHED_AS_NULL);
+		preg_match(self::Regex, $languageTag, $matches, PREG_UNMATCHED_AS_NULL);
 
 		if (isset($matches['language'])) {
 			$language = $matches['language'];

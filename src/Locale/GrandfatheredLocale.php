@@ -10,7 +10,7 @@ final class GrandfatheredLocale implements Locale
 	/**
 	 * Other are lowercase
 	 */
-	private const GRANDFATHERED_CASE = [
+	private const GrandfatheredCase = [
 		'en-gb-oed' => 'en-GB-oed',
 		'sgn-be-fr' => 'sgn-BE-FR',
 		'sgn-be-nl' => 'sgn-BE-NL',
@@ -26,7 +26,7 @@ final class GrandfatheredLocale implements Locale
 	{
 		$tag = strtolower($rawTag);
 
-		$this->tag = self::GRANDFATHERED_CASE[$tag] ?? $tag;
+		$this->tag = self::GrandfatheredCase[$tag] ?? $tag;
 	}
 
 	public function getTag(): string

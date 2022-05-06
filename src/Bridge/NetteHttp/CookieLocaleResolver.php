@@ -14,7 +14,7 @@ use function is_string;
 final class CookieLocaleResolver implements LocaleResolver
 {
 
-	public const COOKIE_KEY = 'locale';
+	public const CookieKey = 'locale';
 
 	private IRequest $request;
 
@@ -31,14 +31,14 @@ final class CookieLocaleResolver implements LocaleResolver
 
 	public function resolve(Locales $locales, LocaleProcessor $localeProcessor): ?Locale
 	{
-		$languageTag = $this->request->getCookie(self::COOKIE_KEY);
+		$languageTag = $this->request->getCookie(self::CookieKey);
 
 		if ($languageTag === null) {
 			return null;
 		}
 
 		if (!is_string($languageTag)) {
-			$this->response->deleteCookie(self::COOKIE_KEY);
+			$this->response->deleteCookie(self::CookieKey);
 
 			return null;
 		}
@@ -46,7 +46,7 @@ final class CookieLocaleResolver implements LocaleResolver
 		try {
 			$this->processor->parse($languageTag);
 		} catch (MalformedLanguageTag $error) {
-			$this->response->deleteCookie(self::COOKIE_KEY);
+			$this->response->deleteCookie(self::CookieKey);
 
 			return null;
 		}

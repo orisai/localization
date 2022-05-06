@@ -15,9 +15,9 @@ use const E_USER_WARNING;
 final class SessionLocaleResolver implements LocaleResolver
 {
 
-	public const SECTION = 'orisai.localization';
+	public const Section = 'orisai.localization';
 
-	public const PARAMETER = 'locale';
+	public const Parameter = 'locale';
 
 	private IResponse $response;
 
@@ -43,9 +43,9 @@ final class SessionLocaleResolver implements LocaleResolver
 			return null;
 		}
 
-		$hasSection = $this->session->hasSection(self::SECTION);
-		if ($hasSection && isset(($section = $this->session->getSection(self::SECTION))[self::PARAMETER])) {
-			return $localeProcessor->parse($section[self::PARAMETER]);
+		$hasSection = $this->session->hasSection(self::Section);
+		if ($hasSection && isset(($section = $this->session->getSection(self::Section))[self::Parameter])) {
+			return $localeProcessor->parse($section[self::Parameter]);
 		}
 
 		return null;

@@ -13,7 +13,7 @@ use function is_array;
 final class CachedCatalogue implements Catalogue
 {
 
-	private const CACHE_KEY = 'orisai.localization';
+	private const CacheKey = 'orisai.localization';
 
 	private Loader $loader;
 
@@ -30,7 +30,7 @@ final class CachedCatalogue implements Catalogue
 	public function __construct(Loader $loader, Storage $storage, bool $debugMode)
 	{
 		$this->loader = $loader;
-		$this->cache = new Cache($storage, self::CACHE_KEY);
+		$this->cache = new Cache($storage, self::CacheKey);
 		$this->debugMode = $debugMode;
 	}
 

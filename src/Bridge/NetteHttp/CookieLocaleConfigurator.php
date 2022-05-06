@@ -29,7 +29,7 @@ final class CookieLocaleConfigurator implements LocaleConfigurator
 
 	public function configure(string $languageTag): void
 	{
-		$this->response->setCookie(CookieLocaleResolver::COOKIE_KEY, $languageTag, $this->expiration);
+		$this->response->setCookie(CookieLocaleResolver::CookieKey, $languageTag, $this->expiration);
 	}
 
 }
