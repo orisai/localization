@@ -17,11 +17,13 @@ use Orisai\Localization\Logging\TranslationsLogger;
 use Orisai\Localization\Resource\MultiLoader;
 use Orisai\Localization\Translator;
 use Orisai\Localization\TranslatorGetter;
+use Orisai\Localization\TranslatorHolder;
 use PHPUnit\Framework\TestCase;
 use Tracy\Bar;
 use function assert;
 use function dirname;
 use function mkdir;
+use function Orisai\Localization\t;
 use const PHP_VERSION_ID;
 
 /**
@@ -80,9 +82,11 @@ final class LocalizationExtensionTest extends TestCase
 		self::assertInstanceOf(CachedCatalogue::class, $container->getService('localization.catalogue'));
 		self::assertInstanceOf(MessageFormatter::class, $container->getService('localization.formatter'));
 		self::assertInstanceOf(TranslationsLogger::class, $container->getService('localization.logger'));
-		self::assertInstanceOf(DefaultTranslator::class, $container->getService('localization.translator'));
+		self::assertSame($translator, $container->getService('localization.translator'));
 		self::assertInstanceOf(NetteTranslator::class, $container->getService('localization.translator.nette'));
+		self::assertSame($translator, TranslatorHolder::getTranslator());
 		self::assertFalse($container->hasService('localization.latte.filters'));
+		self::assertSame('test', t('test'));
 	}
 
 	public function testFull(): void

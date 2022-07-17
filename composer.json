@@ -54,7 +54,10 @@
 	"autoload": {
 		"psr-4": {
 			"Orisai\\Localization\\": "src"
-		}
+		},
+		"files": [
+			"src/shortcut.php"
+		]
 	},
 	"autoload-dev": {
 		"psr-4": {

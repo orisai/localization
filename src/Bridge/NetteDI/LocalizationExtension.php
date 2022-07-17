@@ -39,6 +39,7 @@ use Orisai\Localization\Resource\LoaderManager;
 use Orisai\Localization\Resource\MultiLoader;
 use Orisai\Localization\Translator;
 use Orisai\Localization\TranslatorGetter;
+use Orisai\Localization\TranslatorHolder;
 use stdClass;
 use Tracy\Bar;
 use function assert;
@@ -238,6 +239,13 @@ final class LocalizationExtension extends CompilerExtension
 		$translatorGetterDefinition->setImplement(TranslatorGetter::class)
 			->setReference(new Reference($translatorPrefix));
 		$builder->addDefinition($this->prefix('translator.getter'), $translatorGetterDefinition);
+
+		// Shortcut
+
+		$this->getInitialization()->addBody('?::setTranslatorGetter($this->getService(?));', [
+			new Literal(TranslatorHolder::class),
+			$this->prefix('translator.getter'),
+		]);
 	}
 
 	public function beforeCompile(): void
