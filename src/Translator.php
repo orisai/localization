@@ -2,7 +2,6 @@
 
 namespace Orisai\Localization;
 
-use Closure;
 use Orisai\Localization\Locale\Locale;
 
 interface Translator
@@ -21,10 +20,5 @@ interface Translator
 	 * @return array<Locale>
 	 */
 	public function getAllowedLocales(): array;
-
-	/**
-	 * @return Closure(string, array<mixed>=, ?string=): string
-	 */
-	public function toFunction(): Closure;
 
 }

@@ -2,7 +2,6 @@
 
 namespace Orisai\Localization;
 
-use Closure;
 use Orisai\Exceptions\Logic\InvalidState;
 use Orisai\Localization\Exception\LanguageNotAllowed;
 use Orisai\Localization\Formatting\MessageFormatter;
@@ -168,15 +167,6 @@ final class DefaultTranslator implements ConfigurableTranslator
 		}
 
 		return $this->possibleLanguageTags[$languageTag] = array_unique(array_merge(...$listByLocale));
-	}
-
-	public function toFunction(): Closure
-	{
-		return fn (string $message, array $parameters = [], ?string $languageTag = null): string => $this->translate(
-			$message,
-			$parameters,
-			$languageTag,
-		);
 	}
 
 }
