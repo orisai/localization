@@ -21,14 +21,4 @@
 		</properties>
 	</rule>
 
-	<!-- __() -->
-	<rule ref="Generic.NamingConventions.CamelCapsFunctionName.NotCamelCaps">
-		<exclude-pattern>src/shortcut.php</exclude-pattern>
-	</rule>
-
-	<!-- Variables are used in required file -->
-	<rule ref="SlevomatCodingStandard.Variables.UnusedVariable.UnusedVariable">
-		<exclude-pattern>src/Bridge/Tracy/TranslationPanel.php</exclude-pattern>
-	</rule>
-
 </ruleset>

@@ -32,6 +32,7 @@ final class TranslationPanel implements IBarPanel
 	public function getPanel(): string
 	{
 		return Helpers::capture(function (): void {
+			// phpcs:disable SlevomatCodingStandard.Variables.UnusedVariable.UnusedVariable
 			$currentLocale = $this->translator->getCurrentLocale();
 			$defaultLocale = $this->translator->getDefaultLocale();
 			$allowedLocales = array_map(
@@ -39,6 +40,7 @@ final class TranslationPanel implements IBarPanel
 				$this->translator->getAllowedLocales(),
 			);
 			$missingResources = $this->logger->getMissingResources();
+			// phpcs:enable SlevomatCodingStandard.Variables.UnusedVariable.UnusedVariable
 
 			require __DIR__ . '/Translation.panel.phtml';
 		});
