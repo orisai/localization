@@ -5,7 +5,9 @@ namespace Orisai\Localization\Bridge\NetteDI;
 use Latte\Engine;
 use Nette\Bridges\ApplicationLatte\LatteFactory;
 use Nette\DI\CompilerExtension;
+use Nette\DI\ContainerBuilder;
 use Nette\DI\Definitions\AccessorDefinition;
+use Nette\DI\Definitions\Definition;
 use Nette\DI\Definitions\FactoryDefinition;
 use Nette\DI\Definitions\Reference;
 use Nette\DI\Definitions\ServiceDefinition;
@@ -88,7 +90,34 @@ final class LocalizationExtension extends CompilerExtension
 		$config = $this->config;
 		$loader = new DefinitionsLoader($this->compiler);
 
-		// Locales
+		$this->registerConfigurators($builder, $config, $loader);
+
+		$localesDefinition = $this->registerLocales($builder, $config);
+		$localeProcessorDefinition = $this->registerLocaleProcessor($builder);
+
+		$translatorDefinition = $this->registerTranslator(
+			$builder,
+			$localesDefinition,
+			$this->registerResolver($builder, $config, $loader),
+			$this->registerCatalogue(
+				$builder,
+				$config,
+				$this->registerLoader($builder, $config, $loader),
+			),
+			$this->registerMessageFormatter($builder),
+			$this->registerTranslationLogger($builder),
+			$localeProcessorDefinition,
+		);
+
+		$this->registerNetteTranslator($builder, $translatorDefinition);
+
+		$translatorGetterDefinition = $this->registerTranslatorGetter($builder, $translatorDefinition);
+
+		$this->setupShortcut($translatorGetterDefinition);
+	}
+
+	private function registerLocales(ContainerBuilder $builder, stdClass $config): ServiceDefinition
+	{
 		$processor = new LocaleProcessor();
 		$locales = new Locales(
 			$processor,
@@ -96,15 +125,17 @@ final class LocalizationExtension extends CompilerExtension
 			$config->locale->allowed,
 			$config->locale->fallback,
 		);
-		$localesDefinition = $builder->addDefinition($this->prefix('locales'))
+
+		return $builder->addDefinition($this->prefix('locales'))
 			->setFactory('\unserialize(\'?\', [?])', [
 				new Literal(serialize($locales)),
 				Locale::class,
 			])
 			->setType(Locales::class);
+	}
 
-		// Configurators
-
+	private function registerConfigurators(ContainerBuilder $builder, stdClass $config, DefinitionsLoader $loader): void
+	{
 		$configuratorDefinitions = [];
 
 		foreach ($config->configurators as $configuratorKey => $configuratorConfig) {
@@ -121,13 +152,21 @@ final class LocalizationExtension extends CompilerExtension
 				->setFactory(MultiLocaleConfigurator::class, [$configuratorDefinitions])
 				->setType(LocaleConfigurator::class);
 		}
+	}
 
-		// Locale processor
-		$processorDefinition = $builder->addDefinition($this->prefix('locale.processor'))
+	private function registerLocaleProcessor(ContainerBuilder $builder): ServiceDefinition
+	{
+		return $builder->addDefinition($this->prefix('locale.processor'))
 			->setFactory(LocaleProcessor::class)
 			->setType(LocaleProcessor::class);
+	}
 
-		// Resolvers
+	private function registerResolver(
+		ContainerBuilder $builder,
+		stdClass $config,
+		DefinitionsLoader $loader
+	): ServiceDefinition
+	{
 		$resolverDefinitionNames = [];
 
 		foreach ($config->resolvers as $resolverKey => $resolverConfig) {
@@ -146,13 +185,18 @@ final class LocalizationExtension extends CompilerExtension
 			->setType(LocaleResolverManager::class)
 			->setAutowired(false);
 
-		$rootResolverDefinition = $builder->addDefinition($this->prefix('resolvers'))
+		return $builder->addDefinition($this->prefix('resolvers'))
 			->setFactory(MultiLocaleResolver::class, [$resolverManagerDefinition])
 			->setType(LocaleResolver::class)
 			->setAutowired(false);
+	}
 
-		// Loaders
-
+	private function registerLoader(
+		ContainerBuilder $builder,
+		stdClass $config,
+		DefinitionsLoader $loader
+	): ServiceDefinition
+	{
 		$loaderDefinitionNames = [];
 
 		if ($config->directories !== []) {
@@ -182,39 +226,54 @@ final class LocalizationExtension extends CompilerExtension
 			->setType(LoaderManager::class)
 			->setAutowired(false);
 
-		$lazyLoaderDefinition = $builder->addDefinition($this->prefix('loaders'))
+		return $builder->addDefinition($this->prefix('loaders'))
 			->setFactory(MultiLoader::class, [$loaderManagerDefinition])
 			->setType(Loader::class)
 			->setAutowired(false);
+	}
 
-		// Catalogue
-
-		$catalogueDefinition = $builder->addDefinition($this->prefix('catalogue'))
+	private function registerCatalogue(
+		ContainerBuilder $builder,
+		stdClass $config,
+		Definition $lazyLoaderDefinition
+	): ServiceDefinition
+	{
+		return $builder->addDefinition($this->prefix('catalogue'))
 			->setFactory(CachedCatalogue::class, [
 				'loader' => $lazyLoaderDefinition,
 				'debugMode' => $config->debug->newMessages,
 			])
 			->setType(Catalogue::class)
 			->setAutowired(false);
+	}
 
-		// Message formatter
-
-		$messageFormatterDefinition = $builder->addDefinition($this->prefix('formatter'))
+	private function registerMessageFormatter(ContainerBuilder $builder): ServiceDefinition
+	{
+		return $builder->addDefinition($this->prefix('formatter'))
 			->setFactory('?::create()', [new Literal(MessageFormatterFactory::class)])
 			->setType(MessageFormatter::class)
 			->setAutowired(false);
+	}
 
-		// Logger
-
-		$this->loggerDefinition = $loggerDefinition = $builder->addDefinition($this->prefix('logger'))
+	private function registerTranslationLogger(ContainerBuilder $builder): ServiceDefinition
+	{
+		return $this->loggerDefinition = $builder->addDefinition($this->prefix('logger'))
 			->setFactory(TranslationsLogger::class)
 			->setType(TranslationsLogger::class)
 			->setAutowired(false);
+	}
 
-		// Translator
-
-		$translatorPrefix = $this->prefix('translator');
-		$this->translatorDefinition = $translatorDefinition = $builder->addDefinition($translatorPrefix)
+	private function registerTranslator(
+		ContainerBuilder $builder,
+		Definition $localesDefinition,
+		Definition $rootResolverDefinition,
+		Definition $catalogueDefinition,
+		Definition $messageFormatterDefinition,
+		Definition $loggerDefinition,
+		Definition $processorDefinition
+	): ServiceDefinition
+	{
+		return $this->translatorDefinition = $builder->addDefinition($this->prefix('translator'))
 			->setFactory(
 				DefaultTranslator::class,
 				[
@@ -228,23 +287,36 @@ final class LocalizationExtension extends CompilerExtension
 			)
 			->setType(ConfigurableTranslator::class)
 			->setAutowired([Translator::class, ConfigurableTranslator::class]);
+	}
 
+	private function registerNetteTranslator(ContainerBuilder $builder, ServiceDefinition $translatorDefinition): void
+	{
 		$builder->addDefinition($this->prefix('translator.nette'))
 			->setFactory(NetteTranslator::class, [$translatorDefinition])
 			->setType(NetteTranslatorInterface::class);
+	}
 
-		// Translator accessor
+	private function registerTranslatorGetter(
+		ContainerBuilder $builder,
+		ServiceDefinition $translatorDefinition
+	): AccessorDefinition
+	{
+		$translatorDefinitionName = $translatorDefinition->getName();
+		assert($translatorDefinitionName !== null);
 
 		$translatorGetterDefinition = new AccessorDefinition();
 		$translatorGetterDefinition->setImplement(TranslatorGetter::class)
-			->setReference(new Reference($translatorPrefix));
+			->setReference(new Reference($translatorDefinitionName));
 		$builder->addDefinition($this->prefix('translator.getter'), $translatorGetterDefinition);
 
-		// Shortcut
+		return $translatorGetterDefinition;
+	}
 
+	private function setupShortcut(AccessorDefinition $translatorGetterDefinition): void
+	{
 		$this->getInitialization()->addBody('?::setTranslatorGetter($this->getService(?));', [
 			new Literal(TranslatorHolder::class),
-			$this->prefix('translator.getter'),
+			$translatorGetterDefinition->getName(),
 		]);
 	}
 
@@ -253,44 +325,61 @@ final class LocalizationExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$config = $this->config;
 
-		// Latte
+		$this->addTranslatorToLatte($builder);
+		$this->addPanelToTranslator($builder, $config);
+	}
 
+	private function addTranslatorToLatte(ContainerBuilder $builder): void
+	{
 		$latteFactoryName = $builder->getByType(LatteFactory::class);
-		if ($latteFactoryName !== null) {
-			$latteFactoryDefinition = $builder->getDefinition($latteFactoryName);
-			assert($latteFactoryDefinition instanceof FactoryDefinition);
-
-			$latteFiltersDefinition = $builder->addDefinition($this->prefix('latte.filters'))
-				->setFactory(TranslationFilters::class)
-				->setType(TranslationFilters::class)
-				->setAutowired(false);
-
-			$latteFactoryDefinition->getResultDefinition()
-				->addSetup('?->onCompile[] = static function(? $engine) { ?::install($engine->getCompiler()); }', [
-					'@self',
-					new Literal(Engine::class),
-					new Literal(TranslationMacros::class),
-				])
-				->addSetup(
-					'?->addProvider(?, ?)',
-					['@self', 'translator', $this->translatorDefinition],
-				)
-				->addSetup('?->addFilter(?, ?)', ['@self', 'translate', [$latteFiltersDefinition, 'translate']]);
+		if ($latteFactoryName === null) {
+			return;
 		}
 
-		// Debug
+		$latteFactoryDefinition = $builder->getDefinition($latteFactoryName);
+		assert($latteFactoryDefinition instanceof FactoryDefinition);
 
-		if ($config->debug->panel) {
-			$this->translatorDefinition->addSetup(
-				[self::class, 'setupPanel'],
+		$latteFiltersDefinition = $builder->addDefinition($this->prefix('latte.filters'))
+			->setFactory(TranslationFilters::class)
+			->setType(TranslationFilters::class)
+			->setAutowired(false);
+
+		$latteEngineDefinition = $latteFactoryDefinition->getResultDefinition();
+		$latteEngineDefinition
+			->addSetup(
+				[self::class, 'setupLatteBridge'],
 				[
-					"$this->name.panel",
-					$builder->getDefinitionByType(Bar::class),
+					'@self',
 					$this->translatorDefinition,
-					$this->loggerDefinition,
+					$latteFiltersDefinition,
 				],
 			);
+	}
+
+	private function addPanelToTranslator(ContainerBuilder $builder, stdClass $config): void
+	{
+		if (!$config->debug->panel) {
+			return;
 		}
+
+		$this->translatorDefinition->addSetup(
+			[self::class, 'setupPanel'],
+			[
+				"$this->name.panel",
+				$builder->getDefinitionByType(Bar::class),
+				$this->translatorDefinition,
+				$this->loggerDefinition,
+			],
+		);
+	}
+
+	public static function setupLatteBridge(Engine $engine, Translator $translator, TranslationFilters $filters): void
+	{
+		$engine->onCompile[] = static function () use ($engine): void {
+			TranslationMacros::install($engine->getCompiler());
+		};
+		$engine->addProvider('translator', $translator);
+		$engine->addFilter('translate', [$filters, 'translate']);
 	}
 
 	public static function setupPanel(
