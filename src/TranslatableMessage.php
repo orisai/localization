@@ -35,11 +35,6 @@ final class TranslatableMessage
 		return $this->parameters;
 	}
 
-	public function translate(Translator $translator, ?string $languageTag = null): string
-	{
-		return $translator->translate($this->message, $this->parameters, $languageTag ?? $this->getLanguageTag());
-	}
-
 	public function getLanguageTag(): ?string
 	{
 		return $this->languageTag;
