@@ -8,6 +8,7 @@ interface Translator
 {
 
 	/**
+	 * @param literal-string $message
 	 * @param array<mixed> $parameters
 	 */
 	public function translate(string $message, array $parameters = [], ?string $languageTag = null): string;

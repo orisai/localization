@@ -8,8 +8,15 @@ parameters:
 	ignoreErrors:
 		# Shouldn't be possible
 		- message: '#Parameter \#3 \$length of function substr expects int, int\<0, max\>\|false given\.#'
-		  path:  %currentWorkingDirectory%/src/Locale/StandardLocale.php
+		  path:  ../src/Locale/StandardLocale.php
 		  count: 1
 		- message: '#^Parameter \#(5|6) (.+) of class (.+)StandardLocale constructor expects string\|null, string\|false\|null given\.$#'
-		  path:  %currentWorkingDirectory%/src/Locale/LocaleProcessor.php
+		  path:  ../src/Locale/LocaleProcessor.php
 		  count: 2
+
+		# Can't really enforce that. But it doesn't matter, it's only for static analysis
+		- message: '#Parameter \#1 \$message of method (.+)Translator\:\:translate\(\) expects literal-string, string given\.#'
+		  paths:
+		    - ../src/Bridge/Latte/TranslationFilters.php
+		    - ../src/Bridge/NetteLocalization/NetteTranslator.php
+		    - ../src/Bridge/SymfonyTranslationContracts/SymfonyTranslator.php

@@ -5,6 +5,7 @@ namespace Orisai\Localization;
 final class TranslatableMessage
 {
 
+	/** @var literal-string */
 	private string $message;
 
 	/** @var array<mixed> */
@@ -13,6 +14,7 @@ final class TranslatableMessage
 	private ?string $languageTag;
 
 	/**
+	 * @param literal-string $message
 	 * @param array<mixed> $parameters
 	 */
 	public function __construct(string $message, array $parameters = [], ?string $languageTag = null)
@@ -22,6 +24,9 @@ final class TranslatableMessage
 		$this->languageTag = $languageTag;
 	}
 
+	/**
+	 * @return literal-string
+	 */
 	public function getMessage(): string
 	{
 		return $this->message;

@@ -7,6 +7,7 @@ use function function_exists;
 if (!function_exists('Orisai\Localization\t')) {
 
 	/**
+	 * @param literal-string $message
 	 * @param array<mixed> $parameters
 	 */
 	function t(string $message, array $parameters = [], ?string $languageTag = null): string
