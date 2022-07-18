@@ -10,13 +10,16 @@ final class TranslatableMessage
 	/** @var array<mixed> */
 	private array $parameters;
 
+	private ?string $languageTag;
+
 	/**
 	 * @param array<mixed> $parameters
 	 */
-	public function __construct(string $message, array $parameters = [])
+	public function __construct(string $message, array $parameters = [], ?string $languageTag = null)
 	{
 		$this->message = $message;
 		$this->parameters = $parameters;
+		$this->languageTag = $languageTag;
 	}
 
 	public function getMessage(): string
@@ -34,7 +37,12 @@ final class TranslatableMessage
 
 	public function translate(Translator $translator, ?string $languageTag = null): string
 	{
-		return $translator->translate($this->message, $this->parameters, $languageTag);
+		return $translator->translate($this->message, $this->parameters, $languageTag ?? $this->getLanguageTag());
+	}
+
+	public function getLanguageTag(): ?string
+	{
+		return $this->languageTag;
 	}
 
 }

@@ -8,6 +8,7 @@ use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Locale\Locales;
 use Orisai\Localization\Logging\TranslationsLogger;
 use Orisai\Localization\TranslatableMessage;
+use Orisai\Localization\Translator;
 use PHPUnit\Framework\TestCase;
 use Tests\Orisai\Localization\Doubles\ArrayCatalogue;
 use Tests\Orisai\Localization\Doubles\FakeLocaleResolver;
@@ -15,10 +16,13 @@ use Tests\Orisai\Localization\Doubles\FakeLocaleResolver;
 final class TranslatableMessageTest extends TestCase
 {
 
-	public function test(): void
+	private Translator $translator;
+
+	protected function setUp(): void
 	{
+		parent::setUp();
 		$processor = new LocaleProcessor();
-		$translator = new DefaultTranslator(
+		$this->translator = new DefaultTranslator(
 			new Locales($processor, 'en', ['cs'], []),
 			new FakeLocaleResolver(),
 			new ArrayCatalogue([
@@ -33,15 +37,30 @@ final class TranslatableMessageTest extends TestCase
 			new TranslationsLogger(),
 			$processor,
 		);
+	}
 
+	public function testBasic(): void
+	{
 		$message = new TranslatableMessage('message', ['apples' => 3]);
 
 		self::assertSame('message', $message->getMessage());
 		self::assertSame(['apples' => 3], $message->getParameters());
+		self::assertNull($message->getLanguageTag());
 
-		self::assertSame('I have 3 apples.', $message->translate($translator));
-		self::assertSame('Já mám 3 jablka.', $message->translate($translator, 'cs-CZ'));
-		self::assertSame('I have 3 apples.', $translator->translate($message->getMessage(), $message->getParameters()));
+		self::assertSame('I have 3 apples.', $message->translate($this->translator));
+		self::assertSame('Já mám 3 jablka.', $message->translate($this->translator, 'cs-CZ'));
+	}
+
+	public function testSpecifyLanguage(): void
+	{
+		$message = new TranslatableMessage('message', ['apples' => 3], 'cs-CZ');
+
+		self::assertSame('message', $message->getMessage());
+		self::assertSame(['apples' => 3], $message->getParameters());
+		self::assertSame($message->getLanguageTag(), 'cs-CZ');
+
+		self::assertSame('Já mám 3 jablka.', $message->translate($this->translator));
+		self::assertSame('I have 3 apples.', $message->translate($this->translator, 'en-US'));
 	}
 
 }
