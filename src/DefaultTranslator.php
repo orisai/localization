@@ -85,6 +85,15 @@ final class DefaultTranslator implements ConfigurableTranslator
 		return $this->messageFormatter->formatMessage($translatedMessage, $parameters, $translatedMessageLanguageTag);
 	}
 
+	public function translateMessage(TranslatableMessage $message, ?string $languageTag = null): string
+	{
+		return $this->translate(
+			$message->getMessage(),
+			$message->getParameters(),
+			$languageTag ?? $message->getLanguageTag(),
+		);
+	}
+
 	public function getDefaultLocale(): Locale
 	{
 		return $this->locales->getDefault();

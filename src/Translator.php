@@ -12,6 +12,8 @@ interface Translator
 	 */
 	public function translate(string $message, array $parameters = [], ?string $languageTag = null): string;
 
+	public function translateMessage(TranslatableMessage $message, ?string $languageTag = null): string;
+
 	public function getCurrentLocale(): Locale;
 
 	public function getDefaultLocale(): Locale;

@@ -7,6 +7,7 @@ use Orisai\Localization\ConfigurableTranslator;
 use Orisai\Localization\Locale\Locale;
 use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Locale\Locales;
+use Orisai\Localization\TranslatableMessage;
 
 final class FakeTranslator implements ConfigurableTranslator
 {
@@ -35,6 +36,15 @@ final class FakeTranslator implements ConfigurableTranslator
 	public function translate(string $message, array $parameters = [], ?string $languageTag = null): string
 	{
 		return $message;
+	}
+
+	public function translateMessage(TranslatableMessage $message, ?string $languageTag = null): string
+	{
+		return $this->translate(
+			$message->getMessage(),
+			$message->getParameters(),
+			$languageTag ?? $message->getLanguageTag(),
+		);
 	}
 
 	public function getCurrentLocale(): Locale

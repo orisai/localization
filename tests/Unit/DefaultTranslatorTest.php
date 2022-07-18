@@ -11,6 +11,7 @@ use Orisai\Localization\Formatting\IntlMessageFormatter;
 use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Locale\Locales;
 use Orisai\Localization\Logging\TranslationsLogger;
+use Orisai\Localization\TranslatableMessage;
 use PHPUnit\Framework\TestCase;
 use Tests\Orisai\Localization\Doubles\ArrayCatalogue;
 use Tests\Orisai\Localization\Doubles\FakeLocaleResolver;
@@ -98,6 +99,15 @@ final class DefaultTranslatorTest extends TestCase
 			$translator->translate('missing-translation', ['unused parameter'], 'cs'),
 		);
 		self::assertSame('another-missing-translation', $translator->translate('another-missing-translation'));
+
+		// Message
+		$message = new TranslatableMessage('apples', ['apples' => 3]);
+		self::assertSame('I have 3 apples.', $translator->translateMessage($message));
+		self::assertSame('Já mám 3 jablka.', $translator->translateMessage($message, 'cs-CZ'));
+
+		$message = new TranslatableMessage('apples', ['apples' => 3], 'cs-CZ');
+		self::assertSame('Já mám 3 jablka.', $translator->translateMessage($message));
+		self::assertSame('I have 3 apples.', $translator->translateMessage($message, 'en-US'));
 
 		// Logger
 		$missingResources = $logger->getMissingResources();
