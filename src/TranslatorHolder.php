@@ -19,7 +19,13 @@ final class TranslatorHolder
 	{
 		if (self::$translatorGetter === null) {
 			throw InvalidState::create()
-				->withMessage(sprintf('Call %s::setTranslatorGetter() to use %s()', self::class, __METHOD__));
+				->withMessage(sprintf(
+					'Call %s::setTranslatorGetter() to use %s(), %s\t() and %s\tm().',
+					self::class,
+					__METHOD__,
+					__NAMESPACE__,
+					__NAMESPACE__,
+				));
 		}
 
 		return self::$translatorGetter->get();

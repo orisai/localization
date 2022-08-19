@@ -24,8 +24,9 @@ final class TranslatorHolderTest extends TestCase
 	{
 		$this->expectException(InvalidState::class);
 		$this->expectExceptionMessage(
-			'Call Orisai\Localization\TranslatorHolder::setTranslatorGetter() ' .
-			'to use Orisai\Localization\TranslatorHolder::getTranslator()',
+			'Call Orisai\Localization\TranslatorHolder::setTranslatorGetter() to use '
+			. 'Orisai\Localization\TranslatorHolder::getTranslator(), '
+			. 'Orisai\Localization\t() and Orisai\Localization\tm().',
 		);
 
 		TranslatorHolder::getTranslator();
