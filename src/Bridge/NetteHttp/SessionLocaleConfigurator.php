@@ -17,10 +17,7 @@ final class SessionLocaleConfigurator implements LocaleConfigurator
 
 	public function configure(string $languageTag): void
 	{
-		$this->session->getSection(SessionLocaleResolver::Section)->offsetSet(
-			SessionLocaleResolver::Parameter,
-			$languageTag,
-		);
+		$this->session->getSection(SessionLocaleResolver::Section)[SessionLocaleResolver::Parameter] = $languageTag;
 	}
 
 }

@@ -21,7 +21,7 @@
 		}
 	],
 	"require": {
-		"php": ">=7.4.0 <8.2.0",
+		"php": ">=7.4.0 <8.3.0",
 		"orisai/data-sources": "^1.0.0",
 		"orisai/exceptions": "^1.0.0",
 		"psr/log": "^1.1.0|^2.0.0|^3.0.0",
@@ -37,7 +37,7 @@
 		"nette/application": "^3.0.0",
 		"nette/caching": "^3.0.0",
 		"nette/di": "^3.0.5",
-		"orisai/coding-standard": "^2.0.0",
+		"orisai/coding-standard": "^3.0.0",
 		"orisai/nette-di": "^1.0.3",
 		"phpstan/extension-installer": "^1.0.0",
 		"phpstan/phpstan": "^1.0.0",

@@ -2,6 +2,7 @@
 
 namespace Orisai\Localization\Locale;
 
+use function assert;
 use function str_contains;
 use function strrpos;
 use function strtolower;
@@ -30,7 +31,7 @@ final class StandardLocale implements Locale
 
 	private ?string $tag = null;
 
-	/** @var array<string> */
+	/** @var array<int, string> */
 	private array $tagVariants = [];
 
 	public function __construct(
@@ -75,6 +76,7 @@ final class StandardLocale implements Locale
 
 		while (str_contains($currentTag, '-')) {
 			$currentTag = substr($currentTag, 0, strrpos($currentTag, '-'));
+			assert($currentTag !== false);
 			$tags[] = $currentTag;
 		}
 

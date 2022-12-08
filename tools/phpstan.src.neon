@@ -20,3 +20,7 @@ parameters:
 		    - ../src/Bridge/Latte/TranslationFilters.php
 		    - ../src/Bridge/NetteLocalization/NetteTranslator.php
 		    - ../src/Bridge/SymfonyTranslationContracts/SymfonyTranslator.php
+
+		# Not validated at this moment
+		- message: '#^Method (.+)\:\:loadFromDirectory\(\) should return array\<string, string\> but returns array\.$#'
+		  path: ../src/Resource/FileLoader.php

@@ -19,7 +19,7 @@ final class GrandfatheredLocale implements Locale
 
 	private string $tag;
 
-	/** @var array<string> */
+	/** @var array<int, string> */
 	private array $tagVariants = [];
 
 	public function __construct(string $rawTag)
