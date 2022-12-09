@@ -22,6 +22,7 @@
 	],
 	"require": {
 		"php": ">=7.4.0 <8.3.0",
+		"nette/utils": "^3.2.0",
 		"orisai/data-sources": "^1.0.0",
 		"orisai/exceptions": "^1.0.0",
 		"psr/log": "^1.1.0|^2.0.0|^3.0.0",
