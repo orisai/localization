@@ -7,12 +7,9 @@ parameters:
 
 	ignoreErrors:
 		# Shouldn't be possible
-		- message: '#Parameter \#3 \$length of function substr expects int, int\<0, max\>\|false given\.#'
+		- message: '#Parameter \#3 \$length of function substr expects int|null, int\|false given\.#'
 		  path:  ../src/Locale/StandardLocale.php
 		  count: 1
-		- message: '#^Parameter \#(5|6) (.+) of class (.+)StandardLocale constructor expects string\|null, string\|false\|null given\.$#'
-		  path:  ../src/Locale/LocaleProcessor.php
-		  count: 2
 
 		# Can't really enforce that. But it doesn't matter, it's only for static analysis
 		- message: '#Parameter \#1 \$message of method (.+)Translator\:\:translate\(\) expects literal-string, string given\.#'
@@ -24,3 +21,29 @@ parameters:
 		# Not validated at this moment
 		- message: '#^Method (.+)\:\:loadFromDirectory\(\) should return array\<string, string\> but returns array\.$#'
 		  path: ../src/Resource/FileLoader.php
+
+		# Latte 2
+		- message: '#^If condition is always false\.$#'
+		  path: ../src/Bridge/NetteDI/LocalizationExtension.php
+		  count: 1
+		- message: '#^Access to an undefined property Latte\\Engine\:\:\$onCompile\.$#'
+		  path: ../src/Bridge/NetteDI/LocalizationExtension.php
+		  count: 1
+		- message: '#^Call to an undefined method Latte\\Engine\:\:getCompiler\(\).$#'
+		  path: ../src/Bridge/NetteDI/LocalizationExtension.php
+		  count: 1
+
+		# Types in callbables
+		- message: '#^Parameter \#1 \$message of method (.+)Translator\:\:translate\(\) expects literal-string, string given\.$#'
+		  path: ../src/Bridge/Latte/TranslationExtension.php
+		  count: 1
+		- message: '#^Method (.+)TranslationExtension\:\:getFilters\(\) return type has no signature specified for callable\.$#'
+		  path: ../src/Bridge/Latte/TranslationExtension.php
+		  count: 1
+		- message: '#^Parameter \#1 \$ of closure expects literal-string, mixed given\.$#'
+		  path: ../src/Bridge/Latte/TranslationExtension.php
+		  count: 1
+
+	excludePaths:
+		# Latte 2
+		- ../src/Bridge/Latte/TranslationMacros.php

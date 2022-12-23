@@ -34,7 +34,7 @@
 		"ext-intl": "*",
 		"brianium/paratest": "^6.3.0",
 		"infection/infection": "^0.26.0",
-		"latte/latte": "^2.5.0",
+		"latte/latte": "^2.5.0|^3.0.4",
 		"nette/application": "^3.1.0",
 		"nette/caching": "^3.1.0",
 		"nette/di": "^3.0.5",

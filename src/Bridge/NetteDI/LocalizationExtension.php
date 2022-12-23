@@ -16,6 +16,7 @@ use Nette\PhpGenerator\Literal;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
 use OriNette\DI\Definitions\DefinitionsLoader;
+use Orisai\Localization\Bridge\Latte\TranslationExtension;
 use Orisai\Localization\Bridge\Latte\TranslationFilters;
 use Orisai\Localization\Bridge\Latte\TranslationMacros;
 use Orisai\Localization\Bridge\NetteCaching\CachedCatalogue;
@@ -46,6 +47,7 @@ use stdClass;
 use Tracy\Bar;
 use function assert;
 use function serialize;
+use function version_compare;
 
 /**
  * @property-read stdClass $config
@@ -338,22 +340,27 @@ final class LocalizationExtension extends CompilerExtension
 
 		$latteFactoryDefinition = $builder->getDefinition($latteFactoryName);
 		assert($latteFactoryDefinition instanceof FactoryDefinition);
-
-		$latteFiltersDefinition = $builder->addDefinition($this->prefix('latte.filters'))
-			->setFactory(TranslationFilters::class)
-			->setType(TranslationFilters::class)
-			->setAutowired(false);
-
 		$latteEngineDefinition = $latteFactoryDefinition->getResultDefinition();
-		$latteEngineDefinition
-			->addSetup(
-				[self::class, 'setupLatteBridge'],
+
+		if (version_compare(Engine::VERSION, '3', '<')) {
+			$latteFiltersDefinition = $builder->addDefinition($this->prefix('latte.filters'))
+				->setFactory(TranslationFilters::class)
+				->setAutowired(false);
+
+			$latteEngineDefinition->addSetup(
+				[self::class, 'setupLatteV2Bridge'],
 				[
 					'@self',
 					$this->translatorDefinition,
 					$latteFiltersDefinition,
 				],
 			);
+		} else {
+			$latteExtensionDefinition = $builder->addDefinition($this->prefix('latte.extension'))
+				->setFactory(TranslationExtension::class)
+				->setAutowired(false);
+			$latteEngineDefinition->addSetup('addExtension', [$latteExtensionDefinition]);
+		}
 	}
 
 	private function addPanelToTranslator(ContainerBuilder $builder, stdClass $config): void
@@ -373,7 +380,7 @@ final class LocalizationExtension extends CompilerExtension
 		);
 	}
 
-	public static function setupLatteBridge(Engine $engine, Translator $translator, TranslationFilters $filters): void
+	public static function setupLatteV2Bridge(Engine $engine, Translator $translator, TranslationFilters $filters): void
 	{
 		$engine->onCompile[] = static function () use ($engine): void {
 			TranslationMacros::install($engine->getCompiler());

@@ -2,7 +2,9 @@
 
 namespace Tests\Orisai\Localization\Unit\Bridge\NetteDI;
 
+use Latte\Engine;
 use OriNette\DI\Boot\ManualConfigurator;
+use Orisai\Localization\Bridge\Latte\TranslationExtension;
 use Orisai\Localization\Bridge\Latte\TranslationFilters;
 use Orisai\Localization\Bridge\NetteCaching\CachedCatalogue;
 use Orisai\Localization\Bridge\NetteDI\LazyLoaderManager;
@@ -24,6 +26,7 @@ use function assert;
 use function dirname;
 use function mkdir;
 use function Orisai\Localization\t;
+use function version_compare;
 use const PHP_VERSION_ID;
 
 /**
@@ -85,7 +88,13 @@ final class LocalizationExtensionTest extends TestCase
 		self::assertSame($translator, $container->getService('localization.translator'));
 		self::assertInstanceOf(NetteTranslator::class, $container->getService('localization.translator.nette'));
 		self::assertSame($translator, TranslatorHolder::getTranslator());
-		self::assertFalse($container->hasService('localization.latte.filters'));
+
+		if (version_compare(Engine::VERSION, '3', '<')) {
+			self::assertFalse($container->hasService('localization.latte.filters'));
+		} else {
+			self::assertFalse($container->hasService('localization.latte.extension'));
+		}
+
 		self::assertSame('test', t('test'));
 	}
 
@@ -119,7 +128,12 @@ final class LocalizationExtensionTest extends TestCase
 		self::assertInstanceOf(TranslationsLogger::class, $container->getService('localization.logger'));
 		self::assertInstanceOf(DefaultTranslator::class, $container->getService('localization.translator'));
 		self::assertInstanceOf(NetteTranslator::class, $container->getService('localization.translator.nette'));
-		self::assertInstanceOf(TranslationFilters::class, $container->getService('localization.latte.filters'));
+
+		if (version_compare(Engine::VERSION, '3', '<')) {
+			self::assertInstanceOf(TranslationFilters::class, $container->getService('localization.latte.filters'));
+		} else {
+			self::assertInstanceOf(TranslationExtension::class, $container->getService('localization.latte.extension'));
+		}
 
 		$bar = $container->getByType(Bar::class);
 		self::assertInstanceOf(TranslationPanel::class, $bar->getPanel('localization.panel'));

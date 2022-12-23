@@ -5,7 +5,6 @@ namespace Orisai\Localization\Locale;
 use Orisai\Localization\Exception\MalformedLanguageTag;
 use function array_merge;
 use function array_unique;
-use function assert;
 use function preg_match;
 use function str_replace;
 use function strlen;
@@ -60,7 +59,6 @@ REGEX;
 			$primaryLanguage = $extendedLanguage !== null
 				? substr($language, 0, -(strlen($extendedLanguage) + 1))
 				: $language;
-			assert($primaryLanguage !== false);
 
 			return new StandardLocale(
 				$primaryLanguage,
