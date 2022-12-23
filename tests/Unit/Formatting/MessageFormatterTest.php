@@ -7,7 +7,11 @@ use Orisai\Localization\Formatting\IntlMessageFormatter;
 use Orisai\Localization\Formatting\SymfonyMessageFormatter;
 use PHPUnit\Framework\TestCase;
 use function date_default_timezone_set;
+use const PHP_OS;
 
+/**
+ * @runTestsInSeparateProcesses
+ */
 final class MessageFormatterTest extends TestCase
 {
 
@@ -96,7 +100,12 @@ final class MessageFormatterTest extends TestCase
 	public function provideSpellout(): Generator
 	{
 		yield ['en-US', 'I have {0, spellout} apples', [34], 'I have thirty-four apples'];
-		yield ['ar', 'لدي {0, spellout} تفاحة', [34], 'لدي أربعة و ثلاثون تفاحة'];
+
+		if (PHP_OS === 'Darwin') {
+			yield ['ar', 'لدي {0, spellout} تفاحة', [34], 'لدي أربعة وثلاثون تفاحة'];
+		} else {
+			yield ['ar', 'لدي {0, spellout} تفاحة', [34], 'لدي أربعة و ثلاثون تفاحة'];
+		}
 	}
 
 	/**
