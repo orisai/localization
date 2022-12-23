@@ -1,0 +1,37 @@
+From 1534b7afd75b80d3a6d0841c8f250db7242e56d4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Marek=20Barto=C5=A1?= <bartos.developer152@gmail.com>
+Date: Fri, 23 Dec 2022 16:59:16 +0100
+Subject: [PATCH] Fix coverage failure in case of an invalid file
+
+---
+ src/PhpParser/Visitor/ReflectionVisitor.php | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/src/PhpParser/Visitor/ReflectionVisitor.php b/src/PhpParser/Visitor/ReflectionVisitor.php
+index 2115bf03..666a1c7f 100644
+--- a/src/PhpParser/Visitor/ReflectionVisitor.php
++++ b/src/PhpParser/Visitor/ReflectionVisitor.php
+@@ -37,6 +37,7 @@ namespace Infection\PhpParser\Visitor;
+ 
+ use function array_pop;
+ use function count;
++use Error;
+ use Infection\Reflection\AnonymousClassReflection;
+ use Infection\Reflection\ClassReflection;
+ use Infection\Reflection\CoreClassReflection;
+@@ -184,7 +185,11 @@ final class ReflectionVisitor extends NodeVisitorAbstract
+         $fqn = FullyQualifiedClassNameManipulator::getFqcn($node);
+ 
+         if ($fqn !== null) {
+-            return CoreClassReflection::fromClassName($fqn->toString());
++            try {
++                return CoreClassReflection::fromClassName($fqn->toString());
++            } catch (Error $e) {
++                return new NullReflection();
++            }
+         }
+ 
+         // TODO: check against interfaces
+-- 
+2.34.1.windows.1
+

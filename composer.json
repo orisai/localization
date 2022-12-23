@@ -33,7 +33,8 @@
 	"require-dev": {
 		"ext-intl": "*",
 		"brianium/paratest": "^6.3.0",
-		"infection/infection": "^0.26.0",
+		"cweagans/composer-patches": "^1.7.3",
+		"infection/infection": "0.26.6",
 		"latte/latte": "^2.5.0|^3.0.4",
 		"nette/application": "^3.1.0",
 		"nette/caching": "^3.1.0",
@@ -47,6 +48,7 @@
 		"phpstan/phpstan-phpunit": "^1.0.0",
 		"phpstan/phpstan-strict-rules": "^1.0.0",
 		"phpunit/phpunit": "^9.5.0",
+		"phpunit/php-code-coverage": "9.2.22",
 		"staabm/annotate-pull-request-from-checkstyle": "^1.7.0",
 		"symfony/polyfill-intl-messageformatter": "^1.10.0",
 		"symfony/translation-contracts": "^2.0.0",
@@ -70,9 +72,20 @@
 	"config": {
 		"sort-packages": true,
 		"allow-plugins": {
+			"cweagans/composer-patches": true,
 			"dealerdirect/phpcodesniffer-composer-installer": true,
 			"infection/extension-installer": true,
 			"phpstan/extension-installer": true
+		}
+	},
+	"extra": {
+		"patches": {
+			"phpunit/php-code-coverage": {
+				"Class not found error fix": "tests/Patches/coverage-invalid-file-error.patch"
+			},
+			"infection/infection": {
+				"Class not found error fix": "tests/Patches/mutations-invalid-file-error.patch"
+			}
 		}
 	}
 }
