@@ -18,10 +18,6 @@ parameters:
 		    - ../src/Bridge/NetteLocalization/NetteTranslator.php
 		    - ../src/Bridge/SymfonyTranslationContracts/SymfonyTranslator.php
 
-		# Not validated at this moment
-		- message: '#^Method (.+)\:\:loadFromDirectory\(\) should return array\<string, string\> but returns array\.$#'
-		  path: ../src/Resource/FileLoader.php
-
 		# Latte 2
 		- message: '#^If condition is always false\.$#'
 		  path: ../src/Bridge/NetteDI/LocalizationExtension.php
