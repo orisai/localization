@@ -11,6 +11,7 @@ use Orisai\Localization\Locale\LocaleResolver;
 use Orisai\Localization\Locale\Locales;
 use Orisai\Localization\Logging\TranslationsLogger;
 use Orisai\Localization\Resource\Catalogue;
+use Orisai\TranslationContracts\Translatable;
 use function array_merge;
 use function array_unique;
 use function sprintf;
@@ -53,20 +54,17 @@ final class DefaultTranslator implements ConfigurableTranslator
 		$this->localeProcessor = $localeProcessor;
 	}
 
-	/**
-	 * @param array<mixed> $parameters
-	 */
-	public function translate(string $message, array $parameters = [], ?string $languageTag = null): string
+	public function translate(string $message, array $parameters = [], ?string $locale = null): string
 	{
-		$locale = $languageTag !== null
-			? $this->checkValidAndAllowed($languageTag)
+		$localeObj = $locale !== null
+			? $this->checkValidAndAllowed($locale)
 			: $this->getCurrentLocale();
-		$languageTag = $locale->getTag();
+		$locale = $localeObj->getTag();
 
 		$translatedMessage = null;
-		$translatedMessageLanguageTag = $languageTag;
+		$translatedMessageLanguageTag = $locale;
 
-		foreach ($this->getPossibleLanguageTags($locale) as $possibleLanguageTag) {
+		foreach ($this->getPossibleLanguageTags($localeObj) as $possibleLanguageTag) {
 			$translatedMessage = $this->catalogue->getMessage($message, $possibleLanguageTag);
 
 			if ($translatedMessage !== null) {
@@ -77,7 +75,7 @@ final class DefaultTranslator implements ConfigurableTranslator
 		}
 
 		if ($translatedMessage === null) {
-			$this->logger->addMissingResource($message, $languageTag);
+			$this->logger->addMissingResource($message, $locale);
 
 			return $message;
 		}
@@ -85,12 +83,12 @@ final class DefaultTranslator implements ConfigurableTranslator
 		return $this->messageFormatter->formatMessage($translatedMessage, $parameters, $translatedMessageLanguageTag);
 	}
 
-	public function translateMessage(TranslatableMessage $message, ?string $languageTag = null): string
+	public function translateMessage(Translatable $message, ?string $locale = null): string
 	{
 		return $this->translate(
 			$message->getMessage(),
 			$message->getParameters(),
-			$languageTag ?? $message->getLanguageTag(),
+			$locale ?? $message->getLocale(),
 		);
 	}
 

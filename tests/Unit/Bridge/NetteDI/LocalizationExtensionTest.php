@@ -18,14 +18,14 @@ use Orisai\Localization\Locale\MultiLocaleResolver;
 use Orisai\Localization\Logging\TranslationsLogger;
 use Orisai\Localization\Resource\MultiLoader;
 use Orisai\Localization\Translator;
-use Orisai\Localization\TranslatorGetter;
-use Orisai\Localization\TranslatorHolder;
+use Orisai\TranslationContracts\TranslatorGetter;
+use Orisai\TranslationContracts\TranslatorHolder;
 use PHPUnit\Framework\TestCase;
 use Tracy\Bar;
 use function assert;
 use function dirname;
 use function mkdir;
-use function Orisai\Localization\t;
+use function Orisai\TranslationContracts\t;
 use function version_compare;
 use const PHP_VERSION_ID;
 

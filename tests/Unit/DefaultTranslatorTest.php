@@ -11,7 +11,7 @@ use Orisai\Localization\Formatting\IntlMessageFormatter;
 use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Locale\Locales;
 use Orisai\Localization\Logging\TranslationsLogger;
-use Orisai\Localization\TranslatableMessage;
+use Orisai\TranslationContracts\TranslatableMessage;
 use PHPUnit\Framework\TestCase;
 use Tests\Orisai\Localization\Doubles\ArrayCatalogue;
 use Tests\Orisai\Localization\Doubles\FakeLocaleResolver;

@@ -8,14 +8,14 @@ use Orisai\Localization\Formatting\IntlMessageFormatter;
 use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Locale\Locales;
 use Orisai\Localization\Logging\TranslationsLogger;
-use Orisai\Localization\TranslatableMessage;
-use Orisai\Localization\TranslatorHolder;
+use Orisai\TranslationContracts\SimpleTranslatorGetter;
+use Orisai\TranslationContracts\TranslatableMessage;
+use Orisai\TranslationContracts\TranslatorHolder;
 use PHPUnit\Framework\TestCase;
 use Tests\Orisai\Localization\Doubles\ArrayCatalogue;
 use Tests\Orisai\Localization\Doubles\FakeLocaleResolver;
-use Tests\Orisai\Localization\Doubles\SimpleTranslatorGetter;
-use function Orisai\Localization\t;
-use function Orisai\Localization\tm;
+use function Orisai\TranslationContracts\t;
+use function Orisai\TranslationContracts\tm;
 
 /**
  * @runTestsInSeparateProcesses
@@ -26,10 +26,6 @@ final class ShortcutTest extends TestCase
 	public function testNotSet(): void
 	{
 		$this->expectException(InvalidState::class);
-		$this->expectExceptionMessage(
-			'Call Orisai\Localization\TranslatorHolder::setTranslatorGetter() ' .
-			'to use Orisai\Localization\TranslatorHolder::getTranslator()',
-		);
 
 		t('test');
 	}

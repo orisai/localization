@@ -2,12 +2,11 @@
 
 namespace Tests\Orisai\Localization\Doubles;
 
-use Closure;
 use Orisai\Localization\ConfigurableTranslator;
 use Orisai\Localization\Locale\Locale;
 use Orisai\Localization\Locale\LocaleProcessor;
 use Orisai\Localization\Locale\Locales;
-use Orisai\Localization\TranslatableMessage;
+use Orisai\TranslationContracts\Translatable;
 
 final class FakeTranslator implements ConfigurableTranslator
 {
@@ -30,20 +29,17 @@ final class FakeTranslator implements ConfigurableTranslator
 		$this->currentLocale = $this->localeProcessor->parse($languageTag);
 	}
 
-	/**
-	 * @param array<mixed> $parameters
-	 */
-	public function translate(string $message, array $parameters = [], ?string $languageTag = null): string
+	public function translate(string $message, array $parameters = [], ?string $locale = null): string
 	{
 		return $message;
 	}
 
-	public function translateMessage(TranslatableMessage $message, ?string $languageTag = null): string
+	public function translateMessage(Translatable $message, ?string $locale = null): string
 	{
 		return $this->translate(
 			$message->getMessage(),
 			$message->getParameters(),
-			$languageTag ?? $message->getLanguageTag(),
+			$locale ?? $message->getLocale(),
 		);
 	}
 
@@ -63,15 +59,6 @@ final class FakeTranslator implements ConfigurableTranslator
 	public function getAllowedLocales(): array
 	{
 		return $this->locales->getAllowed();
-	}
-
-	public function toFunction(): Closure
-	{
-		return fn (string $message, array $parameters = [], ?string $languageTag = null): string => $this->translate(
-			$message,
-			$parameters,
-			$languageTag,
-		);
 	}
 
 }

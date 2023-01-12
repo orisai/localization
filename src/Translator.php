@@ -3,17 +3,10 @@
 namespace Orisai\Localization;
 
 use Orisai\Localization\Locale\Locale;
+use Orisai\TranslationContracts\Translator as TranslatorContract;
 
-interface Translator
+interface Translator extends TranslatorContract
 {
-
-	/**
-	 * @param literal-string $message
-	 * @param array<mixed> $parameters
-	 */
-	public function translate(string $message, array $parameters = [], ?string $languageTag = null): string;
-
-	public function translateMessage(TranslatableMessage $message, ?string $languageTag = null): string;
 
 	public function getCurrentLocale(): Locale;
 
