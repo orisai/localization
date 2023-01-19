@@ -54,7 +54,7 @@ final class FileLoader implements Loader
 			}
 
 			if (Path::getFilenameWithoutExtension($path) === $languageTag) {
-				$data = $this->dataSource->fromFile($path);
+				$data = $this->dataSource->decodeFromFile($path);
 				if (!is_array($data)) {
 					$given = get_debug_type($data);
 
