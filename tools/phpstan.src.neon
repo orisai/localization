@@ -12,7 +12,7 @@ parameters:
 		  count: 1
 
 		# Can't really enforce that. But it doesn't matter, it's only for static analysis
-		- message: '#Parameter \#1 \$message of method (.+)Translator\:\:translate\(\) expects literal-string, string given\.#'
+		- message: '#Parameter \#1 \$id of method (.+)Translator\:\:translate\(\) expects literal-string, string given\.#'
 		  paths:
 		    - ../src/Bridge/Latte/TranslationFilters.php
 		    - ../src/Bridge/NetteLocalization/NetteTranslator.php
@@ -30,7 +30,7 @@ parameters:
 		  count: 1
 
 		# Types in callbables
-		- message: '#^Parameter \#1 \$message of method (.+)Translator\:\:translate\(\) expects literal-string, string given\.$#'
+		- message: '#^Parameter \#1 \$id of method (.+)Translator\:\:translate\(\) expects literal-string, string given\.$#'
 		  path: ../src/Bridge/Latte/TranslationExtension.php
 		  count: 1
 		- message: '#^Method (.+)TranslationExtension\:\:getFilters\(\) return type has no signature specified for callable\.$#'

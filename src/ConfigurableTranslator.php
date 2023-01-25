@@ -9,6 +9,6 @@ namespace Orisai\Localization;
 interface ConfigurableTranslator extends Translator
 {
 
-	public function setCurrentLocale(string $languageTag): void;
+	public function setCurrentLocale(string $locale): void;
 
 }

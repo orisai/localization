@@ -54,7 +54,7 @@ final class DefaultTranslator implements ConfigurableTranslator
 		$this->localeProcessor = $localeProcessor;
 	}
 
-	public function translate(string $message, array $parameters = [], ?string $locale = null): string
+	public function translate(string $id, array $parameters = [], ?string $locale = null): string
 	{
 		$localeObj = $locale !== null
 			? $this->checkValidAndAllowed($locale)
@@ -65,7 +65,7 @@ final class DefaultTranslator implements ConfigurableTranslator
 		$translatedMessageLanguageTag = $locale;
 
 		foreach ($this->getPossibleLanguageTags($localeObj) as $possibleLanguageTag) {
-			$translatedMessage = $this->catalogue->getMessage($message, $possibleLanguageTag);
+			$translatedMessage = $this->catalogue->getMessage($id, $possibleLanguageTag);
 
 			if ($translatedMessage !== null) {
 				$translatedMessageLanguageTag = $possibleLanguageTag;
@@ -75,9 +75,9 @@ final class DefaultTranslator implements ConfigurableTranslator
 		}
 
 		if ($translatedMessage === null) {
-			$this->logger->addMissingResource($message, $locale);
+			$this->logger->addMissingResource($id, $locale);
 
-			return $message;
+			return $id;
 		}
 
 		return $this->messageFormatter->formatMessage($translatedMessage, $parameters, $translatedMessageLanguageTag);
@@ -86,7 +86,7 @@ final class DefaultTranslator implements ConfigurableTranslator
 	public function translateMessage(Translatable $message, ?string $locale = null): string
 	{
 		return $this->translate(
-			$message->getMessage(),
+			$message->getId(),
 			$message->getParameters(),
 			$locale ?? $message->getLocale(),
 		);
@@ -105,7 +105,7 @@ final class DefaultTranslator implements ConfigurableTranslator
 		return $this->locales->getAllowed();
 	}
 
-	public function setCurrentLocale(string $languageTag): void
+	public function setCurrentLocale(string $locale): void
 	{
 		if ($this->currentLocale !== null) {
 			throw InvalidState::create()
@@ -115,7 +115,7 @@ final class DefaultTranslator implements ConfigurableTranslator
 				));
 		}
 
-		$currentLocale = $this->checkValidAndAllowed($languageTag);
+		$currentLocale = $this->checkValidAndAllowed($locale);
 		$this->currentLocale = $currentLocale;
 	}
 

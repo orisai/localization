@@ -24,20 +24,20 @@ final class FakeTranslator implements ConfigurableTranslator
 		$this->localeProcessor = $localeProcessor;
 	}
 
-	public function setCurrentLocale(string $languageTag): void
+	public function setCurrentLocale(string $locale): void
 	{
-		$this->currentLocale = $this->localeProcessor->parse($languageTag);
+		$this->currentLocale = $this->localeProcessor->parse($locale);
 	}
 
-	public function translate(string $message, array $parameters = [], ?string $locale = null): string
+	public function translate(string $id, array $parameters = [], ?string $locale = null): string
 	{
-		return $message;
+		return $id;
 	}
 
 	public function translateMessage(Translatable $message, ?string $locale = null): string
 	{
 		return $this->translate(
-			$message->getMessage(),
+			$message->getId(),
 			$message->getParameters(),
 			$locale ?? $message->getLocale(),
 		);
