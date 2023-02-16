@@ -1,0 +1,41 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method Tests\\\\Orisai\\\\Localization\\\\Doubles\\\\FakeLocaleConfigurator\\:\\:getLanguageTag\\(\\) should return string but returns string\\|null\\.$#"
+			count: 1
+			path: ../tests/Doubles/FakeLocaleConfigurator.php
+
+		-
+			message: "#^Call to function assert\\(\\) with true will always evaluate to true\\.$#"
+			count: 1
+			path: ../tests/Unit/Bridge/NetteDI/LocalizationExtensionTest.php
+
+		-
+			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertInstanceOf\\(\\) with 'Orisai\\\\\\\\TranslationContracts\\\\\\\\TranslatorGetter' and Orisai\\\\TranslationContracts\\\\TranslatorGetter will always evaluate to true\\.$#"
+			count: 1
+			path: ../tests/Unit/Bridge/NetteDI/LocalizationExtensionTest.php
+
+		-
+			message: "#^If condition is always false\\.$#"
+			count: 2
+			path: ../tests/Unit/Bridge/NetteDI/LocalizationExtensionTest.php
+
+		-
+			message: "#^Instanceof between Orisai\\\\Localization\\\\Locale\\\\LocaleProcessor and Orisai\\\\Localization\\\\Locale\\\\LocaleProcessor will always evaluate to true\\.$#"
+			count: 1
+			path: ../tests/Unit/Bridge/NetteDI/LocalizationExtensionTest.php
+
+		-
+			message: "#^Cannot call method getCount\\(\\) on Orisai\\\\Localization\\\\Logging\\\\MissingResource\\|null\\.$#"
+			count: 2
+			path: ../tests/Unit/DefaultTranslatorTest.php
+
+		-
+			message: "#^Cannot call method getLanguageTags\\(\\) on Orisai\\\\Localization\\\\Logging\\\\MissingResource\\|null\\.$#"
+			count: 2
+			path: ../tests/Unit/DefaultTranslatorTest.php
+
+		-
+			message: "#^Cannot call method getMessage\\(\\) on Orisai\\\\Localization\\\\Logging\\\\MissingResource\\|null\\.$#"
+			count: 2
+			path: ../tests/Unit/DefaultTranslatorTest.php
