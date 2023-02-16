@@ -5,6 +5,8 @@ namespace Orisai\Localization\Formatting;
 use MessageFormatter as OriginalIntlMessageFormatter;
 use Orisai\Localization\Exception\MalformedOrUnsupportedMessage;
 use function is_string;
+use function str_replace;
+use const PHP_OS;
 
 final class IntlMessageFormatter implements MessageFormatter
 {
@@ -19,6 +21,11 @@ final class IntlMessageFormatter implements MessageFormatter
 
 		if (!is_string($message)) {
 			throw MalformedOrUnsupportedMessage::forPattern($pattern, $languageTag);
+		}
+
+		// Some specific versions of intl extension on macOS throw garbage into result string
+		if (PHP_OS === 'Darwin') {
+			$message = str_replace(' ', ' ', $message);
 		}
 
 		return $message;
