@@ -4,6 +4,7 @@ namespace Orisai\Localization\Resource;
 
 use Orisai\DataSources\DataSource;
 use Orisai\Exceptions\Logic\InvalidArgument;
+use stdClass;
 use Symfony\Component\Filesystem\Path;
 use Webmozart\Glob\Glob;
 use function array_merge;
@@ -55,6 +56,10 @@ final class FileLoader implements Loader
 
 			if (Path::getFilenameWithoutExtension($path) === $languageTag) {
 				$data = $this->dataSource->decodeFromFile($path);
+				if ($data instanceof stdClass) {
+					$data = (array) $data;
+				}
+
 				if (!is_array($data)) {
 					$given = get_debug_type($data);
 
