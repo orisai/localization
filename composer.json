@@ -35,7 +35,7 @@
 		"ext-intl": "*",
 		"brianium/paratest": "^6.3.0",
 		"cweagans/composer-patches": "^1.7.3",
-		"infection/infection": "0.26.6",
+		"infection/infection": "^0.26.6",
 		"latte/latte": "^2.5.0|^3.0.4",
 		"nette/application": "^3.1.0",
 		"nette/caching": "^3.1.0",
@@ -80,9 +80,6 @@
 		"patches": {
 			"phpunit/php-code-coverage": {
 				"Class not found error fix": "tests/Patches/coverage-invalid-file-error.patch"
-			},
-			"infection/infection": {
-				"Class not found error fix": "tests/Patches/mutations-invalid-file-error.patch"
 			}
 		}
 	}
