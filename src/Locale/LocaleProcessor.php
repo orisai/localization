@@ -65,12 +65,12 @@ REGEX;
 				$extendedLanguage,
 				$matches['script'] ?? null,
 				$matches['region'] ?? null,
-				(isset($matches['variants']) && $matches['variants'] !== '' ?
-					substr($matches['variants'], 1)
+				(isset($matches['variants']) && $matches['variants'] !== ''
+					? substr($matches['variants'], 1)
 					: null
 				),
-				(isset($matches['extensions']) && $matches['extensions'] !== '' ?
-					substr($matches['extensions'], 1)
+				(isset($matches['extensions']) && $matches['extensions'] !== ''
+					? substr($matches['extensions'], 1)
 					: null
 				),
 				$matches['privateSubtag'] ?? null,
