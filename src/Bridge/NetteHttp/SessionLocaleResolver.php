@@ -31,6 +31,10 @@ final class SessionLocaleResolver implements LocaleResolver
 
 	public function resolve(Locales $locales, LocaleProcessor $localeProcessor): ?Locale
 	{
+		if (!$this->session->exists()) {
+			return null;
+		}
+
 		if (!$this->session->isStarted() && $this->response->isSent()) {
 			trigger_error(
 				sprintf(
