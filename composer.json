@@ -78,9 +78,6 @@
 	},
 	"extra": {
 		"patches": {
-			"phpunit/php-code-coverage": {
-				"Class not found error fix": "tests/Patches/coverage-invalid-file-error.patch"
-			},
 			"infection/infection": {
 				"Class not found error fix": "tests/Patches/mutations-invalid-file-error.patch"
 			}
