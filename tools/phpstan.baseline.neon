@@ -9,6 +9,11 @@ parameters:
 			path: ../src/Bridge/NetteDI/LocalizationExtension.php
 
 		-
+			message: "#^Method Orisai\\\\Localization\\\\Locale\\\\GrandfatheredLocale\\:\\:getStandardLocale\\(\\) never returns Orisai\\\\Localization\\\\Locale\\\\StandardLocale so it can be removed from the return type\\.$#"
+			count: 1
+			path: ../src/Locale/GrandfatheredLocale.php
+
+		-
 			message: "#^Method Tests\\\\Orisai\\\\Localization\\\\Doubles\\\\FakeLocaleConfigurator\\:\\:getLanguageTag\\(\\) should return string but returns string\\|null\\.$#"
 			count: 1
 			path: ../tests/Doubles/FakeLocaleConfigurator.php

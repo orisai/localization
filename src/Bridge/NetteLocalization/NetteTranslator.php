@@ -33,10 +33,7 @@ final class NetteTranslator implements NetteTranslatorInterface
 		$messageParameters = $parameters[0] ?? [];
 
 		if (!is_array($messageParameters)) {
-			if ($messageParameters === null) {
-				// nette/forms gives null parameter by default
-				$messageParameters = [];
-			} elseif (is_int($messageParameters) || is_float($messageParameters)) {
+			if (is_int($messageParameters) || is_float($messageParameters)) {
 				// Count parameter, used in nette/forms
 				$messageParameters = ['count' => $messageParameters];
 			} else {
