@@ -47,16 +47,21 @@ parameters:
 			path: ../tests/Unit/Bridge/NetteDI/LocalizationExtensionTest.php
 
 		-
+			message: "#^Call to new Orisai\\\\Localization\\\\DefaultTranslator\\(\\) on a separate line has no effect\\.$#"
+			count: 1
+			path: ../tests/Unit/DefaultTranslatorTest.php
+
+		-
 			message: "#^Cannot call method getCount\\(\\) on Orisai\\\\Localization\\\\Logging\\\\MissingResource\\|null\\.$#"
-			count: 2
+			count: 1
 			path: ../tests/Unit/DefaultTranslatorTest.php
 
 		-
 			message: "#^Cannot call method getLanguageTags\\(\\) on Orisai\\\\Localization\\\\Logging\\\\MissingResource\\|null\\.$#"
-			count: 2
+			count: 1
 			path: ../tests/Unit/DefaultTranslatorTest.php
 
 		-
 			message: "#^Cannot call method getMessage\\(\\) on Orisai\\\\Localization\\\\Logging\\\\MissingResource\\|null\\.$#"
-			count: 2
+			count: 1
 			path: ../tests/Unit/DefaultTranslatorTest.php

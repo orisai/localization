@@ -4,6 +4,7 @@ namespace Orisai\Localization\Bridge\NetteHttp;
 
 use DateTimeInterface;
 use Nette\Http\IResponse;
+use Nette\Utils\DateTime;
 use Orisai\Localization\Locale\LocaleConfigurator;
 
 final class CookieLocaleConfigurator implements LocaleConfigurator
@@ -11,8 +12,8 @@ final class CookieLocaleConfigurator implements LocaleConfigurator
 
 	private IResponse $response;
 
-	/** @var string|int|DateTimeInterface */
-	private $expiration = '1 year';
+	/** @var string|int|DateTimeInterface|null */
+	private $expiration = null;
 
 	public function __construct(IResponse $response)
 	{
@@ -20,7 +21,7 @@ final class CookieLocaleConfigurator implements LocaleConfigurator
 	}
 
 	/**
-	 * @param string|int|DateTimeInterface $expiration
+	 * @param string|int|DateTimeInterface|null $expiration
 	 */
 	public function setCookieExpiration($expiration): void
 	{
@@ -29,7 +30,12 @@ final class CookieLocaleConfigurator implements LocaleConfigurator
 
 	public function configure(string $languageTag): void
 	{
-		$this->response->setCookie(CookieLocaleResolver::CookieKey, $languageTag, $this->expiration);
+		$expiration = $this->expiration;
+		if ($expiration !== null) {
+			$expiration = (int) DateTime::from($expiration)->format('U');
+		}
+
+		$this->response->setCookie(CookieLocaleResolver::CookieKey, $languageTag, $expiration);
 	}
 
 }

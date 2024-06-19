@@ -49,19 +49,20 @@ parameters:
 			path: ../src/Bridge/NetteDI/LocalizationExtension.php
 			count: 1
 
-		# Types in callbables
-		-
-			message: '#^Parameter \#1 \$id of method (.+)Translator\:\:translate\(\) expects literal-string, string given\.$#'
-			path: ../src/Bridge/Latte/TranslationExtension.php
-			count: 1
+		# Types in callables
 		-
 			message: '#^Method (.+)TranslationExtension\:\:getFilters\(\) return type has no signature specified for callable\.$#'
 			path: ../src/Bridge/Latte/TranslationExtension.php
 			count: 1
 		-
-			message: '#^Parameter \#1 \$ of closure expects literal-string, mixed given\.$#'
-			path: ../src/Bridge/Latte/TranslationExtension.php
+			message: "#^Parameter \\#1 \\$id of method Orisai\\\\TranslationContracts\\\\Translator\\:\\:translate\\(\\) expects literal\\-string, string given\\.$#"
 			count: 1
+			path: ../src/Bridge/Latte/TranslationExtension.php
+
+		-
+			message: "#^Parameter \\#1 of closure expects literal\\-string, mixed given\\.$#"
+			count: 1
+			path: ../src/Bridge/Latte/TranslationExtension.php
 
 	excludePaths:
 		# Latte 2
