@@ -27,7 +27,7 @@
 		"orisai/exceptions": "^1.0.0",
 		"orisai/translation-contracts": "^1.0.0",
 		"psr/log": "^1.1.0|^2.0.0|^3.0.0",
-		"symfony/filesystem": "^5.4.0|^6.0.0",
+		"symfony/filesystem": "^5.4.0|^6.0.0|^7.0.0",
 		"symfony/polyfill-php80": "^1.22.0",
 		"webmozart/glob": "^4.2.0"
 	},
