@@ -33,4 +33,9 @@ final class SymfonyTranslator implements TranslatorInterface
 		return $this->translator->translate($message, $parameters, $locale);
 	}
 
+	public function getLocale(): string
+	{
+		return $this->translator->getCurrentLocale()->getLanguage();
+	}
+
 }
