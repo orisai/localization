@@ -49,7 +49,6 @@
 		"phpstan/phpstan-phpunit": "^1.0.0",
 		"phpstan/phpstan-strict-rules": "^1.0.0",
 		"phpunit/phpunit": "^9.5.0",
-		"phpunit/php-code-coverage": "9.2.22",
 		"staabm/annotate-pull-request-from-checkstyle": "^1.7.0",
 		"symfony/polyfill-intl-messageformatter": "^1.10.0",
 		"symfony/translation-contracts": "^2.0.0|^3.5.0",
