@@ -14,11 +14,6 @@ parameters:
 			path: ../src/Locale/GrandfatheredLocale.php
 
 		-
-			message: "#^Strict comparison using \\!\\=\\= between non\\-empty\\-string and '' will always evaluate to true\\.$#"
-			count: 2
-			path: ../src/Locale/LocaleProcessor.php
-
-		-
 			message: "#^Method Tests\\\\Orisai\\\\Localization\\\\Doubles\\\\FakeLocaleConfigurator\\:\\:getLanguageTag\\(\\) should return string but returns string\\|null\\.$#"
 			count: 1
 			path: ../tests/Doubles/FakeLocaleConfigurator.php
