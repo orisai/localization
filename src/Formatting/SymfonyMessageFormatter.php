@@ -5,6 +5,7 @@ namespace Orisai\Localization\Formatting;
 use Orisai\Localization\Exception\MalformedOrUnsupportedMessage;
 use Symfony\Polyfill\Intl\MessageFormatter\MessageFormatter as OriginalSymfonyMessageFormatter;
 use function is_string;
+use function str_replace;
 
 final class SymfonyMessageFormatter implements MessageFormatter
 {
@@ -21,7 +22,9 @@ final class SymfonyMessageFormatter implements MessageFormatter
 			throw MalformedOrUnsupportedMessage::forPattern($pattern, $languageTag);
 		}
 
-		return $message;
+		// Replace non-breaking spaces
+		// TODO - configurable, for tests-only
+		return str_replace(' ', ' ', $message);
 	}
 
 	/**

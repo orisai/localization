@@ -7,7 +7,6 @@ use Orisai\Localization\Formatting\IntlMessageFormatter;
 use Orisai\Localization\Formatting\SymfonyMessageFormatter;
 use PHPUnit\Framework\TestCase;
 use function date_default_timezone_set;
-use const PHP_OS;
 
 /**
  * @runTestsInSeparateProcesses
@@ -15,14 +14,14 @@ use const PHP_OS;
 final class MessageFormatterTest extends TestCase
 {
 
-	private static IntlMessageFormatter $intlFormatter;
+	private static IntlMessageFormatter $formatter;
 
 	private static SymfonyMessageFormatter $symfonyFormatter;
 
 	public static function setUpBeforeClass(): void
 	{
 		date_default_timezone_set('UTC');
-		self::$intlFormatter = new IntlMessageFormatter();
+		self::$formatter = new IntlMessageFormatter();
 		self::$symfonyFormatter = new SymfonyMessageFormatter();
 	}
 
@@ -40,8 +39,8 @@ final class MessageFormatterTest extends TestCase
 	 */
 	public function testIntl(string $locale, string $message, array $parameters, string $expected): void
 	{
-		self::assertSame($expected, self::$intlFormatter->formatMessage($message, $parameters, $locale));
-		self::$intlFormatter->validatePattern($message, $locale);
+		self::assertSame($expected, self::$formatter->formatMessage($message, $parameters, $locale));
+		self::$formatter->validatePattern($message, $locale);
 	}
 
 	/**
@@ -61,7 +60,7 @@ final class MessageFormatterTest extends TestCase
 	public function testSymfony(string $locale, string $message, array $parameters, string $expected): void
 	{
 		self::assertSame($expected, self::$symfonyFormatter->formatMessage($message, $parameters, $locale));
-		self::$intlFormatter->validatePattern($message, $locale);
+		self::$symfonyFormatter->validatePattern($message, $locale);
 	}
 
 	/**
@@ -100,12 +99,7 @@ final class MessageFormatterTest extends TestCase
 	public function provideSpellout(): Generator
 	{
 		yield ['en-US', 'I have {0, spellout} apples', [34], 'I have thirty-four apples'];
-
-		if (PHP_OS === 'Darwin') {
-			yield ['ar', 'لدي {0, spellout} تفاحة', [34], 'لدي أربعة وثلاثون تفاحة'];
-		} else {
-			yield ['ar', 'لدي {0, spellout} تفاحة', [34], 'لدي أربعة و ثلاثون تفاحة'];
-		}
+		yield ['ar', 'لدي {0, spellout} تفاحة', [34], 'لدي أربعة وثلاثون تفاحة'];
 	}
 
 	/**
