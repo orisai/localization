@@ -23,6 +23,11 @@ parameters:
 			- Orisai\Exceptions\Check\CheckedException
 
 	ignoreErrors:
+		# Internal classes in tests
+		-
+			message: '#(.+)internal(.+)Orisai(.+)#'
+			path: ../tests
+
 		# Shouldn't be possible
 		-
 			message: '#Parameter \#3 \$length of function substr expects int|null, int\|false given\.#'
