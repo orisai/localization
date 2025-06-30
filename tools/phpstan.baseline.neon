@@ -1,67 +1,97 @@
 parameters:
 	ignoreErrors:
 		-
-			message: """
-				#^Fetching deprecated class constant VERSION of class Latte\\\\Engine\\:
-				use Engine\\:\\:Version$#
-			"""
+			message: '''
+				#^Fetching deprecated class constant VERSION of class Latte\\Engine\:
+				use Engine\:\:Version$#
+			'''
+			identifier: classConstant.deprecated
 			count: 1
 			path: ../src/Bridge/NetteDI/LocalizationExtension.php
 
 		-
-			message: "#^Method Orisai\\\\Localization\\\\Locale\\\\GrandfatheredLocale\\:\\:getStandardLocale\\(\\) never returns Orisai\\\\Localization\\\\Locale\\\\StandardLocale so it can be removed from the return type\\.$#"
+			message: '#^Access to constant on internal class Symfony\\Polyfill\\Intl\\MessageFormatter\\MessageFormatter\.$#'
+			identifier: classConstant.internalClass
+			count: 1
+			path: ../src/Formatting/MessageFormatterFactory.php
+
+		-
+			message: '#^Call to static method create\(\) of internal class Symfony\\Polyfill\\Intl\\MessageFormatter\\MessageFormatter from outside its root namespace Symfony\.$#'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: ../src/Formatting/SymfonyMessageFormatter.php
+
+		-
+			message: '#^Call to static method formatMessage\(\) of internal class Symfony\\Polyfill\\Intl\\MessageFormatter\\MessageFormatter from outside its root namespace Symfony\.$#'
+			identifier: staticMethod.internalClass
+			count: 1
+			path: ../src/Formatting/SymfonyMessageFormatter.php
+
+		-
+			message: '#^Method Orisai\\Localization\\Locale\\GrandfatheredLocale\:\:getStandardLocale\(\) never returns Orisai\\Localization\\Locale\\StandardLocale so it can be removed from the return type\.$#'
+			identifier: return.unusedType
 			count: 1
 			path: ../src/Locale/GrandfatheredLocale.php
 
 		-
-			message: "#^Method Tests\\\\Orisai\\\\Localization\\\\Doubles\\\\FakeLocaleConfigurator\\:\\:getLanguageTag\\(\\) should return string but returns string\\|null\\.$#"
+			message: '#^Method Tests\\Orisai\\Localization\\Doubles\\FakeLocaleConfigurator\:\:getLanguageTag\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
 			count: 1
 			path: ../tests/Doubles/FakeLocaleConfigurator.php
 
 		-
-			message: "#^Call to function assert\\(\\) with true will always evaluate to true\\.$#"
+			message: '#^Call to function assert\(\) with true will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
 			count: 1
 			path: ../tests/Unit/Bridge/NetteDI/LocalizationExtensionTest.php
 
 		-
-			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertInstanceOf\\(\\) with 'Orisai\\\\\\\\TranslationContracts\\\\\\\\TranslatorGetter' and Orisai\\\\TranslationContracts\\\\TranslatorGetter will always evaluate to true\\.$#"
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''Orisai\\\\TranslationContracts\\\\TranslatorGetter'' and Orisai\\TranslationContracts\\TranslatorGetter will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
 			count: 1
 			path: ../tests/Unit/Bridge/NetteDI/LocalizationExtensionTest.php
 
 		-
-			message: """
-				#^Fetching deprecated class constant VERSION of class Latte\\\\Engine\\:
-				use Engine\\:\\:Version$#
-			"""
+			message: '''
+				#^Fetching deprecated class constant VERSION of class Latte\\Engine\:
+				use Engine\:\:Version$#
+			'''
+			identifier: classConstant.deprecated
 			count: 2
 			path: ../tests/Unit/Bridge/NetteDI/LocalizationExtensionTest.php
 
 		-
-			message: "#^If condition is always false\\.$#"
+			message: '#^If condition is always false\.$#'
+			identifier: if.alwaysFalse
 			count: 2
 			path: ../tests/Unit/Bridge/NetteDI/LocalizationExtensionTest.php
 
 		-
-			message: "#^Instanceof between Orisai\\\\Localization\\\\Locale\\\\LocaleProcessor and Orisai\\\\Localization\\\\Locale\\\\LocaleProcessor will always evaluate to true\\.$#"
+			message: '#^Instanceof between Orisai\\Localization\\Locale\\LocaleProcessor and Orisai\\Localization\\Locale\\LocaleProcessor will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
 			count: 1
 			path: ../tests/Unit/Bridge/NetteDI/LocalizationExtensionTest.php
 
 		-
-			message: "#^Call to new Orisai\\\\Localization\\\\DefaultTranslator\\(\\) on a separate line has no effect\\.$#"
+			message: '#^Call to new Orisai\\Localization\\DefaultTranslator\(\) on a separate line has no effect\.$#'
+			identifier: new.resultUnused
 			count: 1
 			path: ../tests/Unit/DefaultTranslatorTest.php
 
 		-
-			message: "#^Cannot call method getCount\\(\\) on Orisai\\\\Localization\\\\Logging\\\\MissingResource\\|null\\.$#"
+			message: '#^Cannot call method getCount\(\) on Orisai\\Localization\\Logging\\MissingResource\|null\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: ../tests/Unit/DefaultTranslatorTest.php
 
 		-
-			message: "#^Cannot call method getLanguageTags\\(\\) on Orisai\\\\Localization\\\\Logging\\\\MissingResource\\|null\\.$#"
+			message: '#^Cannot call method getLanguageTags\(\) on Orisai\\Localization\\Logging\\MissingResource\|null\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: ../tests/Unit/DefaultTranslatorTest.php
 
 		-
-			message: "#^Cannot call method getMessage\\(\\) on Orisai\\\\Localization\\\\Logging\\\\MissingResource\\|null\\.$#"
+			message: '#^Cannot call method getMessage\(\) on Orisai\\Localization\\Logging\\MissingResource\|null\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: ../tests/Unit/DefaultTranslatorTest.php
